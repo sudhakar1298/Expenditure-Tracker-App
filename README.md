@@ -27,7 +27,7 @@ function doPost(e) {
     var data = JSON.parse(e.postData.contents);
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     
-    // Append [Date, Amount, Merchant, Category, Source]
+    // Appends [Date, Amount, Merchant, Category, Source]
     sheet.appendRow([
       new Date(data.timestamp),
       data.amount,
