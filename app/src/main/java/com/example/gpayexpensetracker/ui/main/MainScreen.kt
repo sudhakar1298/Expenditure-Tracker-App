@@ -148,9 +148,11 @@ fun VaultGlassApp(
         if (showAddBottomSheet) {
             AddExpenseBottomSheet(
                 onDismiss = { showAddBottomSheet = false },
-                onSave = { amount, merchant, category, reason ->
-                    viewModel.addManualTransaction(amount, merchant, category, reason)
-                    showAddBottomSheet = false
+                onSave = { amount, merchant, category, reason, onResult ->
+                    viewModel.addManualTransaction(amount, merchant, category, reason) { error ->
+                        onResult(error)
+                        if (error == null) showAddBottomSheet = false
+                    }
                 }
             )
         }
@@ -1191,13 +1193,15 @@ fun VaultGlassBottomBar(
 @Composable
 fun AddExpenseBottomSheet(
     onDismiss: () -> Unit,
-    onSave: (Double, String, String, String) -> Unit
+    onSave: (Double, String, String, String, (String?) -> Unit) -> Unit
 ) {
     val isDark = isSystemInDarkTheme()
     var amount by remember { mutableStateOf("") }
     var merchant by remember { mutableStateOf("") }
     var category by remember { mutableStateOf("Food & Dining") }
     var reason by remember { mutableStateOf("") }
+    var saveError by remember { mutableStateOf<String?>(null) }
+    var isSaving by remember { mutableStateOf(false) }
 
     val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
     val mutedText = if (isDark) BotanicalDarkTextMuted else BotanicalLightTextMuted
@@ -1253,18 +1257,32 @@ fun AddExpenseBottomSheet(
                 label = { Text("Reason (optional)") },
                 modifier = Modifier.fillMaxWidth()
             )
+            if (saveError != null) {
+                Text(saveError!!, color = MaterialTheme.colorScheme.error, fontSize = 12.sp)
+            }
             Button(
                 onClick = {
                     val doubleAmt = amount.toDoubleOrNull()
-                    if (doubleAmt != null && merchant.isNotBlank()) {
-                        onSave(doubleAmt, merchant, category, reason.trim())
+                    when {
+                        doubleAmt == null || !doubleAmt.isFinite() || doubleAmt <= 0.0 ->
+                            saveError = "Enter a valid amount greater than zero."
+                        merchant.isBlank() -> saveError = "Enter a merchant or purpose."
+                        else -> {
+                            saveError = null
+                            isSaving = true
+                            onSave(doubleAmt, merchant.trim(), category, reason.trim()) { error ->
+                                saveError = error
+                                if (error != null) isSaving = false
+                            }
+                        }
                     }
                 },
+                enabled = !isSaving,
                 colors = ButtonDefaults.buttonColors(containerColor = primaryAccent, contentColor = if (isDark) BotanicalDarkBackground else Color.White),
                 shape = RoundedCornerShape(14.dp),
                 modifier = Modifier.fillMaxWidth().height(48.dp)
             ) {
-                Text("✓ Save Expense", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                Text(if (isSaving) "Saving…" else "✓ Save Expense", fontWeight = FontWeight.Bold, fontSize = 15.sp)
             }
         }
     }

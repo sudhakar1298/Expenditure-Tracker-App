@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gpayexpensetracker.data.BackendSyncUtility
 import com.example.gpayexpensetracker.data.DataRepository
+import com.example.gpayexpensetracker.data.ExpenseCategories
 import com.example.gpayexpensetracker.data.SheetsSyncUtility
 import com.example.gpayexpensetracker.data.TransactionEntity
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -86,20 +87,42 @@ class MainScreenViewModel(
         refreshFromBackend()
     }
 
-    fun addManualTransaction(amount: Double, merchant: String, category: String, reason: String = merchant) {
+    fun addManualTransaction(
+        amount: Double,
+        merchant: String,
+        category: String,
+        reason: String,
+        onResult: (String?) -> Unit
+    ) {
         viewModelScope.launch {
-            val transaction = TransactionEntity(
-                amount,
-                merchant,
-                category,
-                System.currentTimeMillis(),
-                "Manual",
-                "Manually entered"
-            )
-            transaction.reason = reason.trim().takeUnless { it.isBlank() }
-            repository.insert(transaction)
-            SheetsSyncUtility.sync(appContext, transaction)
-            BackendSyncUtility.sync(appContext, transaction)
+            try {
+                val transaction = TransactionEntity(
+                    amount,
+                    merchant.trim(),
+                    ExpenseCategories.normalize(category),
+                    System.currentTimeMillis(),
+                    "Manual",
+                    "Manually entered"
+                )
+                transaction.reason = reason.trim().takeUnless { it.isBlank() }
+                repository.insert(transaction)
+                onResult(null)
+
+                // The expense is already safe in Room. Remote delivery must never
+                // be able to terminate the UI or undo a successful local save.
+                viewModelScope.launch {
+                    try {
+                        SheetsSyncUtility.sync(appContext, transaction)
+                        BackendSyncUtility.sync(appContext, transaction)
+                    } catch (error: Exception) {
+                        Log.e("MainScreenViewModel", "Manual expense sync failed", error)
+                        BackendSyncUtility.status.value = "Saved on phone; upload pending"
+                    }
+                }
+            } catch (error: Exception) {
+                Log.e("MainScreenViewModel", "Manual expense save failed", error)
+                onResult("Could not save the expense. Please try again.")
+            }
         }
     }
 
