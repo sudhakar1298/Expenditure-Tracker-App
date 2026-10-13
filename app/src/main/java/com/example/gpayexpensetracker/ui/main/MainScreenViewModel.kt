@@ -5,7 +5,9 @@ import android.util.Log
 import android.provider.Settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.gpayexpensetracker.data.BackendSyncUtility
 import com.example.gpayexpensetracker.data.DataRepository
+import com.example.gpayexpensetracker.data.SheetsSyncUtility
 import com.example.gpayexpensetracker.data.TransactionEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -13,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 
 class MainScreenViewModel(
     private val repository: DataRepository,
@@ -32,12 +35,27 @@ class MainScreenViewModel(
     private val _googleSheetsUrl = MutableStateFlow(sharedPrefs.getString("google_sheets_url", "") ?: "")
     val googleSheetsUrl: StateFlow<String> = _googleSheetsUrl.asStateFlow()
 
+    private val _backendApiUrl = MutableStateFlow(sharedPrefs.getString("backend_api_url", "") ?: "")
+    val backendApiUrl: StateFlow<String> = _backendApiUrl.asStateFlow()
+    val syncStatus: StateFlow<String> = BackendSyncUtility.status.asStateFlow()
+
     private val _isNotificationServiceEnabled = MutableStateFlow(false)
     val isNotificationServiceEnabled: StateFlow<Boolean> = _isNotificationServiceEnabled.asStateFlow()
 
     init {
         Log.d("MainScreenViewModel", "Loaded URL from SharedPreferences: ${_googleSheetsUrl.value}")
         checkNotificationPermission()
+        refreshFromBackend()
+        viewModelScope.launch {
+            while (true) {
+                delay(15000)
+                BackendSyncUtility.retryPending(appContext)
+            }
+        }
+    }
+
+    fun refreshFromBackend() {
+        BackendSyncUtility.fetchRemoteExpensesFromBackend(appContext, repository)
     }
 
     fun checkNotificationPermission() {
@@ -58,7 +76,13 @@ class MainScreenViewModel(
         sharedPrefs.edit().putString("google_sheets_url", url).apply()
     }
 
-    fun addManualTransaction(amount: Double, merchant: String, category: String) {
+    fun setBackendApiUrl(url: String) {
+        _backendApiUrl.value = url.trim()
+        sharedPrefs.edit().putString("backend_api_url", url.trim()).apply()
+        refreshFromBackend()
+    }
+
+    fun addManualTransaction(amount: Double, merchant: String, category: String, reason: String = merchant) {
         viewModelScope.launch {
             val transaction = TransactionEntity(
                 amount,
@@ -66,10 +90,11 @@ class MainScreenViewModel(
                 category,
                 System.currentTimeMillis(),
                 "Manual",
-                "Manually entered"
+                reason
             )
             repository.insert(transaction)
-            com.example.gpayexpensetracker.data.SheetsSyncUtility.sync(appContext, transaction)
+            SheetsSyncUtility.sync(appContext, transaction)
+            BackendSyncUtility.sync(appContext, transaction)
         }
     }
 
@@ -92,7 +117,8 @@ class MainScreenViewModel(
             transaction.category = category
             transaction.isPending = false
             repository.update(transaction)
-            com.example.gpayexpensetracker.data.SheetsSyncUtility.sync(appContext, transaction)
+            SheetsSyncUtility.sync(appContext, transaction)
+            BackendSyncUtility.sync(appContext, transaction)
         }
     }
 }

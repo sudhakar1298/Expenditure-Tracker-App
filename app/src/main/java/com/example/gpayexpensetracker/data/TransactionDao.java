@@ -15,8 +15,11 @@ public interface TransactionDao {
     @Query("SELECT * FROM transactions ORDER BY timestamp DESC")
     LiveData<List<TransactionEntity>> getAllTransactions();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insertTransaction(TransactionEntity transaction);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertAllTransactions(List<TransactionEntity> transactions);
 
     @Update
     void updateTransaction(TransactionEntity transaction);
@@ -26,4 +29,7 @@ public interface TransactionDao {
 
     @Query("DELETE FROM transactions WHERE id = :id")
     void deleteTransactionById(long id);
+
+    @Query("DELETE FROM transactions")
+    void deleteAllTransactions();
 }

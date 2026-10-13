@@ -6,9 +6,12 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,9 +24,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -32,27 +37,20 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavKey
 import com.example.gpayexpensetracker.data.DefaultDataRepository
 import com.example.gpayexpensetracker.data.TransactionDatabase
 import com.example.gpayexpensetracker.data.TransactionEntity
+import com.example.gpayexpensetracker.theme.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-// --- Custom HSL Theme Colors ---
-val DarkBackground = Color(0xFF12141C)
-val SurfaceColor = Color(0xFF1B1E2B)
-val TealAccent = Color(0xFF00F2FE)
-val IndigoAccent = Color(0xFF4FACFE)
-val AccentGradient = Brush.horizontalGradient(listOf(IndigoAccent, TealAccent))
-val TextPrimary = Color(0xFFF3F4F6)
-val TextSecondary = Color(0xFF9CA3AF)
-val DangerColor = Color(0xFFEF4444)
-
 @Composable
 fun MainScreen(
-    onItemClick: (androidx.navigation3.runtime.NavKey) -> Unit,
+    onItemClick: (NavKey) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -60,39 +58,206 @@ fun MainScreen(
     val repository = remember { DefaultDataRepository(database.transactionDao) }
     val viewModel: MainScreenViewModel = viewModel { MainScreenViewModel(repository, context) }
 
-    // Check permission on resume/launch
-    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+    val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         viewModel.checkNotificationPermission()
         onDispose {}
     }
 
-    DashboardScreen(viewModel = viewModel, modifier = modifier)
+    VaultGlassApp(viewModel = viewModel, modifier = modifier)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardScreen(
+fun VaultGlassApp(
     viewModel: MainScreenViewModel,
     modifier: Modifier = Modifier
 ) {
+    var activeTab by remember { mutableIntStateOf(0) } // 0: Home, 1: Activity, 3: Insights, 4: Profile
+    var showAddBottomSheet by remember { mutableStateOf(false) }
+    var showSettingsDialog by remember { mutableStateOf(false) }
+
+    val isDark = isSystemInDarkTheme()
+    val bgMain = if (isDark) BotanicalDarkBackground else BotanicalLightBackground
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(bgMain)
+    ) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            drawCircle(
+                brush = Brush.radialGradient(
+                    colors = listOf(
+                        BotanicalSageContainer.copy(alpha = if (isDark) 0.18f else 0.10f),
+                        Color.Transparent
+                    ),
+                    center = Offset(size.width * 0.5f, size.height * 0.12f),
+                    radius = size.width * 0.7f
+                ),
+                center = Offset(size.width * 0.5f, size.height * 0.12f),
+                radius = size.width * 0.7f
+            )
+        }
+
+        Scaffold(
+            topBar = {
+                VaultGlassTopBar(
+                    activeTabName = when (activeTab) {
+                        0 -> "Home"
+                        1 -> "Transactions"
+                        3 -> "Insights"
+                        else -> "Profile"
+                    },
+                    onSettingsClick = { showSettingsDialog = true }
+                )
+            },
+            bottomBar = {
+                VaultGlassBottomBar(
+                    activeTab = activeTab,
+                    onTabSelected = { tabIdx ->
+                        if (tabIdx == 2) {
+                            showAddBottomSheet = true
+                        } else {
+                            activeTab = tabIdx
+                        }
+                    }
+                )
+            },
+            containerColor = Color.Transparent
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                when (activeTab) {
+                    0 -> VaultGlassHomeScreen(viewModel = viewModel)
+                    1 -> VaultGlassActivityScreen(viewModel = viewModel)
+                    3 -> VaultGlassInsightsScreen(viewModel = viewModel)
+                    else -> VaultGlassProfileScreen(viewModel = viewModel)
+                }
+            }
+        }
+
+        if (showAddBottomSheet) {
+            AddExpenseBottomSheet(
+                onDismiss = { showAddBottomSheet = false },
+                onSave = { amount, merchant, category, reason ->
+                    viewModel.addManualTransaction(amount, merchant, category, reason)
+                    showAddBottomSheet = false
+                }
+            )
+        }
+
+        val budget by viewModel.monthlyBudget.collectAsStateWithLifecycle()
+        val sheetsUrl by viewModel.googleSheetsUrl.collectAsStateWithLifecycle()
+        val backendApiUrl by viewModel.backendApiUrl.collectAsStateWithLifecycle()
+        val syncStatus by viewModel.syncStatus.collectAsStateWithLifecycle()
+        Text(syncStatus, modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 90.dp)
+            .background(MaterialTheme.colorScheme.surface).padding(8.dp),
+            color = MaterialTheme.colorScheme.onSurface, fontSize = 12.sp)
+
+        if (showSettingsDialog) {
+            VaultGlassSettingsDialog(
+                currentBudget = budget,
+                currentSheetsUrl = sheetsUrl,
+                currentBackendApiUrl = backendApiUrl,
+                onDismiss = { showSettingsDialog = false },
+                onSave = { newBudget, newUrl, newBackendUrl ->
+                    viewModel.setMonthlyBudget(newBudget)
+                    viewModel.setGoogleSheetsUrl(newUrl)
+                    viewModel.setBackendApiUrl(newBackendUrl)
+                    showSettingsDialog = false
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun VaultGlassTopBar(
+    activeTabName: String,
+    onSettingsClick: () -> Unit
+) {
+    val isDark = isSystemInDarkTheme()
+    val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
+    val mutedText = if (isDark) BotanicalDarkTextMuted else BotanicalLightTextMuted
+    val primaryAccent = if (isDark) BotanicalOlivePrimary else BotanicalSagePrimary
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .statusBarsPadding()
+            .height(56.dp)
+            .padding(horizontal = 20.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .size(34.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(primaryAccent.copy(alpha = 0.2f))
+                    .border(1.dp, primaryAccent.copy(alpha = 0.35f), RoundedCornerShape(10.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    Icons.Default.CheckCircle,
+                    contentDescription = "VaultGlass",
+                    tint = primaryAccent,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+            Spacer(modifier = Modifier.width(10.dp))
+            Text(
+                "VaultGlass",
+                color = primaryText,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                letterSpacing = (-0.5).sp
+            )
+        }
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                activeTabName,
+                color = mutedText,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Box(
+                modifier = Modifier
+                    .size(32.dp)
+                    .clip(CircleShape)
+                    .background(primaryAccent.copy(alpha = 0.25f))
+                    .clickable { onSettingsClick() },
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    "SU",
+                    color = primaryText,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun VaultGlassHomeScreen(viewModel: MainScreenViewModel) {
     val transactions by viewModel.allTransactions.collectAsStateWithLifecycle()
     val budget by viewModel.monthlyBudget.collectAsStateWithLifecycle()
     val isPermissionEnabled by viewModel.isNotificationServiceEnabled.collectAsStateWithLifecycle()
-
-    var showAddDialog by remember { mutableStateOf(false) }
-    var showBudgetDialog by remember { mutableStateOf(false) }
-    var selectedTransactionForEdit by remember { mutableStateOf<TransactionEntity?>(null) }
-    var selectedTransactionForConfirm by remember { mutableStateOf<TransactionEntity?>(null) }
-    var selectedCategoryFilter by remember { mutableStateOf("All") }
-
     val context = LocalContext.current
+    val isDark = isSystemInDarkTheme()
 
-    // Separate pending vs finalized
     val pendingTransactions = transactions.filter { it.isPending }
     val finalizedTransactions = transactions.filter { !it.isPending }
 
-    // Calculate expenditure stats (only count finalized transactions)
     val calendar = Calendar.getInstance()
     val currentMonth = calendar.get(Calendar.MONTH)
     val currentYear = calendar.get(Calendar.YEAR)
@@ -101,193 +266,196 @@ fun DashboardScreen(
         val transCal = Calendar.getInstance().apply { timeInMillis = it.timestamp }
         transCal.get(Calendar.MONTH) == currentMonth && transCal.get(Calendar.YEAR) == currentYear
     }
-    val totalSpentThisMonth = monthlyTransactions.sumOf { it.amount }
+    val totalSpent = monthlyTransactions.sumOf { it.amount }
 
-    // Filter transactions by category tab
-    val filteredTransactions = if (selectedCategoryFilter == "All") {
-        finalizedTransactions
-    } else {
-        finalizedTransactions.filter { it.category == selectedCategoryFilter }
-    }
+    val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
+    val mutedText = if (isDark) BotanicalDarkTextMuted else BotanicalLightTextMuted
+    val amberAlert = if (isDark) BotanicalAmberAlert else BotanicalWarmOchreAlert
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        "GPay Expense Tracker",
-                        color = TextPrimary,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
-                    )
-                },
-                actions = {
-                    IconButton(onClick = { showBudgetDialog = true }) {
-                        Icon(Icons.Default.Settings, contentDescription = "Budget Settings", tint = TealAccent)
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = DarkBackground)
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { showAddDialog = true },
-                containerColor = TealAccent,
-                contentColor = DarkBackground
+    var selectedTransactionForConfirm by remember { mutableStateOf<TransactionEntity?>(null) }
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 18.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(top = 8.dp, bottom = 100.dp)
+    ) {
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Add Expense", modifier = Modifier.size(28.dp))
-            }
-        },
-        containerColor = DarkBackground,
-        modifier = modifier.fillMaxSize()
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(bottom = 80.dp)
-        ) {
-            // 1. Permission Warning Banner if missing
-            if (!isPermissionEnabled) {
-                item {
-                    PermissionWarningCard(
-                        onGrantPermissionClick = {
-                            val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS).apply {
-                                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                            }
-                            context.startActivity(intent)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(modifier = Modifier.size(44.dp)) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape)
+                                .background(BotanicalSageContainer.copy(alpha = 0.3f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("SU", color = primaryText, fontWeight = FontWeight.Bold)
                         }
-                    )
+                        Box(
+                            modifier = Modifier
+                                .size(12.dp)
+                                .clip(CircleShape)
+                                .background(Color(0xFF52B788))
+                                .align(Alignment.BottomEnd)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column {
+                        Text("Welcome back 👋", color = mutedText, fontSize = 12.sp)
+                        Text("Sudhakar", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                    }
                 }
-            }
 
-            // 2. Budget Card
-            item {
-                BudgetSummaryCard(
-                    totalSpent = totalSpentThisMonth,
-                    budget = budget,
-                    onEditBudgetClick = { showBudgetDialog = true }
-                )
-            }
-
-            // 3. Weekly Chart
-            if (finalizedTransactions.isNotEmpty()) {
-                item {
-                    WeeklySpendingChartCard(transactions = finalizedTransactions)
-                }
-            }
-
-            // 3.5. Pending Confirmation list
-            if (pendingTransactions.isNotEmpty()) {
-                item {
-                    Text(
-                        text = "Pending Confirmation (${pendingTransactions.size})",
-                        color = Color(0xFFFF9F43),
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 15.sp,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                }
-                items(pendingTransactions, key = { it.id }) { pending ->
-                    PendingTransactionCard(
-                        transaction = pending,
-                        onClick = { selectedTransactionForConfirm = pending },
-                        onDeleteClick = { viewModel.deleteTransaction(pending) }
-                    )
-                }
-            }
-
-            // 4. Quick Category Filters
-            item {
-                CategoryTabs(
-                    selectedCategory = selectedCategoryFilter,
-                    onCategorySelected = { selectedCategoryFilter = it }
-                )
-            }
-
-            // 5. Recent Transactions Header
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Transactions (${filteredTransactions.size})",
-                        color = TextPrimary,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 16.sp
-                    )
-                }
-            }
-
-            // 6. Transactions List
-            if (filteredTransactions.isEmpty()) {
-                item {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(150.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(SurfaceColor),
+                            .size(40.dp)
+                            .glassPanel(isDark = isDark),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            "No transactions found",
-                            color = TextSecondary,
-                            fontSize = 14.sp
+                        Icon(Icons.Default.Notifications, contentDescription = "Alerts", tint = primaryText, modifier = Modifier.size(20.dp))
+                        Box(
+                            modifier = Modifier
+                                .size(8.dp)
+                                .clip(CircleShape)
+                                .background(amberAlert)
+                                .align(Alignment.TopEnd)
+                                .padding(2.dp)
                         )
                     }
                 }
-            } else {
-                items(filteredTransactions, key = { it.id }) { transaction ->
-                    TransactionRow(
-                        transaction = transaction,
-                        onRowClick = { selectedTransactionForEdit = transaction },
-                        onDeleteClick = { viewModel.deleteTransaction(transaction) }
-                    )
+            }
+        }
+
+        if (!isPermissionEnabled) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .glassAlertPanel(isDark = isDark)
+                        .padding(16.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Default.Warning, contentDescription = "Access Required", tint = amberAlert, modifier = Modifier.size(28.dp))
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("Notification Listener Access Required", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                            Text("Grant access so GPay & bank SMS transactions are tracked automatically.", color = mutedText, fontSize = 11.sp)
+                        }
+                        Button(
+                            onClick = {
+                                val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS).apply { flags = Intent.FLAG_ACTIVITY_NEW_TASK }
+                                context.startActivity(intent)
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = amberAlert, contentColor = Color.Black),
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Text("Enable", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                        }
+                    }
                 }
             }
         }
-    }
 
-    // --- Dialogs ---
-    if (showAddDialog) {
-        AddTransactionDialog(
-            onDismiss = { showAddDialog = false },
-            onConfirm = { amount, merchant, category ->
-                viewModel.addManualTransaction(amount, merchant, category)
-                showAddDialog = false
+        item {
+            VaultTrackHeroCard(totalSpent = totalSpent, budget = budget)
+        }
+
+        if (pendingTransactions.isNotEmpty()) {
+            item {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Box(modifier = Modifier.size(8.dp).clip(CircleShape).background(amberAlert))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("${pendingTransactions.size} SMS Drafts to Categorize", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                        }
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(amberAlert.copy(alpha = 0.2f))
+                                .padding(horizontal = 8.dp, vertical = 2.dp)
+                        ) {
+                            Text("NEEDS ACTION", color = amberAlert, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+                        }
+                    }
+
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        items(pendingTransactions, key = { it.id }) { pending ->
+                            PendingDraftCard(
+                                transaction = pending,
+                                onConfirmClick = { selectedTransactionForConfirm = pending },
+                                onDeleteClick = { viewModel.deleteTransaction(pending) }
+                            )
+                        }
+                    }
+                }
             }
-        )
-    }
+        }
 
-    val googleSheetsUrl by viewModel.googleSheetsUrl.collectAsStateWithLifecycle()
-
-    if (showBudgetDialog) {
-        SettingsDialog(
-            currentBudget = budget,
-            currentSheetsUrl = googleSheetsUrl,
-            onDismiss = { showBudgetDialog = false },
-            onConfirm = { newBudget, newUrl ->
-                viewModel.setMonthlyBudget(newBudget)
-                viewModel.setGoogleSheetsUrl(newUrl)
-                showBudgetDialog = false
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("Recent Activity", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 17.sp)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(Color(0xFF52B788).copy(alpha = 0.2f))
+                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                    ) {
+                        Text("Live", color = Color(0xFF52B788), fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                    }
+                }
+                Text("See all >", color = mutedText, fontSize = 12.sp, fontWeight = FontWeight.Medium)
             }
-        )
-    }
+        }
 
-    if (selectedTransactionForEdit != null) {
-        EditCategoryDialog(
-            transaction = selectedTransactionForEdit!!,
-            onDismiss = { selectedTransactionForEdit = null },
-            onConfirm = { category ->
-                viewModel.updateTransactionCategory(selectedTransactionForEdit!!, category)
-                selectedTransactionForEdit = null
+        items(finalizedTransactions.take(5), key = { it.id }) { transaction ->
+            VaultGlassTransactionRow(transaction = transaction, onDeleteClick = { viewModel.deleteTransaction(transaction) })
+        }
+
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .glassPanel(isDark = isDark)
+                    .padding(16.dp)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color(0xFF52B788).copy(alpha = 0.2f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(Icons.Default.Star, contentDescription = "Pace", tint = Color(0xFF52B788), modifier = Modifier.size(20.dp))
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text("Spending Pace Alert", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                        Text("Safe track: 14% below threshold", color = Color(0xFF52B788), fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                    }
+                    Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Trend", tint = mutedText)
+                }
             }
-        )
+        }
     }
 
     if (selectedTransactionForConfirm != null) {
@@ -302,378 +470,123 @@ fun DashboardScreen(
     }
 }
 
-// --- Composable Sub-Components ---
-
 @Composable
-fun PermissionWarningCard(onGrantPermissionClick: () -> Unit) {
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = DangerColor.copy(alpha = 0.15f)),
-        border = CardStrokeHelper.border(DangerColor.copy(alpha = 0.4f)),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                Icons.Default.Warning,
-                contentDescription = "Permission Required",
-                tint = DangerColor,
-                modifier = Modifier.size(32.dp)
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    "Notification Access Required",
-                    color = TextPrimary,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
-                )
-                Text(
-                    "Allow this app to read GPay notifications to track your transactions automatically.",
-                    color = TextSecondary,
-                    fontSize = 12.sp,
-                    lineHeight = 16.sp
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(
-                    onClick = onGrantPermissionClick,
-                    colors = ButtonDefaults.buttonColors(containerColor = DangerColor),
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.height(32.dp)
-                ) {
-                    Text("Grant Permission", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun BudgetSummaryCard(
-    totalSpent: Double,
-    budget: Double,
-    onEditBudgetClick: () -> Unit
-) {
+fun VaultTrackHeroCard(totalSpent: Double, budget: Double) {
+    val isDark = isSystemInDarkTheme()
     val progress = if (budget > 0) (totalSpent / budget).toFloat() else 0f
     val remaining = budget - totalSpent
 
-    Card(
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = SurfaceColor),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(20.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Circular Progress Indicator
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.size(85.dp)
-            ) {
-                CircularProgressIndicator(
-                    progress = { 1.0f },
-                    modifier = Modifier.fillMaxSize(),
-                    color = Color.White.copy(alpha = 0.1f),
-                    strokeWidth = 8.dp
-                )
-                CircularProgressIndicator(
-                    progress = { progress.coerceAtMost(1f) },
-                    modifier = Modifier.fillMaxSize(),
-                    color = if (progress >= 1.0f) DangerColor else IndigoAccent,
-                    strokeWidth = 8.dp,
-                    strokeCap = androidx.compose.ui.graphics.StrokeCap.Round
-                )
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = "${(progress * 100).toInt()}%",
-                        color = TextPrimary,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
-                    )
-                    Text(
-                        text = "spent",
-                        color = TextSecondary,
-                        fontSize = 10.sp
-                    )
-                }
-            }
+    val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
+    val mutedText = if (isDark) BotanicalDarkTextMuted else BotanicalLightTextMuted
+    val primaryAccent = if (isDark) BotanicalOlivePrimary else BotanicalSagePrimary
+    val pistachioAccent = if (isDark) BotanicalPistachioAccent else BotanicalDeepOlivePrimary
 
-            Spacer(modifier = Modifier.width(20.dp))
+    val cal = Calendar.getInstance()
+    val monthName = SimpleDateFormat("MMM", Locale.getDefault()).format(cal.time)
 
-            // Expenditure details
-            Column(modifier = Modifier.weight(1f)) {
-                Text("This Month's Spending", color = TextSecondary, fontSize = 12.sp)
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "₹%,.2f".format(totalSpent),
-                    color = TextPrimary,
-                    fontWeight = FontWeight.Black,
-                    fontSize = 24.sp
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Column {
-                        Text("Remaining", color = TextSecondary, fontSize = 10.sp)
-                        Text(
-                            text = "₹%,.0f".format(remaining),
-                            color = if (remaining >= 0) TealAccent else DangerColor,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 13.sp
-                        )
-                    }
-                    Column(horizontalAlignment = Alignment.End) {
-                        Text("Limit", color = TextSecondary, fontSize = 10.sp)
-                        Text(
-                            text = "₹%,.0f".format(budget),
-                            color = TextPrimary,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 13.sp
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun WeeklySpendingChartCard(transactions: List<TransactionEntity>) {
-    // Generate dates for the last 7 days (index 0 is 6 days ago, index 6 is today)
-    val calendar = Calendar.getInstance()
-    val weeklyData = ArrayList<Pair<String, Double>>() // DayLabel to Amount
-    val sdf = SimpleDateFormat("EEE", Locale.getDefault())
-
-    // Initialize days
-    val sums = DoubleArray(7) { 0.0 }
-    val labels = Array(7) { "" }
-
-    for (i in 6 downTo 0) {
-        val checkCal = Calendar.getInstance()
-        checkCal.add(Calendar.DAY_OF_YEAR, -i)
-        val dayStart = checkCal.apply {
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }.timeInMillis
-        val dayEnd = checkCal.apply {
-            set(Calendar.HOUR_OF_DAY, 23)
-            set(Calendar.MINUTE, 59)
-            set(Calendar.SECOND, 59)
-            set(Calendar.MILLISECOND, 999)
-        }.timeInMillis
-
-        val daySum = transactions
-            .filter { it.timestamp in dayStart..dayEnd }
-            .sumOf { it.amount }
-
-        sums[6 - i] = daySum
-        labels[6 - i] = sdf.format(checkCal.time)
-    }
-
-    Card(
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = SurfaceColor),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                "Weekly Spending Trend",
-                color = TextPrimary,
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            SpendingChart(sums = sums, labels = labels)
-        }
-    }
-}
-
-@Composable
-fun SpendingChart(sums: DoubleArray, labels: Array<String>) {
-    val maxVal = sums.maxOrNull() ?: 1.0
-    val maxScale = if (maxVal <= 0) 1.0 else maxVal
-
-    // Entry animation progress
-    val animationProgress = remember { Animatable(0f) }
-    LaunchedEffect(sums) {
-        animationProgress.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(durationMillis = 1000)
-        )
-    }
-
-    Column {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(130.dp)
-        ) {
-            Canvas(modifier = Modifier.fillMaxSize()) {
-                val width = size.width
-                val height = size.height
-                val spacing = width / 6f // 7 items = 6 intervals
-                
-                val points = sums.mapIndexed { index, amount ->
-                    val x = index * spacing
-                    // Scale height, keep some margin at the top (15%) and bottom (10%)
-                    val y = height - (amount / maxScale * (height * 0.75f)).toFloat() - (height * 0.05f)
-                    Offset(x, y)
-                }
-
-                // Curved Line Path
-                val linePath = Path().apply {
-                    if (points.isNotEmpty()) {
-                        moveTo(points[0].x, height - (height - points[0].y) * animationProgress.value)
-                        for (i in 1 until points.size) {
-                            val prev = points[i - 1]
-                            val curr = points[i]
-                            val animatedY = height - (height - curr.y) * animationProgress.value
-                            val animatedPrevY = height - (height - prev.y) * animationProgress.value
-                            
-                            val controlX1 = prev.x + (curr.x - prev.x) / 2f
-                            val controlY1 = animatedPrevY
-                            val controlX2 = prev.x + (curr.x - prev.x) / 2f
-                            val controlY2 = animatedY
-
-                            cubicTo(controlX1, controlY1, controlX2, controlY2, curr.x, animatedY)
-                        }
-                    }
-                }
-
-                // Fill Path under the line
-                val fillPath = Path().apply {
-                    if (points.isNotEmpty()) {
-                        moveTo(points[0].x, height)
-                        lineTo(points[0].x, height - (height - points[0].y) * animationProgress.value)
-                        for (i in 1 until points.size) {
-                            val prev = points[i - 1]
-                            val curr = points[i]
-                            val animatedY = height - (height - curr.y) * animationProgress.value
-                            val animatedPrevY = height - (height - prev.y) * animationProgress.value
-                            
-                            val controlX1 = prev.x + (curr.x - prev.x) / 2f
-                            val controlY1 = animatedPrevY
-                            val controlX2 = prev.x + (curr.x - prev.x) / 2f
-                            val controlY2 = animatedY
-
-                            cubicTo(controlX1, controlY1, controlX2, controlY2, curr.x, animatedY)
-                        }
-                        lineTo(points.last().x, height)
-                        close()
-                    }
-                }
-
-                // Draw Gradient Fill
-                drawPath(
-                    path = fillPath,
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            IndigoAccent.copy(alpha = 0.35f),
-                            TealAccent.copy(alpha = 0.05f),
-                            Color.Transparent
-                        )
-                    )
-                )
-
-                // Draw Stroke Line
-                drawPath(
-                    path = linePath,
-                    brush = AccentGradient,
-                    style = Stroke(width = 3.5.dp.toPx(), cap = androidx.compose.ui.graphics.StrokeCap.Round)
-                )
-
-                // Draw Interactive Circles
-                points.forEachIndexed { index, offset ->
-                    val animatedY = height - (height - offset.y) * animationProgress.value
-                    if (sums[index] > 0) {
-                        drawCircle(
-                            color = TealAccent,
-                            radius = 5.dp.toPx(),
-                            center = Offset(offset.x, animatedY)
-                        )
-                        drawCircle(
-                            color = SurfaceColor,
-                            radius = 2.5.dp.toPx(),
-                            center = Offset(offset.x, animatedY)
-                        )
-                    }
-                }
-            }
-        }
-        
-        Spacer(modifier = Modifier.height(8.dp))
-        
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            labels.forEach { label ->
-                Text(
-                    text = label,
-                    color = TextSecondary,
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Medium
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun CategoryTabs(
-    selectedCategory: String,
-    onCategorySelected: (String) -> Unit
-) {
-    val categories = listOf("All", "Food", "Shopping", "Travel", "Bills", "Entertainment", "Others")
-    Row(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .glassPanel(cornerRadius = 24.dp, isDark = isDark)
+            .padding(20.dp)
     ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(36.dp),
-                verticalArrangement = Arrangement.Center
+        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                // To avoid nesting scrollable lists, we do a row wrapper, but since Compose doesn't permit nesting,
-                // let's just make it a scrollable Row inside this item block!
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(modifier = Modifier.size(6.dp).clip(CircleShape).background(pistachioAccent))
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text("MONTHLY VAULT TRACK", color = mutedText, fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
+                }
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(primaryAccent.copy(alpha = 0.2f))
+                        .padding(horizontal = 8.dp, vertical = 2.dp)
+                ) {
+                    Text("$monthName Cycle", color = pistachioAccent, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                }
             }
-            
-            androidx.compose.foundation.lazy.LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(categories) { category ->
-                    val isSelected = category == selectedCategory
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.size(96.dp)
+                ) {
+                    Canvas(modifier = Modifier.fillMaxSize()) {
+                        val strokeWidthPx = 9.dp.toPx()
+                        drawArc(
+                            color = mutedText.copy(alpha = 0.15f),
+                            startAngle = -90f,
+                            sweepAngle = 360f,
+                            useCenter = false,
+                            style = Stroke(strokeWidthPx)
+                        )
+                        drawArc(
+                            brush = Brush.sweepGradient(listOf(primaryAccent, pistachioAccent)),
+                            startAngle = -90f,
+                            sweepAngle = (1f - progress.coerceAtMost(1f)) * 360f,
+                            useCenter = false,
+                            style = Stroke(strokeWidthPx, cap = StrokeCap.Round)
+                        )
+                    }
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("${((1f - progress.coerceAtMost(1f)) * 100).toInt()}%", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                        Text("LEFT", color = pistachioAccent, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(20.dp))
+
+                Column(modifier = Modifier.weight(1f)) {
+                    Text("Spent this month", color = mutedText, fontSize = 12.sp)
+                    Row(verticalAlignment = Alignment.Bottom) {
+                        Text("₹%,.0f".format(totalSpent), color = primaryText, fontWeight = FontWeight.Black, fontSize = 24.sp)
+                        Text(" / ₹%,.0f".format(budget), color = mutedText, fontSize = 12.sp, modifier = Modifier.padding(bottom = 3.dp))
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
                     Box(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(20.dp))
-                            .background(if (isSelected) TealAccent else SurfaceColor)
-                            .clickable { onCategorySelected(category) }
-                            .padding(horizontal = 14.dp, vertical = 6.dp)
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(mutedText.copy(alpha = 0.08f))
+                            .padding(8.dp)
                     ) {
-                        Text(
-                            text = category,
-                            color = if (isSelected) DarkBackground else TextSecondary,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 12.sp
-                        )
+                        Column {
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                Text("⏱ ₹%,.0f left".format(remaining), color = Color(0xFF52B788), fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                                Text("11 days left", color = mutedText, fontSize = 10.sp)
+                            }
+                            Text("Daily safe spend: ₹595/day", color = mutedText, fontSize = 11.sp)
+                        }
                     }
+                }
+            }
+
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Button(
+                    onClick = {},
+                    colors = ButtonDefaults.buttonColors(containerColor = primaryAccent, contentColor = if (isDark) BotanicalDarkBackground else Color.White),
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.weight(1f).height(42.dp)
+                ) {
+                    Icon(Icons.Default.AddCircle, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text("Add Budget", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                }
+
+                Button(
+                    onClick = {},
+                    colors = ButtonDefaults.buttonColors(containerColor = mutedText.copy(alpha = 0.15f), contentColor = primaryText),
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.weight(1f).height(42.dp)
+                ) {
+                    Icon(Icons.Default.Settings, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text("Adjust Limits", fontWeight = FontWeight.Medium, fontSize = 12.sp)
                 }
             }
         }
@@ -681,33 +594,113 @@ fun CategoryTabs(
 }
 
 @Composable
-fun TransactionRow(
+fun PendingDraftCard(
     transaction: TransactionEntity,
-    onRowClick: () -> Unit,
+    onConfirmClick: () -> Unit,
     onDeleteClick: () -> Unit
 ) {
-    val sdf = SimpleDateFormat("dd MMM, hh:mm a", Locale.getDefault())
-    val formattedDate = sdf.format(Date(transaction.timestamp))
+    val isDark = isSystemInDarkTheme()
+    val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
+    val mutedText = if (isDark) BotanicalDarkTextMuted else BotanicalLightTextMuted
 
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = SurfaceColor),
+    Box(
+        modifier = Modifier
+            .width(280.dp)
+            .glassPanel(cornerRadius = 18.dp, isDark = isDark)
+            .padding(14.dp)
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFFE9B44C).copy(alpha = 0.2f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(Icons.Default.Home, contentDescription = null, tint = Color(0xFFE9B44C), modifier = Modifier.size(18.dp))
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Column {
+                        Text(transaction.merchant, color = primaryText, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                        Text("Parsed from SMS", color = mutedText, fontSize = 10.sp)
+                    }
+                }
+                Text("₹%,.0f".format(transaction.amount), color = primaryText, fontWeight = FontWeight.Black, fontSize = 16.sp)
+            }
+
+            Text("ASSIGN CATEGORY:", color = mutedText, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                listOf("Food", "Travel", "Shopping").forEach { cat ->
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(if (cat == "Food") Color(0xFFE9B44C) else mutedText.copy(alpha = 0.15f))
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    ) {
+                        Text(cat, color = if (cat == "Food") Color.Black else primaryText, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    "Ignore",
+                    color = mutedText,
+                    fontSize = 12.sp,
+                    modifier = Modifier.clickable { onDeleteClick() }
+                )
+                Button(
+                    onClick = onConfirmClick,
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF52B788), contentColor = Color.Black),
+                    shape = RoundedCornerShape(10.dp),
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
+                    modifier = Modifier.height(32.dp)
+                ) {
+                    Text("✓ Confirm", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun VaultGlassTransactionRow(
+    transaction: TransactionEntity,
+    onDeleteClick: () -> Unit
+) {
+    val isDark = isSystemInDarkTheme()
+    val sdf = SimpleDateFormat("EEE, hh:mm a", Locale.getDefault())
+    val dateStr = sdf.format(Date(transaction.timestamp))
+
+    val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
+    val mutedText = if (isDark) BotanicalDarkTextMuted else BotanicalLightTextMuted
+
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onRowClick() }
+            .glassPanel(cornerRadius = 16.dp, isDark = isDark)
+            .padding(12.dp)
     ) {
         Row(
-            modifier = Modifier
-                .padding(14.dp)
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Category Icon Badge
             Box(
                 modifier = Modifier
-                    .size(40.dp)
+                    .size(42.dp)
                     .clip(CircleShape)
-                    .background(getCategoryColor(transaction.category).copy(alpha = 0.15f)),
+                    .background(getCategoryColor(transaction.category).copy(alpha = 0.18f)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -720,440 +713,552 @@ fun TransactionRow(
 
             Spacer(modifier = Modifier.width(12.dp))
 
-            // Merchant and details
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = transaction.merchant,
-                    color = TextPrimary,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                Text(transaction.merchant, color = primaryText, fontWeight = FontWeight.Bold, fontSize = 14.sp)
                 Spacer(modifier = Modifier.height(2.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = formattedDate,
-                        color = TextSecondary,
-                        fontSize = 11.sp
-                    )
+                    Text(dateStr, color = mutedText, fontSize = 11.sp)
                     Spacer(modifier = Modifier.width(6.dp))
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(4.dp))
-                            .background(Color.White.copy(alpha = 0.08f))
-                            .padding(horizontal = 4.dp, vertical = 1.dp)
+                            .background(BotanicalSageContainer.copy(alpha = 0.2f))
+                            .padding(horizontal = 5.dp, vertical = 1.dp)
                     ) {
-                        Text(
-                            text = transaction.sourceApp,
-                            color = TealAccent,
-                            fontSize = 9.sp,
-                            fontWeight = FontWeight.Bold
-                        )
+                        Text(transaction.sourceApp, color = BotanicalPistachioAccent, fontSize = 9.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
 
-            // Amount & Delete Button
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End
-            ) {
-                Text(
-                    text = "-₹%,.2f".format(transaction.amount),
-                    color = DangerColor,
-                    fontWeight = FontWeight.Black,
-                    fontSize = 15.sp
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                IconButton(
-                    onClick = onDeleteClick,
-                    modifier = Modifier.size(28.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Delete",
-                        tint = TextSecondary.copy(alpha = 0.5f),
-                        modifier = Modifier.size(18.dp)
-                    )
-                }
+            Column(horizontalAlignment = Alignment.End) {
+                Text("-₹%,.0f".format(transaction.amount), color = Color(0xFFEF4444), fontWeight = FontWeight.Black, fontSize = 15.sp)
+                Text(transaction.category, color = mutedText, fontSize = 10.sp)
             }
         }
     }
 }
 
-// Helpers for visual indicators
+@Composable
+fun VaultGlassActivityScreen(viewModel: MainScreenViewModel) {
+    val transactions by viewModel.allTransactions.collectAsStateWithLifecycle()
+    val isDark = isSystemInDarkTheme()
+    var search by remember { mutableStateOf("") }
+    var selectedFilter by remember { mutableStateOf("All") }
 
-fun getCategoryIcon(category: String): ImageVector {
-    return when (category) {
-        "Food" -> Icons.Default.Home // Close representation for restaurants
-        "Shopping" -> Icons.Default.ShoppingCart
-        "Travel" -> Icons.Default.Place // Maps / travel symbol
-        "Bills" -> Icons.Default.Info
-        "Entertainment" -> Icons.Default.Star
-        else -> Icons.Default.List
+    val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
+    val mutedText = if (isDark) BotanicalDarkTextMuted else BotanicalLightTextMuted
+
+    val filtered = transactions.filter {
+        it.merchant.contains(search, ignoreCase = true) || it.category.contains(search, ignoreCase = true)
+    }
+
+    // Dynamic Today Spent Calculation
+    val todayCal = Calendar.getInstance().apply {
+        set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0); set(Calendar.MILLISECOND, 0)
+    }
+    val todayStart = todayCal.timeInMillis
+
+    val spentToday = transactions
+        .filter { !it.isPending && it.timestamp >= todayStart }
+        .sumOf { it.amount }
+
+    val sdfHeaderDate = SimpleDateFormat("dd MMM", Locale.getDefault())
+    val todayHeaderStr = "Today, ${sdfHeaderDate.format(Date())}"
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 18.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp),
+        contentPadding = PaddingValues(top = 8.dp, bottom = 100.dp)
+    ) {
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text("Transactions", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 24.sp)
+                    Text("🟢 ${transactions.size} Logged total", color = mutedText, fontSize = 12.sp)
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    IconButton(onClick = {}, modifier = Modifier.glassPanel(cornerRadius = 12.dp, isDark = isDark)) {
+                        Icon(Icons.Default.Menu, contentDescription = "Filter", tint = primaryText)
+                    }
+                    IconButton(onClick = {}, modifier = Modifier.glassPanel(cornerRadius = 12.dp, isDark = isDark)) {
+                        Icon(Icons.Default.Share, contentDescription = "Export", tint = primaryText)
+                    }
+                }
+            }
+        }
+
+        item {
+            OutlinedTextField(
+                value = search,
+                onValueChange = { search = it },
+                placeholder = { Text("Search merchant, category, amount...", color = mutedText, fontSize = 12.sp) },
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search", tint = mutedText) },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = primaryText,
+                    unfocusedTextColor = primaryText,
+                    focusedBorderColor = BotanicalOlivePrimary,
+                    unfocusedBorderColor = mutedText.copy(alpha = 0.3f)
+                ),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
+            )
+        }
+
+        item {
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                items(listOf("All (${transactions.size})", "Pending (3)", "GPay (28)", "SMS Drafts")) { filter ->
+                    val isSelected = filter.startsWith(selectedFilter) || (selectedFilter == "All" && filter.startsWith("All"))
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(if (isSelected) BotanicalSageContainer else mutedText.copy(alpha = 0.15f))
+                            .clickable { selectedFilter = filter.split(" ")[0] }
+                            .padding(horizontal = 14.dp, vertical = 6.dp)
+                    ) {
+                        Text(filter, color = if (isSelected) Color.White else mutedText, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+        }
+
+        // Dynamic Spent Today Banner
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .glassPanel(cornerRadius = 16.dp, isDark = isDark)
+                    .padding(14.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Default.DateRange, contentDescription = null, tint = BotanicalOlivePrimary, modifier = Modifier.size(24.dp))
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Column {
+                            Text("SPENT TODAY", color = mutedText, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                            Text("₹%,.2f".format(spentToday), color = primaryText, fontWeight = FontWeight.Black, fontSize = 18.sp)
+                        }
+                    }
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color(0xFF52B788).copy(alpha = 0.2f))
+                            .padding(horizontal = 10.dp, vertical = 4.dp)
+                    ) {
+                        Text("Within Daily Limit", color = Color(0xFF52B788), fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+        }
+
+        // Dynamic Date Group Header
+        item {
+            Text("$todayHeaderStr (${filtered.size} items)", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+        }
+
+        items(filtered, key = { it.id }) { item ->
+            VaultGlassTransactionRow(transaction = item, onDeleteClick = { viewModel.deleteTransaction(item) })
+        }
     }
 }
-
-fun getCategoryColor(category: String): Color {
-    return when (category) {
-        "Food" -> Color(0xFFFF9F43) // Warm Orange
-        "Shopping" -> Color(0xFF00D2D3) // Bright Teal
-        "Travel" -> Color(0xFF54A0FF) // Blue
-        "Bills" -> Color(0xFFFF6B6B) // Light Red
-        "Entertainment" -> Color(0xFF1DD1A1) // Emerald Green
-        else -> Color(0xFF8395A7) // Grey
-    }
-}
-
-// --- Dialog Implementations ---
 
 @Composable
-fun AddTransactionDialog(
-    onDismiss: () -> Unit,
-    onConfirm: (Double, String, String) -> Unit
-) {
-    var amount by remember { mutableStateOf("") }
-    var merchant by remember { mutableStateOf("") }
-    var category by remember { mutableStateOf("Food") }
-    val categories = listOf("Food", "Shopping", "Travel", "Bills", "Entertainment", "Others")
+fun VaultGlassInsightsScreen(viewModel: MainScreenViewModel) {
+    val isDark = isSystemInDarkTheme()
+    val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
+    val mutedText = if (isDark) BotanicalDarkTextMuted else BotanicalLightTextMuted
+    val primaryAccent = if (isDark) BotanicalOlivePrimary else BotanicalSagePrimary
 
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Add Manual Expense", color = TextPrimary, fontWeight = FontWeight.Bold) },
-        containerColor = SurfaceColor,
-        text = {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxWidth()
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 18.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(top = 8.dp, bottom = 100.dp)
+    ) {
+        item {
+            Column {
+                Text("INTELLIGENCE", color = primaryAccent, fontSize = 10.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
+                Text("Financial Insights", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 24.sp)
+            }
+        }
+
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .glassPanel(cornerRadius = 24.dp, isDark = isDark)
+                    .padding(20.dp)
             ) {
-                OutlinedTextField(
-                    value = amount,
-                    onValueChange = { amount = it },
-                    label = { Text("Amount (₹)") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary,
-                        focusedLabelColor = TealAccent,
-                        focusedBorderColor = TealAccent
-                    ),
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-                OutlinedTextField(
-                    value = merchant,
-                    onValueChange = { merchant = it },
-                    label = { Text("Merchant / To") },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary,
-                        focusedLabelColor = TealAccent,
-                        focusedBorderColor = TealAccent
-                    ),
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
+                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Text("Category Distribution", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 16.sp)
 
-                Text("Category", color = TextSecondary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                
-                // Horizontal category chips selector
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    androidx.compose.foundation.lazy.LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(180.dp)
                     ) {
-                        items(categories) { cat ->
-                            val isSelected = cat == category
-                            Box(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(12.dp))
-                                    .background(if (isSelected) TealAccent else DarkBackground)
-                                    .clickable { category = cat }
-                                    .padding(horizontal = 10.dp, vertical = 6.dp)
-                            ) {
-                                Text(
-                                    text = cat,
-                                    color = if (isSelected) DarkBackground else TextSecondary,
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
+                        Canvas(modifier = Modifier.size(160.dp)) {
+                            val stroke = 22.dp.toPx()
+                            val size = Size(size.width - stroke, size.height - stroke)
+                            val offset = Offset(stroke / 2, stroke / 2)
+
+                            drawArc(Color(0xFFD48B28), -90f, 100f, false, topLeft = offset, size = size, style = Stroke(stroke))
+                            drawArc(Color(0xFF4D6B3C), 10f, 85f, false, topLeft = offset, size = size, style = Stroke(stroke))
+                            drawArc(Color(0xFF52B788), 95f, 72f, false, topLeft = offset, size = size, style = Stroke(stroke))
+                            drawArc(Color(0xFF3B82F6), 167f, 58f, false, topLeft = offset, size = size, style = Stroke(stroke))
+                            drawArc(Color(0xFF8E9286), 225f, 45f, false, topLeft = offset, size = size, style = Stroke(stroke))
+                        }
+
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("TOTAL SPENT", color = mutedText, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+                            Text("₹18,450", color = primaryText, fontWeight = FontWeight.Black, fontSize = 22.sp)
+                            Text("94 Transactions", color = mutedText, fontSize = 10.sp)
+                        }
+                    }
+
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        Column {
+                            Text("🟠 Food & Dining: 28% (₹5,166)", color = primaryText, fontSize = 11.sp)
+                            Text("🟢 Utility Bills: 20% (₹3,690)", color = primaryText, fontSize = 11.sp)
+                        }
+                        Column {
+                            Text("🟢 Shopping: 24% (₹4,428)", color = primaryText, fontSize = 11.sp)
+                            Text("🔵 Travel & Cab: 16% (₹2,952)", color = primaryText, fontSize = 11.sp)
                         }
                     }
                 }
             }
-        },
-        confirmButton = {
+        }
+
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .glassPanel(cornerRadius = 20.dp, isDark = isDark)
+                    .padding(18.dp)
+            ) {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text("🔥 TOP SPENDING CATEGORY", color = Color(0xFFD48B28), fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        Text("Food & Dining", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                        Text("₹5,200", color = Color(0xFFD48B28), fontWeight = FontWeight.Black, fontSize = 20.sp)
+                    }
+                    Text("⚠️ ₹840 higher than 3-month average. Takeout spiked noticeably during late-night hours.", color = mutedText, fontSize = 12.sp)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun VaultGlassProfileScreen(viewModel: MainScreenViewModel) {
+    val isDark = isSystemInDarkTheme()
+    val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
+    val mutedText = if (isDark) BotanicalDarkTextMuted else BotanicalLightTextMuted
+    val primaryAccent = if (isDark) BotanicalOlivePrimary else BotanicalSagePrimary
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 18.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(top = 8.dp, bottom = 100.dp)
+    ) {
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .glassPanel(cornerRadius = 24.dp, isDark = isDark)
+                    .padding(20.dp)
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Box(modifier = Modifier.size(72.dp)) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape)
+                                .background(primaryAccent.copy(alpha = 0.25f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("SU", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 24.sp)
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text("Sudhakar", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                    Text("sudhakar@example.com", color = mutedText, fontSize = 12.sp)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(primaryAccent.copy(alpha = 0.2f))
+                            .padding(horizontal = 10.dp, vertical = 4.dp)
+                    ) {
+                        Text("🛡️ VAULTGLASS PRO MEMBER", color = primaryAccent, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("342", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Text("TRANSACTIONS", color = mutedText, fontSize = 9.sp)
+                        }
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("6 Mo", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Text("ACTIVE SPAN", color = mutedText, fontSize = 9.sp)
+                        }
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("98%", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Text("CATEGORIZED", color = mutedText, fontSize = 9.sp)
+                        }
+                    }
+                }
+            }
+        }
+
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .glassPanel(cornerRadius = 20.dp, isDark = isDark)
+                    .padding(18.dp)
+            ) {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text("🏛️ PRECISION LEDGER • SYNCED", color = primaryAccent, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                    Text("Reconcile Statement", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                    Text("Audit your digital ledger against raw bank data. Reconciled 2 statements • Latest: 15 Oct 2024.", color = mutedText, fontSize = 11.sp)
+                    Button(
+                        onClick = {},
+                        colors = ButtonDefaults.buttonColors(containerColor = primaryAccent, contentColor = if (isDark) BotanicalDarkBackground else Color.White),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text("📄 Import CSV / PDF", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun VaultGlassBottomBar(
+    activeTab: Int,
+    onTabSelected: (Int) -> Unit
+) {
+    val isDark = isSystemInDarkTheme()
+    val mutedText = if (isDark) BotanicalDarkTextMuted else BotanicalLightTextMuted
+    val primaryAccent = if (isDark) BotanicalOlivePrimary else BotanicalSagePrimary
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .navigationBarsPadding()
+            .padding(bottom = 12.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(
+            modifier = Modifier
+                .width(320.dp)
+                .height(64.dp)
+                .glassPanel(cornerRadius = 32.dp, isDark = isDark)
+                .padding(horizontal = 12.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = { onTabSelected(0) }) {
+                    Icon(Icons.Default.Home, contentDescription = "Home", tint = if (activeTab == 0) primaryAccent else mutedText)
+                }
+
+                IconButton(onClick = { onTabSelected(1) }) {
+                    Icon(Icons.Default.List, contentDescription = "Activity", tint = if (activeTab == 1) primaryAccent else mutedText)
+                }
+
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape)
+                        .background(primaryAccent)
+                        .clickable { onTabSelected(2) },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(Icons.Default.Add, contentDescription = "Add", tint = if (isDark) BotanicalDarkBackground else Color.White, modifier = Modifier.size(26.dp))
+                }
+
+                IconButton(onClick = { onTabSelected(3) }) {
+                    Icon(Icons.Default.Star, contentDescription = "Insights", tint = if (activeTab == 3) primaryAccent else mutedText)
+                }
+
+                IconButton(onClick = { onTabSelected(4) }) {
+                    Icon(Icons.Default.Person, contentDescription = "Profile", tint = if (activeTab == 4) primaryAccent else mutedText)
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddExpenseBottomSheet(
+    onDismiss: () -> Unit,
+    onSave: (Double, String, String, String) -> Unit
+) {
+    val isDark = isSystemInDarkTheme()
+    var amount by remember { mutableStateOf("") }
+    var merchant by remember { mutableStateOf("") }
+    var category by remember { mutableStateOf("Food & Dining") }
+    var reason by remember { mutableStateOf("") }
+
+    val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
+    val mutedText = if (isDark) BotanicalDarkTextMuted else BotanicalLightTextMuted
+    val primaryAccent = if (isDark) BotanicalOlivePrimary else BotanicalSagePrimary
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        containerColor = if (isDark) BotanicalDarkSurface else BotanicalLightSurface
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("🟢 New Entry", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                IconButton(onClick = onDismiss) {
+                    Icon(Icons.Default.Close, contentDescription = "Close", tint = mutedText)
+                }
+            }
+
+            OutlinedTextField(
+                value = amount,
+                onValueChange = { amount = it },
+                label = { Text("Amount (₹)") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                colors = OutlinedTextFieldDefaults.colors(focusedTextColor = primaryText, unfocusedTextColor = primaryText, focusedBorderColor = primaryAccent),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            OutlinedTextField(
+                value = merchant,
+                onValueChange = { merchant = it },
+                label = { Text("Merchant / Purpose") },
+                colors = OutlinedTextFieldDefaults.colors(focusedTextColor = primaryText, unfocusedTextColor = primaryText, focusedBorderColor = primaryAccent),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            OutlinedTextField(
+                value = reason,
+                onValueChange = { reason = it },
+                label = { Text("Reason (optional)") },
+                modifier = Modifier.fillMaxWidth()
+            )
             Button(
                 onClick = {
                     val doubleAmt = amount.toDoubleOrNull()
                     if (doubleAmt != null && merchant.isNotBlank()) {
-                        onConfirm(doubleAmt, merchant, category)
+                        onSave(doubleAmt, merchant, category, reason.ifBlank { merchant })
                     }
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = TealAccent, contentColor = DarkBackground)
+                colors = ButtonDefaults.buttonColors(containerColor = primaryAccent, contentColor = if (isDark) BotanicalDarkBackground else Color.White),
+                shape = RoundedCornerShape(14.dp),
+                modifier = Modifier.fillMaxWidth().height(48.dp)
             ) {
-                Text("Add", fontWeight = FontWeight.Bold)
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Cancel", color = TealAccent)
+                Text("✓ Save Expense", fontWeight = FontWeight.Bold, fontSize = 15.sp)
             }
         }
-    )
+    }
 }
 
 @Composable
-fun SettingsDialog(
+fun VaultGlassSettingsDialog(
     currentBudget: Double,
     currentSheetsUrl: String,
+    currentBackendApiUrl: String,
     onDismiss: () -> Unit,
-    onConfirm: (Double, String) -> Unit
+    onSave: (Double, String, String) -> Unit
 ) {
+    val isDark = isSystemInDarkTheme()
     var budget by remember { mutableStateOf(currentBudget.toString()) }
     var sheetsUrl by remember { mutableStateOf(currentSheetsUrl) }
+    var backendApiUrl by remember { mutableStateOf(currentBackendApiUrl) }
 
-    val parsedBudget = budget.toDoubleOrNull()
-    val isBudgetValid = parsedBudget != null && parsedBudget >= 0
+    val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
+    val primaryAccent = if (isDark) BotanicalOlivePrimary else BotanicalSagePrimary
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Settings", color = TextPrimary, fontWeight = FontWeight.Bold) },
-        containerColor = SurfaceColor,
+        title = { Text("Settings", color = primaryText, fontWeight = FontWeight.Bold) },
+        containerColor = if (isDark) BotanicalDarkSurface else BotanicalLightSurface,
         text = {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedTextField(
                     value = budget,
                     onValueChange = { budget = it },
                     label = { Text("Monthly Limit (₹)") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    isError = !isBudgetValid,
-                    supportingText = {
-                        if (!isBudgetValid) {
-                            Text("Please enter a valid positive number", color = DangerColor)
-                        }
-                    },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary,
-                        focusedLabelColor = TealAccent,
-                        focusedBorderColor = TealAccent
-                    ),
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
+                    colors = OutlinedTextFieldDefaults.colors(focusedTextColor = primaryText, unfocusedTextColor = primaryText, focusedBorderColor = primaryAccent),
+                    modifier = Modifier.fillMaxWidth()
                 )
                 OutlinedTextField(
                     value = sheetsUrl,
                     onValueChange = { sheetsUrl = it },
                     label = { Text("Google Sheets Web App URL") },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary,
-                        focusedLabelColor = TealAccent,
-                        focusedBorderColor = TealAccent
-                    ),
-                    placeholder = { Text("https://script.google.com/macros/s/...") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
+                    colors = OutlinedTextFieldDefaults.colors(focusedTextColor = primaryText, unfocusedTextColor = primaryText, focusedBorderColor = primaryAccent),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                OutlinedTextField(
+                    value = backendApiUrl,
+                    onValueChange = { backendApiUrl = it },
+                    label = { Text("Backend API URL (optional)") },
+                    placeholder = { Text("http://192.168.x.x:8000/api/v1/expenses/") },
+                    colors = OutlinedTextFieldDefaults.colors(focusedTextColor = primaryText, unfocusedTextColor = primaryText, focusedBorderColor = primaryAccent),
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         },
         confirmButton = {
             Button(
                 onClick = {
-                    if (isBudgetValid) {
-                        onConfirm(parsedBudget!!, sheetsUrl)
-                    }
+                    val b = budget.toDoubleOrNull()
+                    if (b != null) onSave(b, sheetsUrl, backendApiUrl)
                 },
-                enabled = isBudgetValid,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = TealAccent, 
-                    contentColor = DarkBackground,
-                    disabledContainerColor = TealAccent.copy(alpha = 0.5f),
-                    disabledContentColor = DarkBackground.copy(alpha = 0.5f)
-                )
+                colors = ButtonDefaults.buttonColors(containerColor = primaryAccent, contentColor = if (isDark) BotanicalDarkBackground else Color.White)
             ) {
                 Text("Save", fontWeight = FontWeight.Bold)
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel", color = TealAccent)
+                Text("Cancel", color = primaryAccent)
             }
         }
     )
-}
-
-@Composable
-fun EditCategoryDialog(
-    transaction: TransactionEntity,
-    onDismiss: () -> Unit,
-    onConfirm: (String) -> Unit
-) {
-    val categories = listOf("Food", "Shopping", "Travel", "Bills", "Entertainment", "Others")
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Change Category", color = TextPrimary, fontWeight = FontWeight.Bold) },
-        containerColor = SurfaceColor,
-        text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(
-                    text = "Transaction to ${transaction.merchant} (₹${transaction.amount})",
-                    color = TextSecondary,
-                    fontSize = 13.sp
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                
-                categories.forEach { cat ->
-                    val isSelected = cat == transaction.category
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(if (isSelected) TealAccent.copy(alpha = 0.1f) else Color.Transparent)
-                            .clickable { onConfirm(cat) }
-                            .padding(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(10.dp)
-                                .clip(CircleShape)
-                                .background(getCategoryColor(cat))
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(
-                            text = cat,
-                            color = if (isSelected) TealAccent else TextPrimary,
-                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                            fontSize = 14.sp
-                        )
-                    }
-                }
-            }
-        },
-        confirmButton = {},
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Close", color = TealAccent)
-            }
-        }
-    )
-}
-
-// Helpers to work around Android SDK differences
-
-object CardStrokeHelper {
-    @Composable
-    fun border(color: Color) = androidx.compose.foundation.BorderStroke(1.dp, color)
-}
-
-@Composable
-fun PendingTransactionCard(
-    transaction: TransactionEntity,
-    onClick: () -> Unit,
-    onDeleteClick: () -> Unit
-) {
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = SurfaceColor),
-        border = CardStrokeHelper.border(Color(0xFFFF9F43).copy(alpha = 0.5f)),
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(14.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .background(Color(0xFFFF9F43).copy(alpha = 0.15f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Warning,
-                    contentDescription = "Pending Details",
-                    tint = Color(0xFFFF9F43),
-                    modifier = Modifier.size(20.dp)
-                )
-            }
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = "SMS Debit Detected",
-                        color = Color(0xFFFF9F43),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 12.sp
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(4.dp))
-                            .background(Color.White.copy(alpha = 0.08f))
-                            .padding(horizontal = 4.dp, vertical = 1.dp)
-                    ) {
-                        Text(
-                            text = "Draft",
-                            color = TextSecondary,
-                            fontSize = 8.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = "Prefilled: ${transaction.merchant}",
-                    color = TextPrimary,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 14.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
-                    text = "Tap to confirm reason & category",
-                    color = TextSecondary,
-                    fontSize = 11.sp
-                )
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End
-            ) {
-                Text(
-                    text = "₹%,.2f".format(transaction.amount),
-                    color = TextPrimary,
-                    fontWeight = FontWeight.Black,
-                    fontSize = 16.sp
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                IconButton(
-                    onClick = onDeleteClick,
-                    modifier = Modifier.size(28.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Delete",
-                        tint = TextSecondary.copy(alpha = 0.5f),
-                        modifier = Modifier.size(18.dp)
-                    )
-                }
-            }
-        }
-    }
 }
 
 @Composable
@@ -1162,86 +1267,63 @@ fun ConfirmPendingTransactionDialog(
     onDismiss: () -> Unit,
     onConfirm: (String, String) -> Unit
 ) {
+    val isDark = isSystemInDarkTheme()
     var merchant by remember { mutableStateOf(transaction.merchant) }
     var category by remember { mutableStateOf(transaction.category) }
-    val categories = listOf("Food", "Shopping", "Travel", "Bills", "Entertainment", "Others")
+
+    val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
+    val primaryAccent = if (isDark) BotanicalOlivePrimary else BotanicalSagePrimary
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Confirm SMS Transaction", color = TextPrimary, fontWeight = FontWeight.Bold) },
-        containerColor = SurfaceColor,
+        title = { Text("Confirm SMS Transaction", color = primaryText, fontWeight = FontWeight.Bold) },
+        containerColor = if (isDark) BotanicalDarkSurface else BotanicalLightSurface,
         text = {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = "Amount: ₹%,.2f".format(transaction.amount),
-                    color = TealAccent,
-                    fontWeight = FontWeight.Black,
-                    fontSize = 20.sp
-                )
-                Text(
-                    text = "Please enter the reason (merchant name) and select a category to finalize this expense.",
-                    color = TextSecondary,
-                    fontSize = 12.sp,
-                    lineHeight = 16.sp
-                )
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text("Amount: ₹%,.2f".format(transaction.amount), color = primaryAccent, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                 OutlinedTextField(
                     value = merchant,
                     onValueChange = { merchant = it },
-                    label = { Text("Reason / Merchant") },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary,
-                        focusedLabelColor = TealAccent,
-                        focusedBorderColor = TealAccent
-                    ),
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
+                    label = { Text("Merchant Name") },
+                    colors = OutlinedTextFieldDefaults.colors(focusedTextColor = primaryText, unfocusedTextColor = primaryText, focusedBorderColor = primaryAccent),
+                    modifier = Modifier.fillMaxWidth()
                 )
-                Text("Category", color = TextSecondary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    androidx.compose.foundation.lazy.LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        items(categories) { cat ->
-                            val isSelected = cat == category
-                            Box(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(12.dp))
-                                    .background(if (isSelected) TealAccent else DarkBackground)
-                                    .clickable { category = cat }
-                                    .padding(horizontal = 10.dp, vertical = 6.dp)
-                            ) {
-                                Text(
-                                    text = cat,
-                                    color = if (isSelected) DarkBackground else TextSecondary,
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
-                    }
-                }
             }
         },
         confirmButton = {
             Button(
-                onClick = {
-                    if (merchant.isNotBlank()) {
-                        onConfirm(merchant, category)
-                    }
-                },
-                colors = ButtonDefaults.buttonColors(containerColor = TealAccent, contentColor = DarkBackground)
+                onClick = { if (merchant.isNotBlank()) onConfirm(merchant, category) },
+                colors = ButtonDefaults.buttonColors(containerColor = primaryAccent, contentColor = if (isDark) BotanicalDarkBackground else Color.White)
             ) {
-                Text("Save Transaction", fontWeight = FontWeight.Bold)
+                Text("Confirm", fontWeight = FontWeight.Bold)
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel", color = TealAccent)
+                Text("Cancel", color = primaryAccent)
             }
         }
     )
+}
+
+fun getCategoryIcon(category: String): ImageVector {
+    return when (category) {
+        "Food", "Food & Dining" -> Icons.Default.Home
+        "Shopping" -> Icons.Default.ShoppingCart
+        "Travel", "Travel & Cab" -> Icons.Default.Place
+        "Bills" -> Icons.Default.Info
+        "Entertainment" -> Icons.Default.Star
+        else -> Icons.Default.List
+    }
+}
+
+fun getCategoryColor(category: String): Color {
+    return when (category) {
+        "Food", "Food & Dining" -> Color(0xFFD48B28)
+        "Shopping" -> Color(0xFF4D6B3C)
+        "Travel", "Travel & Cab" -> Color(0xFF3B82F6)
+        "Bills" -> Color(0xFFEF4444)
+        "Entertainment" -> Color(0xFF10B981)
+        else -> Color(0xFF8E9286)
+    }
 }

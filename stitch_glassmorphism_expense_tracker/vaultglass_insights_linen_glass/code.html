@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#F6F4EE;}body{overscroll-behavior:none;font-family:'Inter',sans-serif;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "surface-variant": "#e4e2dd",
+          "on-secondary-fixed": "#141e11",
+          "on-tertiary-container": "#ffd7c9",
+          "error-container": "#ffdad6",
+          "on-error": "#ffffff",
+          "inverse-on-surface": "#f3f1eb",
+          "secondary-container": "#dae7d0",
+          "tertiary-fixed": "#ffdbcf",
+          "primary": "#365226",
+          "inverse-surface": "#30312d",
+          "primary-container": "#4d6b3c",
+          "surface-container": "#f0eee8",
+          "on-primary-fixed-variant": "#324e22",
+          "on-primary-container": "#c7eab0",
+          "on-error-container": "#93000a",
+          "on-secondary": "#ffffff",
+          "surface-bright": "#fbf9f3",
+          "on-surface": "#1b1c18",
+          "on-primary": "#ffffff",
+          "primary-fixed": "#caedb2",
+          "surface-dim": "#dcdad4",
+          "surface-container-low": "#f5f3ed",
+          "secondary-fixed-dim": "#becab5",
+          "background": "#F6F4EE",
+          "secondary": "#566250",
+          "surface": "#F6F4EE",
+          "surface-container-lowest": "#ffffff",
+          "error": "#ba1a1a",
+          "outline": "#74796d",
+          "tertiary-container": "#9b4c2e",
+          "on-tertiary-fixed-variant": "#783115",
+          "inverse-primary": "#aed198",
+          "tertiary": "#7d3519",
+          "primary-fixed-dim": "#aed198",
+          "on-surface-variant": "#43483e",
+          "outline-variant": "#c3c8bb",
+          "on-secondary-container": "#5c6856",
+          "on-background": "#1b1c18",
+          "on-tertiary": "#ffffff",
+          "surface-tint": "#496638",
+          "surface-container-highest": "#e4e2dd",
+          "secondary-fixed": "#dae7d0",
+          "tertiary-fixed-dim": "#ffb59b",
+          "on-primary-fixed": "#072100",
+          "surface-container-high": "#eae8e2",
+          "on-secondary-fixed-variant": "#3e4a3a",
+          "on-tertiary-fixed": "#380d00"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "margin-mobile": "1.25rem",
+          "space-md": "1rem",
+          "space-xs": "0.25rem",
+          "space-xl": "2.5rem",
+          "gutter-sm": "1rem",
+          "space-lg": "1.5rem",
+          "margin": "3rem",
+          "gutter": "1.5rem",
+          "space-sm": "0.5rem"
+        },
+        "fontFamily": {
+          "body-lg": ["Inter"],
+          "label-caps": ["Inter"],
+          "headline-lg": ["Inter"],
+          "body-sm": ["Inter"],
+          "headline-md": ["Inter"],
+          "headline-lg-mobile": ["Inter"],
+          "headline-xl": ["Inter"],
+          "label-md": ["Inter"],
+          "headline-sm": ["Inter"],
+          "label-lg": ["Inter"],
+          "headline-xl-mobile": ["Inter"],
+          "body-md": ["Inter"]
+        },
+        "fontSize": {
+          "body-lg": ["17px", {"lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "400"}],
+          "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "600"}],
+          "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+          "body-sm": ["13px", {"lineHeight": "18px", "letterSpacing": "0.005em", "fontWeight": "400"}],
+          "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "500"}],
+          "headline-lg-mobile": ["26px", {"lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "500"}],
+          "headline-xl": ["44px", {"lineHeight": "52px", "letterSpacing": "-0.03em", "fontWeight": "500"}],
+          "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+          "headline-sm": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+          "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+          "headline-xl-mobile": ["34px", {"lineHeight": "42px", "letterSpacing": "-0.025em", "fontWeight": "500"}],
+          "body-md": ["15px", {"lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400"}]
+        }
+      }
+    }
+  };
+</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+      background-color: #F6F4EE;
+    }
+  </style>
+</head><body class="bg-[#F6F4EE] text-[#18251D] antialiased min-h-screen flex flex-col"><header class="fixed top-0 w-full z-50 pt-safe bg-[#F6F4EE]/85 backdrop-blur-xl border-b border-black/[0.05]"><div class="h-16 px-margin-mobile flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="VaultGlass App Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1WlyRVM-WpnkyigmQVIyT91whNNniFEAGXmYsvptL0JvMubNsYJ6-UPZbof5eLB4uK_LxuOvS0KF-2NQABcGR8__Ec8c3Q6VcWIGvPKHNn9a-m6XfMKiT-gpNGWX_4zha1G8mwWZRkTRznDWE9gkFUAUZP4esmJ1D83r_uNs6aoZJOt-EMcC0CLr8DMaOGGJSeHn9Xw39UTVzaR02V_o2dHkdguMle2KL9Vzb5mUlfYhvf6VmbH3QMTkvg"/><span class="font-headline-sm text-headline-sm text-[#18251D] tracking-tight font-semibold">VaultGlass</span></div><div class="flex items-center gap-space-sm"><span class="font-headline-sm text-headline-sm text-primary font-medium tracking-tight">Insights</span><img alt="Sudhakar Profile" class="w-8 h-8 rounded-full object-cover ml-space-xs ring-2 ring-primary/20 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-vV7iD4m-Ng5fGtiGjkgVtcy9oemYlpHMDiIw2r5iQ4rHSXUUY-ClOogUn2yCzI_CsmpQ844k4LrJTe6ECr89GUZl6StKvjfWCxClMo7-c2xc994YMV6bo5fUGVCw8f6OBuDDnb6zBBKS7yuk9lbs5gSVNbxbR52JRIaR3f4f35buU181BNegYPlJv2RyhwHN6jv3sFWcqnWO5QfbENcefjqP2GDet_C70BKq_9ugsMjBSoManI71j7F_WCz2UyacGA"/></div></div></header><main class="flex-1 w-full bg-[#F6F4EE] pt-16 pb-28"><div class="flex flex-col w-full px-margin-mobile pb-28 gap-space-md">
+<!-- Warm Organic Subtle Ambient Glow Orbs -->
+<div class="relative w-full overflow-hidden">
+<div class="absolute -top-10 left-1/4 w-60 h-60 bg-[#4D6B3C]/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute top-28 right-0 w-52 h-52 bg-[#D49B35]/10 rounded-full blur-3xl pointer-events-none"></div>
+</div>
+<!-- Header & Interactive Month Switcher -->
+<section class="flex flex-col gap-space-sm pt-2">
+<div class="flex items-center justify-between">
+<div>
+<p class="font-label-caps text-label-caps text-primary uppercase tracking-wider font-semibold">Intelligence</p>
+<h1 class="font-headline-lg text-headline-lg text-[#18251D] font-semibold tracking-tight">Financial Insights</h1>
+</div>
+<button aria-label="Export Summary" class="w-10 h-10 rounded-full bg-white/80 border border-white shadow-[0_4px_16px_rgba(30,40,30,0.06)] backdrop-blur-xl flex items-center justify-center text-[#18251D] active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[20px] text-primary">ios_share</span>
+</button>
+</div>
+<!-- Month Switcher Glass Pill -->
+<div class="flex items-center justify-between bg-white/75 border border-white/90 backdrop-blur-xl rounded-full px-space-sm py-2 shadow-[0_8px_24px_rgba(24,37,29,0.06)]">
+<button aria-label="Previous Month" class="w-9 h-9 rounded-full bg-[#365226]/10 hover:bg-[#365226]/15 flex items-center justify-center text-primary active:scale-90 transition-all border border-[#365226]/15" id="prev-month-btn" type="button">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<div class="flex flex-col items-center">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-primary">calendar_month</span>
+<span class="font-label-lg text-label-lg text-[#18251D] font-semibold tracking-tight" id="current-month-label">October 2024</span>
+</div>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="font-headline-sm text-headline-sm text-[#18251D] font-semibold">₹18,450.00</span>
+<span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-[#365226]/10 text-primary font-label-md text-label-md font-medium border border-primary/20">
+<span class="material-symbols-outlined text-[13px]">trending_down</span>
+            12% vs Sep
+          </span>
+</div>
+</div>
+<button aria-label="Next Month" class="w-9 h-9 rounded-full bg-[#EAE8E2]/60 flex items-center justify-center text-[#5A665E] active:scale-90 transition-all opacity-40 cursor-not-allowed" disabled="" id="next-month-btn" type="button">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Spend Breakdown Donut Chart Card -->
+<section class="bg-white/75 border border-white/90 backdrop-blur-xl rounded-xl p-space-md shadow-[0_8px_24px_rgba(24,37,29,0.06)] flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">donut_large</span>
+<h2 class="font-headline-sm text-headline-sm text-[#18251D] font-semibold">Category Distribution</h2>
+</div>
+<span class="font-label-md text-label-md px-2.5 py-1 rounded-full bg-[#365226]/10 text-primary font-medium border border-primary/20">5 Categories</span>
+</div>
+<!-- Custom Donut SVG with Warm Linen Track, Olive, Amber, Pistachio & Terracotta -->
+<div class="relative flex items-center justify-center py-2">
+<svg aria-label="Spend breakdown donut chart" class="w-56 h-56 -rotate-90 transform" viewbox="0 0 160 160">
+<!-- Background Track (Warm Linen Sage) -->
+<circle cx="80" cy="80" fill="none" r="62" stroke="#E6E3DB" stroke-width="16"></circle>
+<!-- Segment 1: Food 28% (Ochre Amber #D49B35) -->
+<circle class="transition-all duration-700 ease-out hover:opacity-85" cx="80" cy="80" fill="none" r="62" stroke="#D49B35" stroke-dasharray="109.08 280.48" stroke-dashoffset="0" stroke-linecap="round" stroke-width="16"></circle>
+<!-- Segment 2: Shopping 24% (Rich Olive Moss #4D6B3C) -->
+<circle class="transition-all duration-700 ease-out hover:opacity-85" cx="80" cy="80" fill="none" r="62" stroke="#4D6B3C" stroke-dasharray="93.49 296.07" stroke-dashoffset="-111.5" stroke-linecap="round" stroke-width="16"></circle>
+<!-- Segment 3: Bills 20% (Sage Green #6A8E4E) -->
+<circle class="transition-all duration-700 ease-out hover:opacity-85" cx="80" cy="80" fill="none" r="62" stroke="#6A8E4E" stroke-dasharray="77.91 311.65" stroke-dashoffset="-207.5" stroke-linecap="round" stroke-width="16"></circle>
+<!-- Segment 4: Travel 16% (Pistachio #8FAF72) -->
+<circle class="transition-all duration-700 ease-out hover:opacity-85" cx="80" cy="80" fill="none" r="62" stroke="#8FAF72" stroke-dasharray="62.33 327.23" stroke-dashoffset="-287.5" stroke-linecap="round" stroke-width="16"></circle>
+<!-- Segment 5: Others 12% (Terracotta Clay #9B4C2E) -->
+<circle class="transition-all duration-700 ease-out hover:opacity-85" cx="80" cy="80" fill="none" r="62" stroke="#9B4C2E" stroke-dasharray="41.0 348.56" stroke-dashoffset="-351.5" stroke-linecap="round" stroke-width="16"></circle>
+</svg>
+<!-- Center Typography -->
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+<span class="font-label-caps text-label-caps uppercase text-[#5A665E] tracking-wider font-semibold">Total Spent</span>
+<span class="font-headline-lg text-headline-lg text-[#18251D] font-bold tracking-tight">₹18,450</span>
+<span class="font-body-sm text-body-sm text-primary font-medium">94 Transactions</span>
+</div>
+</div>
+<!-- Category Legend Grid (Frosted Milk Glass Pills) -->
+<div class="grid grid-cols-2 gap-2 pt-2">
+<div class="flex items-center justify-between p-2 rounded-lg bg-white/70 border border-white shadow-[0_2px_8px_rgba(24,37,29,0.04)] hover:bg-white/90 transition-colors">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#D49B35] shadow-[0_0_6px_#D49B35]"></span>
+<span class="font-body-sm text-body-sm text-[#18251D] font-medium">Food &amp; Dining</span>
+</div>
+<span class="font-label-md text-label-md text-[#A66F0F] font-semibold">28% · ₹5,166</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded-lg bg-white/70 border border-white shadow-[0_2px_8px_rgba(24,37,29,0.04)] hover:bg-white/90 transition-colors">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#4D6B3C] shadow-[0_0_6px_#4D6B3C]"></span>
+<span class="font-body-sm text-body-sm text-[#18251D] font-medium">Shopping</span>
+</div>
+<span class="font-label-md text-label-md text-primary font-semibold">24% · ₹4,428</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded-lg bg-white/70 border border-white shadow-[0_2px_8px_rgba(24,37,29,0.04)] hover:bg-white/90 transition-colors">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#6A8E4E] shadow-[0_0_6px_#6A8E4E]"></span>
+<span class="font-body-sm text-body-sm text-[#18251D] font-medium">Utility Bills</span>
+</div>
+<span class="font-label-md text-label-md text-[#3E6125] font-semibold">20% · ₹3,690</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded-lg bg-white/70 border border-white shadow-[0_2px_8px_rgba(24,37,29,0.04)] hover:bg-white/90 transition-colors">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#8FAF72] shadow-[0_0_6px_#8FAF72]"></span>
+<span class="font-body-sm text-body-sm text-[#18251D] font-medium">Travel &amp; Cab</span>
+</div>
+<span class="font-label-md text-label-md text-[#4D6B3C] font-semibold">16% · ₹2,952</span>
+</div>
+<div class="col-span-2 flex items-center justify-between p-2 rounded-lg bg-white/70 border border-white shadow-[0_2px_8px_rgba(24,37,29,0.04)] hover:bg-white/90 transition-colors">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#9B4C2E] shadow-[0_0_6px_#9B4C2E]"></span>
+<span class="font-body-sm text-body-sm text-[#18251D] font-medium">Other Miscellaneous</span>
+</div>
+<span class="font-label-md text-label-md text-[#7D3519] font-semibold">12% · ₹2,214</span>
+</div>
+</div>
+</section>
+<!-- Top Category Highlight Card with Warm Ochre Accent -->
+<section class="relative bg-white/75 border border-white/90 backdrop-blur-xl rounded-xl p-space-md shadow-[0_10px_28px_rgba(212,155,53,0.1)] overflow-hidden">
+<!-- Accent Warm Aura -->
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-[#D49B35]/15 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex flex-col gap-3 relative z-10">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-[#D49B35]/15 flex items-center justify-center text-[#A66F0F] border border-[#D49B35]/30">
+<span class="material-symbols-outlined text-[16px]">local_fire_department</span>
+</div>
+<span class="font-label-caps text-label-caps text-primary tracking-wider uppercase font-semibold">Top Spending Category</span>
+</div>
+<span class="font-label-md text-label-md px-2.5 py-0.5 rounded-full bg-[#D49B35]/15 text-[#8F5A00] font-semibold border border-[#D49B35]/30">Attention</span>
+</div>
+<div class="flex items-baseline justify-between">
+<div>
+<h3 class="font-headline-md text-headline-md text-[#18251D] font-bold">Food &amp; Dining</h3>
+<p class="font-body-sm text-body-sm text-[#5A665E]">14 Swiggy, Zomato &amp; cafe visits logged</p>
+</div>
+<div class="text-right">
+<span class="font-headline-md text-headline-md text-[#A66F0F] font-bold">₹5,200</span>
+<p class="font-label-md text-label-md text-[#5A665E]">28.1% of month</p>
+</div>
+</div>
+<!-- Insight Callout Box -->
+<div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#FAF7F0] border border-[#E9E4D6]">
+<span class="material-symbols-outlined text-[18px] text-[#A66F0F] shrink-0 mt-0.5">warning</span>
+<p class="font-body-sm text-body-sm text-[#222C24]">
+<strong class="text-[#8F5A00] font-semibold">₹840 higher</strong> than your 3-month average. Takeout spiked noticeably during late-night hours.
+        </p>
+</div>
+<!-- Actionable Suggestion Chip -->
+<div class="flex items-center justify-between pt-1">
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#365226]/10 hover:bg-[#365226]/20 text-primary border border-primary/25 font-label-md text-label-md font-semibold active:scale-95 transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-[14px]">tune</span>
+          Set ₹6,000 Food Cap
+        </button>
+<a class="font-label-md text-label-md text-primary font-semibold hover:text-[#18251D] flex items-center gap-0.5" href="#">
+          View Transactions
+          <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+<!-- 6-Month Spend Trend Sparkline Card -->
+<section class="bg-white/75 border border-white/90 backdrop-blur-xl rounded-xl p-space-md shadow-[0_8px_24px_rgba(24,37,29,0.06)] flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-[#18251D] font-semibold">6-Month Spending Trend</h2>
+<p class="font-body-sm text-body-sm text-[#5A665E]">Consistent savings trajectory</p>
+</div>
+<div class="text-right">
+<span class="font-label-md text-label-md text-primary font-semibold px-2.5 py-1 rounded-full bg-[#365226]/10 border border-primary/20">Avg ₹19,140</span>
+</div>
+</div>
+<!-- Chart Container with Light Organic Grid & Olive Moss Gradient -->
+<div class="relative w-full pt-4 pb-1">
+<svg class="w-full h-36 overflow-visible" preserveaspectratio="none" viewbox="0 0 320 120">
+<defs>
+<lineargradient id="areaGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#4D6B3C" stop-opacity="0.25"></stop>
+<stop offset="80%" stop-color="#8FAF72" stop-opacity="0.08"></stop>
+<stop offset="100%" stop-color="#4D6B3C" stop-opacity="0.0"></stop>
+</lineargradient>
+</defs>
+<!-- Average Baseline Dotted Line (y = 52 ~ ₹19,140) -->
+<line stroke="#C3C8BB" stroke-dasharray="4 4" stroke-width="1.5" x1="10" x2="310" y1="52" y2="52"></line>
+<text fill="#74796D" font-family="Inter" font-size="8" font-weight="600" text-anchor="end" x="312" y="55">Avg</text>
+<!-- Area Fill -->
+<polygon fill="url(#areaGradient)" points="15,110 15,82 72,50 129,66 186,22 243,36 300,59 300,110"></polygon>
+<!-- Smooth Spline Path -->
+<path d="M 15 82 Q 43.5 50 72 50 T 129 66 T 186 22 T 243 36 T 300 59" fill="none" stroke="#4D6B3C" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+<!-- Data Points -->
+<circle cx="15" cy="82" fill="#FFFFFF" r="3.5" stroke="#4D6B3C" stroke-width="2"></circle>
+<circle cx="72" cy="50" fill="#FFFFFF" r="3.5" stroke="#4D6B3C" stroke-width="2"></circle>
+<circle cx="129" cy="66" fill="#FFFFFF" r="3.5" stroke="#4D6B3C" stroke-width="2"></circle>
+<circle cx="186" cy="22" fill="#FFDAD6" r="4.5" stroke="#BA1A1A" stroke-width="2.5"></circle> <!-- Peak month -->
+<circle cx="243" cy="36" fill="#FFFFFF" r="3.5" stroke="#4D6B3C" stroke-width="2"></circle>
+<circle cx="300" cy="59" fill="#4D6B3C" r="4.5" stroke="#C7EAB0" stroke-width="2.5"></circle> <!-- Current month -->
+</svg>
+<!-- Month Label Axis -->
+<div class="flex justify-between items-center px-1 text-[#5A665E] font-label-md text-label-md mt-1">
+<span class="text-center">May<br/><strong class="text-[#18251D]">16.2k</strong></span>
+<span class="text-center">Jun<br/><strong class="text-[#18251D]">19.4k</strong></span>
+<span class="text-center">Jul<br/><strong class="text-[#18251D]">17.8k</strong></span>
+<span class="text-center">Aug<br/><strong class="text-[#BA1A1A]">22.1k</strong></span>
+<span class="text-center">Sep<br/><strong class="text-[#18251D]">20.9k</strong></span>
+<span class="text-center text-primary font-bold">Oct<br/><strong class="text-primary">18.45k</strong></span>
+</div>
+</div>
+</section>
+<!-- Smart Predictions & Leak Alerts -->
+<section class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-sm text-headline-sm text-[#18251D] font-semibold">Predictive Leak Alerts</h2>
+<span class="font-label-md text-label-md text-primary font-semibold">Live AI Feed</span>
+</div>
+<div class="grid grid-cols-1 gap-2.5">
+<!-- Mini Card 1: Weekend Spike -->
+<div class="bg-white/75 border border-white/90 backdrop-blur-xl rounded-xl p-space-sm flex items-start gap-3 shadow-[0_4px_16px_rgba(24,37,29,0.05)]">
+<div class="w-10 h-10 rounded-xl bg-[#D49B35]/15 border border-[#D49B35]/25 flex items-center justify-center text-[#A66F0F] shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[20px]">bolt</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h4 class="font-body-md text-body-md text-[#18251D] font-semibold truncate">Weekend Spike Detected</h4>
+<span class="font-label-md text-label-md text-[#8F5A00] bg-[#D49B35]/15 border border-[#D49B35]/25 px-2 py-0.5 rounded-full font-semibold">+42% Pace</span>
+</div>
+<p class="font-body-sm text-body-sm text-[#5A665E] mt-0.5">
+            You spend 42% more on Saturdays and Sundays. Consider scheduling no-spend Saturdays.
+          </p>
+</div>
+</div>
+<!-- Mini Card 2: Subscriptions Due -->
+<div class="bg-white/75 border border-white/90 backdrop-blur-xl rounded-xl p-space-sm flex items-start gap-3 shadow-[0_4px_16px_rgba(24,37,29,0.05)]">
+<div class="w-10 h-10 rounded-xl bg-[#4D6B3C]/15 border border-[#4D6B3C]/25 flex items-center justify-center text-primary shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h4 class="font-body-md text-body-md text-[#18251D] font-semibold truncate">2 Subscriptions Due</h4>
+<span class="font-label-md text-label-md text-primary bg-[#4D6B3C]/15 border border-[#4D6B3C]/25 px-2 py-0.5 rounded-full font-semibold">in 3 Days</span>
+</div>
+<p class="font-body-sm text-body-sm text-[#5A665E] mt-0.5">
+            Netflix (₹649) &amp; Spotify (₹119) will be auto-debited on Oct 28th.
+          </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive JavaScript for micro-interactions -->
+<script>
+    (function () {
+      const prevBtn = document.getElementById('prev-month-btn');
+      const nextBtn = document.getElementById('next-month-btn');
+      const label = document.getElementById('current-month-label');
+
+      const months = ['August 2024', 'September 2024', 'October 2024'];
+      let currentIdx = 2;
+
+      function updateState() {
+        if (!label) return;
+        label.textContent = months[currentIdx];
+        if (currentIdx === 0) {
+          prevBtn.disabled = true;
+          prevBtn.classList.add('opacity-40', 'cursor-not-allowed');
+        } else {
+          prevBtn.disabled = false;
+          prevBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+        }
+
+        if (currentIdx === months.length - 1) {
+          nextBtn.disabled = true;
+          nextBtn.classList.add('opacity-40', 'cursor-not-allowed');
+        } else {
+          nextBtn.disabled = false;
+          nextBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+        }
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', function () {
+          if (currentIdx > 0) {
+            currentIdx--;
+            updateState();
+          }
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', function () {
+          if (currentIdx < months.length - 1) {
+            currentIdx++;
+            updateState();
+          }
+        });
+      }
+    })();
+  </script>
+</div></main><div class="fixed bottom-0 inset-x-0 z-50 pointer-events-none pb-safe"><div class="px-4 pb-4 max-w-md mx-auto w-full"><nav class="pointer-events-auto h-16 w-full rounded-full bg-white/80 backdrop-blur-xl border border-white shadow-[0_16px_40px_rgba(24,37,29,0.12)] flex items-center justify-around px-2 relative"><a class="flex flex-col items-center justify-center min-w-[48px] h-12 rounded-full text-[#5A665E] hover:text-[#18251D] transition-all px-3" data-path="home" href="#"><span class="material-symbols-outlined text-[22px]">grid_view</span><span class="font-label-md text-label-md mt-0.5">Home</span></a><a class="flex flex-col items-center justify-center min-w-[48px] h-12 rounded-full text-[#5A665E] hover:text-[#18251D] transition-all px-3 relative" data-path="transactions" href="#"><div class="relative flex items-center justify-center"><span class="material-symbols-outlined text-[22px]">receipt_long</span><span class="absolute -top-0.5 -right-1 w-2 h-2 rounded-full bg-[#D49B35] shadow-[0_0_6px_#D49B35]"></span></div><span class="font-label-md text-label-md mt-0.5">Activity</span></a><div class="relative -top-3 flex items-center justify-center px-1"><a class="w-14 h-14 rounded-full bg-[#365226] shadow-[0_6px_20px_rgba(54,82,38,0.35)] flex items-center justify-center text-white border-2 border-white active:scale-95 transition-transform" data-path="add-expense" href="#"><span class="material-symbols-outlined text-[28px] font-bold">add</span></a></div><a aria-current="page" class="flex flex-col items-center justify-center min-w-[48px] h-12 rounded-full transition-all px-3 text-primary bg-[#365226]/12 border border-[#365226]/20" data-path="insights" href="#"><span class="material-symbols-outlined text-[22px]">insert_chart</span><span class="font-label-md text-label-md mt-0.5 font-semibold">Insights</span></a><a class="flex flex-col items-center justify-center min-w-[48px] h-12 rounded-full text-[#5A665E] hover:text-[#18251D] transition-all px-3" data-path="profile" href="#"><span class="material-symbols-outlined text-[22px]">account_circle</span><span class="font-label-md text-label-md mt-0.5">Profile</span></a></nav></div></div>
+</body></html>

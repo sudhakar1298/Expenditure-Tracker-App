@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#0f1511;}body{overscroll-behavior:none;font-family:'Inter',sans-serif;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-primary-container":"#283d17","on-secondary":"#32302e","surface":"#0f1511","surface-container":"#1b211d","tertiary-container":"#ca9933","outline-variant":"#44483e","primary-container":"#8fa978","secondary-fixed":"#e7e1dd","surface-container-high":"#252b27","background":"#0f1511","tertiary-fixed-dim":"#f4be55","outline":"#8e9286","on-surface":"#dee4dd","inverse-on-surface":"#2c322d","on-primary-fixed":"#0c2001","surface-container-lowest":"#0a100c","inverse-primary":"#4e653b","on-secondary-fixed":"#1d1b19","on-tertiary":"#412d00","on-background":"#dee4dd","on-tertiary-fixed":"#271900","surface-variant":"#303632","on-tertiary-fixed-variant":"#5e4200","on-surface-variant":"#c4c8bb","secondary-container":"#4b4946","on-secondary-fixed-variant":"#494644","tertiary":"#f4be55","inverse-surface":"#dee4dd","on-tertiary-container":"#4b3400","on-error":"#690005","primary-fixed-dim":"#b4cf9b","surface-container-low":"#171d19","surface-bright":"#343b36","primary-fixed":"#d0ebb5","on-secondary-container":"#bcb7b4","error":"#ffb4ab","primary":"#b4cf9b","secondary-fixed-dim":"#cbc5c2","tertiary-fixed":"#ffdea7","surface-tint":"#b4cf9b","surface-dim":"#0f1511","on-error-container":"#ffdad6","error-container":"#93000a","on-primary":"#213611","on-primary-fixed-variant":"#374d25","surface-container-highest":"#303632","secondary":"#cbc5c2"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-sm":"0.5rem","gutter":"1.25rem","space-xs":"0.25rem","space-xl":"2.25rem","space-lg":"1.5rem","margin-mobile":"1rem","space-2xl":"3.5rem","space-md":"1rem","margin":"2.5rem","gutter-mobile":"0.75rem"},"fontFamily":{"title-md":["Inter"],"headline-xl-mobile":["Inter"],"body-md":["Inter"],"body-sm":["Inter"],"label-md":["Inter"],"metric-hero-mobile":["Inter"],"headline-sm":["Inter"],"headline-lg-mobile":["Inter"],"body-lg":["Inter"],"headline-xl":["Inter"],"headline-lg":["Inter"],"headline-md":["Inter"],"label-sm":["Inter"],"metric-hero":["Inter"]},"fontSize":{"title-md":["16px",{"lineHeight":"22px","letterSpacing":"0em","fontWeight":"600"}],"headline-xl-mobile":["32px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"500"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}],"body-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"400"}],"label-md":["13px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"metric-hero-mobile":["36px",{"lineHeight":"40px","letterSpacing":"-0.025em","fontWeight":"500"}],"headline-sm":["20px",{"lineHeight":"26px","letterSpacing":"-0.005em","fontWeight":"500"}],"headline-lg-mobile":["26px",{"lineHeight":"32px","letterSpacing":"-0.015em","fontWeight":"500"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"0em","fontWeight":"400"}],"headline-xl":["40px",{"lineHeight":"48px","letterSpacing":"-0.02em","fontWeight":"500"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.015em","fontWeight":"500"}],"headline-md":["24px",{"lineHeight":"30px","letterSpacing":"-0.01em","fontWeight":"500"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.06em","fontWeight":"600"}],"metric-hero":["48px",{"lineHeight":"52px","letterSpacing":"-0.03em","fontWeight":"500"}]}}}}</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head><body class="bg-[#111613] text-on-surface antialiased min-h-screen flex flex-col"><header class="fixed top-0 w-full z-50 pt-safe bg-[#111613]/85 backdrop-blur-xl border-b border-white/[0.06] shadow-[0_4px_20px_rgba(0,0,0,0.4)]"><div class="h-16 px-margin-mobile flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-lg bg-[#7E9A68]/20 border border-[#7E9A68]/30 flex items-center justify-center text-[#b4cf9b] shadow-[0_0_12px_rgba(126,154,104,0.25)]"><span class="material-symbols-outlined text-[20px]">shield_with_heart</span></div><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight font-semibold">VaultGlass</span></div><div class="flex items-center gap-space-sm"><span class="font-body-md text-on-surface-variant font-medium tracking-tight">Home</span><img alt="Profile" class="w-8 h-8 rounded-full object-cover ml-space-xs ring-1 ring-[#7E9A68]/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkoFYxiPW1Fdwb5BBQPYdYEQhXIKYkHVLztd6-8CU7cIuCElKG9s-UoYQAl_sVxpDI8xKNJp4j_7fgcvPzjOKHorG9kqzfQrG9bH9Uxj7JjqozJHJCi8G3X-iojumZHtUwcBhChd-h0GS-jVcCP1KIBZfhvEPR9VMMpOIijuK8CzFS5vnEv9ck_WpGL_VqoUcpbGUmYs4X7trTvN8Ko2hZ4LzeUjWG-q4OFD0GPdDhlRasRo8E2TSk8Q1v6L4goRvbgw"/></div></div></header><main class="flex-1 w-full bg-[#111613] pt-16 pb-28"><div class="flex flex-col w-full text-on-surface">
+<!-- Subtle Organic Spruce & Moss Ambient Glow Overlay -->
+<div class="fixed top-12 left-1/2 -translate-x-1/2 w-88 h-72 bg-gradient-to-b from-[#7E9A68]/18 via-[#52B788]/8 to-transparent blur-3xl pointer-events-none -z-10 rounded-full"></div>
+<!-- Top Hero Greeting Row -->
+<div class="px-margin-mobile pt-space-sm pb-space-sm flex items-center justify-between">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="relative flex-shrink-0">
+<img class="w-11 h-11 rounded-full object-cover shadow-md bg-[#1a241e] ring-1 ring-[#7E9A68]/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLUw3K8dE6XM691HHIMYk2-K6CZ8YskgPD234pPwaakly09KgeWJ14UON_L5B66WEuAfLEgCNaz8hN3SSxu4XoZITKkilej2JnW-pvCfFzvgvEQ7y0tD64MKE1qIQW3JnkXlirMqS9rca_DE6NJJkKbg5h-cl12P7G5sdQnXi1ulTPNlDotzow7Gf5-YdQYB-Th_vMLC-L5a4PFV4xWRGcWiPZrudQG3OdGeAV8jq7xkEpBUb1WQ_ZXVekIXzBjOXoyg"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-[#52B788] rounded-full ring-2 ring-[#111613] shadow-[0_0_8px_rgba(82,183,136,0.8)]"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+          Welcome back <span class="">👋</span>
+</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold tracking-tight truncate">Sudhakar</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<button aria-label="Notifications" class="relative w-10 h-10 rounded-full bg-[#1a241e]/70 backdrop-blur-md border border-white/[0.08] flex items-center justify-center text-on-surface hover:bg-[#1a241e] transition-transform active:scale-95 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#E9B44C] shadow-[0_0_6px_#E9B44C]"></span>
+</button>
+<button aria-label="Settings" class="w-10 h-10 rounded-full bg-[#1a241e]/70 backdrop-blur-md border border-white/[0.08] flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-[#1a241e] transition-transform active:scale-95 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</button>
+</div>
+</div>
+<!-- Main Scrollable Section -->
+<div class="flex flex-col gap-space-md px-margin-mobile mt-space-xs pb-space-xl">
+<!-- Budget Hero Card with Botanical Olive & Pistachio Gradient -->
+<div class="relative overflow-hidden rounded-2xl bg-[#1a241e]/65 backdrop-blur-xl border border-white/[0.07] p-space-md shadow-[0_12px_40px_-6px_rgba(0,0,0,0.6)]">
+<div class="absolute -right-12 -top-12 w-48 h-48 bg-gradient-to-br from-[#7E9A68]/20 to-[#97B082]/10 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-[#97B082] shadow-[0_0_6px_#97B082] animate-pulse"></span>
+<span class="font-label-sm text-[11px] text-on-surface-variant tracking-wider uppercase font-semibold">Monthly Vault Track</span>
+</div>
+<span class="font-label-sm text-[11px] bg-[#7E9A68]/20 text-[#b4cf9b] border border-[#7E9A68]/35 px-2.5 py-0.5 rounded-full font-semibold">May Cycle</span>
+</div>
+<div class="flex items-center gap-space-md">
+<!-- Circular Progress Meter: Olive & Pistachio -->
+<div class="relative w-28 h-28 flex-shrink-0 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90 transform" viewbox="0 0 100 100">
+<defs>
+<lineargradient id="budgetRingGrad" x1="0%" x2="100%" y1="0%">
+<stop offset="0%" stop-color="#7E9A68"></stop>
+<stop offset="60%" stop-color="#97B082"></stop>
+<stop offset="100%" stop-color="#b4cf9b"></stop>
+</lineargradient>
+</defs>
+<!-- Background circle track -->
+<circle class="text-[#252b27]/80" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<!-- Spent progress circle: 74% spent (perimeter = 251.2, 74% = 185.8) -->
+<circle class="transition-all duration-1000 ease-out" cx="50" cy="50" fill="transparent" r="40" stroke="url(#budgetRingGrad)" stroke-dasharray="251.2" stroke-dashoffset="65.3" stroke-linecap="round" stroke-width="8.5"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold leading-none">26%</span>
+<span class="font-label-sm text-[10px] text-[#b4cf9b] uppercase tracking-tight mt-0.5 font-semibold">left</span>
+</div>
+</div>
+<!-- Spend Stats -->
+<div class="flex flex-col min-w-0 flex-1">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Spent this month</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-md text-headline-md text-on-surface font-bold tracking-tight">₹18,450</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">/ ₹25,000</span>
+</div>
+<div class="mt-2 pt-2 bg-[#151c17]/70 border border-white/[0.04] rounded-lg p-2">
+<div class="flex items-center justify-between text-on-surface">
+<span class="font-body-sm text-body-sm text-[#52B788] flex items-center gap-1 font-medium">
+<span class="material-symbols-outlined text-[15px]">timer</span> ₹6,550 left
+              </span>
+<span class="font-label-sm text-[10px] text-on-surface-variant">11 days left</span>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+              Daily safe spend: <span class="font-medium text-on-surface">₹595/day</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="grid grid-cols-2 gap-space-sm mt-space-md pt-space-xs">
+<button class="w-full h-10 rounded-xl bg-gradient-to-r from-[#7E9A68] to-[#97B082] hover:opacity-95 text-[#111613] font-body-md text-body-md font-semibold flex items-center justify-center gap-1.5 shadow-[0_4px_16px_rgba(126,154,104,0.35)] active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+          Add Budget
+        </button>
+<button class="w-full h-10 rounded-xl bg-[#1a241e]/80 hover:bg-[#1a241e] border border-white/[0.08] text-on-surface font-body-md text-body-md font-medium flex items-center justify-center gap-1.5 backdrop-blur-md active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">tune</span>
+          Adjust Limits
+        </button>
+</div>
+</div>
+<!-- Amber Alert Strip: Pending Confirmations (Honey/Dijon Amber #E9B44C) -->
+<div class="relative rounded-2xl bg-[#E9B44C]/10 border border-[#E9B44C]/30 p-3.5 backdrop-blur-md shadow-md">
+<!-- Amber Corner Flare Indicator -->
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<span class="flex h-2.5 w-2.5 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E9B44C] opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#E9B44C]"></span>
+</span>
+<span class="font-headline-sm text-[14px] leading-5 text-on-surface font-semibold">3 SMS Drafts to Categorize</span>
+</div>
+<span class="font-label-sm text-[11px] px-2 py-0.5 rounded-full bg-[#E9B44C]/20 text-[#E9B44C] border border-[#E9B44C]/30 font-bold uppercase tracking-wider">
+          Needs Action
+        </span>
+</div>
+<!-- Swipeable Horizontal Cards -->
+<div class="flex gap-space-sm overflow-x-auto no-scrollbar scroll-smooth pb-1 -mx-1 px-1">
+<!-- Pending Card 1 -->
+<div class="flex-shrink-0 w-72 rounded-xl bg-[#1a241e]/90 border border-white/[0.08] backdrop-blur-xl p-3 shadow-lg flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-[#E07A5F]/20 text-[#E07A5F] flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">lunch_dining</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md text-on-surface font-semibold leading-tight">Swiggy</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Parsed from HDFC Bank SMS</span>
+</div>
+</div>
+<span class="font-metric-md text-[18px] text-on-surface font-bold">₹850</span>
+</div>
+<div class="mt-3">
+<span class="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-wider block mb-1.5">Assign Category:</span>
+<div class="flex flex-wrap gap-1.5">
+<button class="px-2.5 py-1 rounded-full font-label-sm text-[11px] bg-[#E9B44C] text-[#111613] font-bold shadow-sm active:scale-95 transition-all" type="button">Food</button>
+<button class="px-2.5 py-1 rounded-full font-label-sm text-[11px] bg-[#151c17] border border-white/[0.08] text-on-surface-variant hover:text-on-surface active:scale-95 transition-all" type="button">Travel</button>
+<button class="px-2.5 py-1 rounded-full font-label-sm text-[11px] bg-[#151c17] border border-white/[0.08] text-on-surface-variant hover:text-on-surface active:scale-95 transition-all" type="button">Shopping</button>
+</div>
+</div>
+<div class="mt-3 pt-2 flex items-center justify-between">
+<button class="font-body-sm text-body-sm text-on-surface-variant hover:text-[#E07A5F] transition-colors" type="button">Ignore</button>
+<button class="h-7 px-3 rounded-lg bg-[#7E9A68] hover:bg-[#97B082] text-[#111613] font-body-sm text-body-sm font-semibold flex items-center gap-1 active:scale-95 transition-transform shadow-sm" type="button">
+<span class="material-symbols-outlined text-[15px]">done</span> Confirm
+            </button>
+</div>
+</div>
+<!-- Pending Card 2 -->
+<div class="flex-shrink-0 w-72 rounded-xl bg-[#1a241e]/90 border border-white/[0.08] backdrop-blur-xl p-3 shadow-lg flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-[#7E9A68]/25 text-[#b4cf9b] flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md text-on-surface font-semibold leading-tight">Amazon Pay</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Parsed from ICICI SMS</span>
+</div>
+</div>
+<span class="font-metric-md text-[18px] text-on-surface font-bold">₹1,499</span>
+</div>
+<div class="mt-3">
+<span class="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-wider block mb-1.5">Assign Category:</span>
+<div class="flex flex-wrap gap-1.5">
+<button class="px-2.5 py-1 rounded-full font-label-sm text-[11px] bg-[#7E9A68] text-[#111613] font-semibold shadow-sm active:scale-95 transition-all" type="button">Shopping</button>
+<button class="px-2.5 py-1 rounded-full font-label-sm text-[11px] bg-[#151c17] border border-white/[0.08] text-on-surface-variant hover:text-on-surface active:scale-95 transition-all" type="button">Bills</button>
+<button class="px-2.5 py-1 rounded-full font-label-sm text-[11px] bg-[#151c17] border border-white/[0.08] text-on-surface-variant hover:text-on-surface active:scale-95 transition-all" type="button">Electronics</button>
+</div>
+</div>
+<div class="mt-3 pt-2 flex items-center justify-between">
+<button class="font-body-sm text-body-sm text-on-surface-variant hover:text-[#E07A5F] transition-colors" type="button">Ignore</button>
+<button class="h-7 px-3 rounded-lg bg-[#7E9A68] hover:bg-[#97B082] text-[#111613] font-body-sm text-body-sm font-semibold flex items-center gap-1 active:scale-95 transition-transform shadow-sm" type="button">
+<span class="material-symbols-outlined text-[15px]">done</span> Confirm
+            </button>
+</div>
+</div>
+<!-- Pending Card 3 -->
+<div class="flex-shrink-0 w-72 rounded-xl bg-[#1a241e]/90 border border-white/[0.08] backdrop-blur-xl p-3 shadow-lg flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-[#ca9933]/25 text-[#f4be55] flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">local_taxi</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md text-on-surface font-semibold leading-tight">Uber India</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Parsed from SBI Card</span>
+</div>
+</div>
+<span class="font-metric-md text-[18px] text-on-surface font-bold">₹220</span>
+</div>
+<div class="mt-3">
+<span class="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-wider block mb-1.5">Assign Category:</span>
+<div class="flex flex-wrap gap-1.5">
+<button class="px-2.5 py-1 rounded-full font-label-sm text-[11px] bg-[#7E9A68] text-[#111613] font-semibold shadow-sm active:scale-95 transition-all" type="button">Travel</button>
+<button class="px-2.5 py-1 rounded-full font-label-sm text-[11px] bg-[#151c17] border border-white/[0.08] text-on-surface-variant hover:text-on-surface active:scale-95 transition-all" type="button">Commute</button>
+</div>
+</div>
+<div class="mt-3 pt-2 flex items-center justify-between">
+<button class="font-body-sm text-body-sm text-on-surface-variant hover:text-[#E07A5F] transition-colors" type="button">Ignore</button>
+<button class="h-7 px-3 rounded-lg bg-[#7E9A68] hover:bg-[#97B082] text-[#111613] font-body-sm text-body-sm font-semibold flex items-center gap-1 active:scale-95 transition-transform shadow-sm" type="button">
+<span class="material-symbols-outlined text-[15px]">done</span> Confirm
+            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Transactions Header -->
+<div class="flex items-center justify-between mt-space-xs">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Recent Activity</span>
+<span class="font-label-sm text-[11px] bg-[#1a241e] border border-white/[0.08] px-2 py-0.5 rounded-full text-on-surface-variant">Live</span>
+</div>
+<a class="font-body-sm text-body-sm text-[#b4cf9b] font-medium flex items-center gap-0.5 hover:underline" data-path="transactions" href="#">
+        See all
+        <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+</div>
+<!-- 5 Transaction Rows -->
+<div class="rounded-2xl bg-[#1a241e]/65 backdrop-blur-xl border border-white/[0.07] p-2 shadow-lg flex flex-col gap-1">
+<!-- Row 1: Swiggy -->
+<div class="flex items-center justify-between p-2.5 rounded-xl hover:bg-white/[0.04] transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-full bg-[#E07A5F]/20 text-[#E07A5F] flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">restaurant</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-title-md text-body-md text-on-surface font-semibold truncate">Swiggy Food Delivery</span>
+<span class="px-1.5 py-0.2 rounded font-label-sm text-[9px] bg-[#7E9A68]/20 text-[#b4cf9b] font-bold uppercase">GPay</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Today, 1:15 PM</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0 pl-2">
+<span class="font-headline-sm text-[16px] text-on-surface font-bold tracking-tight">-₹420</span>
+<span class="font-label-sm text-[10px] text-on-surface-variant">Food &amp; Dining</span>
+</div>
+</div>
+<!-- Row 2: Uber Ride -->
+<div class="flex items-center justify-between p-2.5 rounded-xl hover:bg-white/[0.04] transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-full bg-[#7E9A68]/20 text-[#b4cf9b] flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">directions_car</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-title-md text-body-md text-on-surface font-semibold truncate">Uber Ride</span>
+<span class="px-1.5 py-0.2 rounded font-label-sm text-[9px] bg-[#7E9A68]/25 text-[#d0ebb5] font-bold uppercase">SMS</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Today, 9:30 AM</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0 pl-2">
+<span class="font-headline-sm text-[16px] text-on-surface font-bold tracking-tight">-₹280</span>
+<span class="font-label-sm text-[10px] text-on-surface-variant">Transport</span>
+</div>
+</div>
+<!-- Row 3: Salary Credited (Leaf Green) -->
+<div class="flex items-center justify-between p-2.5 rounded-xl bg-[#52B788]/10 border border-[#52B788]/25 transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-full bg-[#52B788]/20 text-[#52B788] flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-title-md text-body-md text-on-surface font-semibold truncate">Salary Credited</span>
+<span class="px-1.5 py-0.2 rounded font-label-sm text-[9px] bg-[#52B788] text-[#0f1511] font-bold uppercase">Bank</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Yesterday, 6:00 PM</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0 pl-2">
+<span class="font-headline-sm text-[18px] text-[#52B788] font-bold tracking-tight">+₹85,000</span>
+<span class="font-label-sm text-[10px] text-[#52B788] font-medium">Income Inflow</span>
+</div>
+</div>
+<!-- Row 4: Blue Tokai Coffee -->
+<div class="flex items-center justify-between p-2.5 rounded-xl hover:bg-white/[0.04] transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-full bg-[#E9B44C]/20 text-[#E9B44C] flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">coffee</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-title-md text-body-md text-on-surface font-semibold truncate">Blue Tokai Coffee</span>
+<span class="px-1.5 py-0.2 rounded font-label-sm text-[9px] bg-[#7E9A68]/20 text-[#b4cf9b] font-bold uppercase">GPay</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Yesterday, 11:20 AM</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0 pl-2">
+<span class="font-headline-sm text-[16px] text-on-surface font-bold tracking-tight">-₹240</span>
+<span class="font-label-sm text-[10px] text-on-surface-variant">Café</span>
+</div>
+</div>
+<!-- Row 5: Netflix Subscription -->
+<div class="flex items-center justify-between p-2.5 rounded-xl hover:bg-white/[0.04] transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-full bg-[#4b4946]/50 text-[#cbc5c2] flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">movie</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-title-md text-body-md text-on-surface font-semibold truncate">Netflix Subscription</span>
+<span class="px-1.5 py-0.2 rounded font-label-sm text-[9px] bg-[#303632] text-[#cbc5c2] font-bold uppercase">Auto-Debit</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">2 days ago</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0 pl-2">
+<span class="font-headline-sm text-[16px] text-on-surface font-bold tracking-tight">-₹649</span>
+<span class="font-label-sm text-[10px] text-on-surface-variant">Entertainment</span>
+</div>
+</div>
+</div>
+<!-- Mini Visual Wealth Breakdown Card -->
+<div class="rounded-2xl bg-[#1a241e]/65 backdrop-blur-lg border border-white/[0.07] p-space-md shadow-md flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-[#7E9A68]/20 text-[#b4cf9b] flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">auto_awesome</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md text-on-surface font-semibold">Spending Pace Alert</span>
+<span class="font-body-sm text-body-sm text-[#52B788]">Safe track: 14% below threshold</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">trending_down</span>
+</div>
+</div>
+</div>
+<script>
+  // Interactive category pills toggle logic
+  document.querySelectorAll('.flex-wrap button').forEach(button => {
+    button.addEventListener('click', (e) => {
+      const parent = e.target.closest('.flex-wrap');
+      if (!parent) return;
+      parent.querySelectorAll('button').forEach(btn => {
+        btn.classList.remove('bg-[#E9B44C]', 'text-[#111613]', 'font-bold', 'bg-[#7E9A68]', 'text-white');
+        btn.classList.add('bg-[#151c17]', 'text-on-surface-variant');
+      });
+      e.target.classList.remove('bg-[#151c17]', 'text-on-surface-variant');
+      e.target.classList.add('bg-[#7E9A68]', 'text-[#111613]', 'font-semibold');
+    });
+  });
+</script></main><div class="fixed bottom-0 inset-x-0 z-50 pointer-events-none pb-safe"><div class="px-4 pb-4 max-w-md mx-auto w-full"><nav class="pointer-events-auto h-16 w-full rounded-full bg-[#151c17]/85 backdrop-blur-xl border border-white/10 shadow-[0_16px_48px_-8px_rgba(0,0,0,0.7)] flex items-center justify-around px-2 relative"><a aria-current="page" class="flex flex-col items-center justify-center min-w-[48px] h-12 rounded-full transition-all px-3 text-[#b4cf9b] bg-[#7E9A68]/20" data-path="home" href="#"><span class="material-symbols-outlined text-[22px]">grid_view</span><span class="font-label-sm text-[11px] mt-0.5">Home</span></a><a class="flex flex-col items-center justify-center min-w-[48px] h-12 rounded-full text-on-surface-variant hover:text-on-surface transition-all px-3 relative" data-path="transactions" href="#"><div class="relative flex items-center justify-center"><span class="material-symbols-outlined text-[22px]">receipt_long</span><span class="absolute -top-0.5 -right-1 w-2 h-2 rounded-full bg-[#E9B44C] shadow-[0_0_8px_#E9B44C]"></span></div><span class="font-label-sm text-[11px] mt-0.5">Activity</span></a><div class="relative -top-3 flex items-center justify-center px-1"><a class="w-14 h-14 rounded-full bg-gradient-to-tr from-[#7E9A68] to-[#97B082] shadow-[0_4px_24px_rgba(126,154,104,0.55)] flex items-center justify-center text-[#111613] border border-white/20 active:scale-95 transition-transform" data-path="add-expense" href="#"><span class="material-symbols-outlined text-[28px] font-bold">add</span></a></div><a class="flex flex-col items-center justify-center min-w-[48px] h-12 rounded-full text-on-surface-variant hover:text-on-surface transition-all px-3" data-path="insights" href="#"><span class="material-symbols-outlined text-[22px]">insert_chart</span><span class="font-label-sm text-[11px] mt-0.5">Insights</span></a><a class="flex flex-col items-center justify-center min-w-[48px] h-12 rounded-full text-on-surface-variant hover:text-on-surface transition-all px-3" data-path="profile" href="#"><span class="material-symbols-outlined text-[22px]">account_circle</span><span class="font-label-sm text-[11px] mt-0.5">Profile</span></a></nav></div></div>
+</body></html>

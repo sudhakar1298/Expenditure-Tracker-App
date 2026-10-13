@@ -1,0 +1,39 @@
+databases:
+  - name: gpay-expense-db
+    databaseName: gpay_expenses
+    user: gpay_expenses
+    plan: free
+    region: singapore
+
+services:
+  - type: web
+    name: gpay-expense-api
+    runtime: python
+    plan: free
+    region: singapore
+    numInstances: 1
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m app.render_start
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: gpay-expense-db
+          property: connectionString
+      - key: USE_SQLITE_FALLBACK
+        value: "false"
+      - key: DATABRICKS_SYNC_ENABLED
+        value: "true"
+      - key: DATABRICKS_HOST
+        sync: false
+      - key: DATABRICKS_TOKEN
+        sync: false
+      - key: DATABRICKS_WAREHOUSE_ID
+        sync: false
+      - key: DATABRICKS_CATALOG
+        sync: false
+      - key: DATABRICKS_SCHEMA
+        value: expense_tracker_dw
+      - key: DATABRICKS_SYNC_INTERVAL_SECONDS
+        value: "15"

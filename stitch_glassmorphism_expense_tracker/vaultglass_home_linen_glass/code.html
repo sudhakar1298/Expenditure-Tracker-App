@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#F6F4EE;}body{overscroll-behavior:none;font-family:'Inter',sans-serif;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface-variant":"#e4e2dd","on-secondary-fixed":"#141e11","on-tertiary-container":"#ffd7c9","error-container":"#ffdad6","on-error":"#ffffff","inverse-on-surface":"#f3f1eb","secondary-container":"#dae7d0","tertiary-fixed":"#ffdbcf","primary":"#365226","inverse-surface":"#30312d","primary-container":"#4d6b3c","surface-container":"#f0eee8","on-primary-fixed-variant":"#324e22","on-primary-container":"#c7eab0","on-error-container":"#93000a","on-secondary":"#ffffff","surface-bright":"#fbf9f3","on-surface":"#18251D","on-primary":"#ffffff","primary-fixed":"#caedb2","surface-dim":"#dcdad4","surface-container-low":"#f5f3ed","secondary-fixed-dim":"#becab5","background":"#F6F4EE","secondary":"#566250","surface":"#fbf9f3","surface-container-lowest":"#ffffff","error":"#ba1a1a","outline":"#74796d","tertiary-container":"#9b4c2e","on-tertiary-fixed-variant":"#783115","inverse-primary":"#aed198","tertiary":"#7d3519","primary-fixed-dim":"#aed198","on-surface-variant":"#5A665E","outline-variant":"#c3c8bb","on-secondary-container":"#5c6856","on-background":"#18251D","on-tertiary":"#ffffff","surface-tint":"#496638","surface-container-highest":"#e4e2dd","secondary-fixed":"#dae7d0","tertiary-fixed-dim":"#ffb59b","on-primary-fixed":"#072100","surface-container-high":"#eae8e2","on-secondary-fixed-variant":"#3e4a3a","on-tertiary-fixed":"#380d00"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"margin-mobile":"1.25rem","space-md":"1rem","space-xs":"0.25rem","space-xl":"2.5rem","gutter-sm":"1rem","space-lg":"1.5rem","margin":"3rem","gutter":"1.5rem","space-sm":"0.5rem"},"fontFamily":{"body-lg":["Inter"],"label-caps":["Inter"],"headline-lg":["Inter"],"body-sm":["Inter"],"headline-md":["Inter"],"headline-lg-mobile":["Inter"],"headline-xl":["Inter"],"label-md":["Inter"],"headline-sm":["Inter"],"label-lg":["Inter"],"headline-xl-mobile":["Inter"],"body-md":["Inter"]},"fontSize":{"body-lg":["17px",{"lineHeight":"26px","letterSpacing":"-0.005em","fontWeight":"400"}],"label-caps":["11px",{"lineHeight":"16px","letterSpacing":"0.06em","fontWeight":"600"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"500"}],"body-sm":["13px",{"lineHeight":"18px","letterSpacing":"0.005em","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"-0.015em","fontWeight":"500"}],"headline-lg-mobile":["26px",{"lineHeight":"34px","letterSpacing":"-0.015em","fontWeight":"500"}],"headline-xl":["44px",{"lineHeight":"52px","letterSpacing":"-0.03em","fontWeight":"500"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"headline-sm":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"500"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"500"}],"headline-xl-mobile":["34px",{"lineHeight":"42px","letterSpacing":"-0.025em","fontWeight":"500"}],"body-md":["15px",{"lineHeight":"22px","letterSpacing":"0em","fontWeight":"400"}]}}}}</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head><body class="bg-[#F6F4EE] text-[#18251D] antialiased min-h-screen flex flex-col"><header class="fixed top-0 w-full z-50 pt-safe bg-[#F6F4EE]/80 backdrop-blur-xl border-b border-black/[0.04] shadow-[0_2px_12px_rgba(70,60,50,0.03)]"><div class="h-16 px-margin-mobile flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-lg bg-[#4D6B3C]/12 border border-[#4D6B3C]/25 flex items-center justify-center text-[#4D6B3C] shadow-sm"><span class="material-symbols-outlined text-[20px]">shield_with_heart</span></div><span class="font-headline-sm text-headline-sm text-[#18251D] tracking-tight font-semibold">VaultGlass</span></div><div class="flex items-center gap-space-sm"><span class="font-body-md text-[#5A665E] font-medium tracking-tight">Home</span><img alt="Profile" class="w-8 h-8 rounded-full object-cover ml-space-xs ring-2 ring-white shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbUn7G098bxjx0ShCsykPGOBolQL1kjcBRLTKwPPWob0tZYfwUBSpqYVNu-jYhR08i-JpsaRMynFbvShPfcHcB_Zlq6RFkMNztKZY9m9_Pk8nFkdBAP4GDG435K9Gnn5S1efcSjJElnDunMhJ39M-oMGN35vMshBp44ePt-s5mOnw1tsJJ7ud7fSB9LXW9cPI7GvuiAgn4gTziYCc0YZj4jktqFSH6Jyd2zyMKowW3VuUnHFUYCXTr_yU8YNVodMYXpw"/></div></div></header><main class="flex-1 w-full bg-[#F6F4EE] pt-16 pb-28"><div class="flex flex-col w-full text-[#18251D]">
+<!-- Soft Warm Organic Sunlight & Linen Ambient Glow Overlay -->
+<div class="fixed top-8 left-1/2 -translate-x-1/2 w-96 h-80 bg-gradient-to-b from-[#4D6B3C]/10 via-[#DCE7D3]/40 to-transparent blur-3xl pointer-events-none -z-10 rounded-full"></div>
+<!-- Top Hero Greeting Row -->
+<div class="px-margin-mobile pt-space-sm pb-space-sm flex items-center justify-between">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="relative flex-shrink-0">
+<img class="w-11 h-11 rounded-full object-cover shadow-[0_2px_8px_rgba(70,60,50,0.12)] bg-white ring-2 ring-white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT7IOeInkmoHV5TYOAEHQdOBzzxBAa8uq7eKhRHYAnQX6fjMDmyXRbZxrij9xsjMd6gHQgfa8SCvaGdTlfsSEVZwtOu_SzrjoJyEoeJ0-j6HS01tf-NdvHeSEoTKsFqgYVIdFyH4AlAE-Y7DR9k_HP1FvGhbvHRRYX_aYZ1vr6CNahmvp1r5mWgoXVDN_7ZdUSqaa9eY0QeZsoIR1rX8P9wpvKIsjZI9pLHpk_2r7zkBWQuTFZV-KXjomRmGxU-BIt2Q"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-[#4D6B3C] rounded-full ring-2 ring-[#F6F4EE] shadow-sm"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm text-[#5A665E] flex items-center gap-1 font-medium">
+          Welcome back <span class="">👋</span>
+</span>
+<span class="font-headline-sm text-headline-sm text-[#18251D] font-semibold tracking-tight truncate">Sudhakar</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<button aria-label="Notifications" class="relative w-10 h-10 rounded-full bg-white/80 backdrop-blur-md border border-white/90 shadow-[0_2px_10px_rgba(70,60,50,0.06)] flex items-center justify-center text-[#18251D] hover:bg-white transition-transform active:scale-95" type="button">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#D48B28] shadow-[0_0_6px_rgba(212,139,40,0.6)]"></span>
+</button>
+<button aria-label="Settings" class="w-10 h-10 rounded-full bg-white/80 backdrop-blur-md border border-white/90 shadow-[0_2px_10px_rgba(70,60,50,0.06)] flex items-center justify-center text-[#5A665E] hover:text-[#18251D] hover:bg-white transition-transform active:scale-95" type="button">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</button>
+</div>
+</div>
+<!-- Main Scrollable Section -->
+<div class="flex flex-col gap-space-md px-margin-mobile mt-space-xs pb-space-xl">
+<!-- Budget Hero Card with Soft Frosted Milk Glass -->
+<div class="relative overflow-hidden rounded-2xl bg-white/75 backdrop-blur-lg border border-white/90 p-space-md shadow-[0_8px_30px_rgba(70,60,50,0.05)]">
+<div class="absolute -right-12 -top-12 w-48 h-48 bg-gradient-to-br from-[#4D6B3C]/12 to-[#AECB9A]/20 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-[#4D6B3C] shadow-[0_0_6px_rgba(77,107,60,0.4)] animate-pulse"></span>
+<span class="font-label-caps text-[11px] text-[#5A665E] tracking-wider uppercase font-semibold">Monthly Vault Track</span>
+</div>
+<span class="font-label-caps text-[11px] bg-[#E2EDDA] text-[#365226] border border-[#4D6B3C]/20 px-2.5 py-0.5 rounded-full font-semibold">May Cycle</span>
+</div>
+<div class="flex items-center gap-space-md">
+<!-- Circular Progress Meter: Olive & Sage -->
+<div class="relative w-28 h-28 flex-shrink-0 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90 transform" viewbox="0 0 100 100">
+<defs>
+<lineargradient id="budgetRingGrad" x1="0%" x2="100%" y1="0%">
+<stop offset="0%" stop-color="#365226"></stop>
+<stop offset="60%" stop-color="#4D6B3C"></stop>
+<stop offset="100%" stop-color="#6F9459"></stop>
+</lineargradient>
+</defs>
+<!-- Background circle track -->
+<circle class="text-[#E7E3D8]" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<!-- Spent progress circle: 74% spent (perimeter = 251.2, 74% = 185.8) -->
+<circle class="transition-all duration-1000 ease-out" cx="50" cy="50" fill="transparent" r="40" stroke="url(#budgetRingGrad)" stroke-dasharray="251.2" stroke-dashoffset="65.3" stroke-linecap="round" stroke-width="8.5"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="font-headline-sm text-headline-sm text-[#18251D] font-bold leading-none">26%</span>
+<span class="font-label-caps text-[10px] text-[#4D6B3C] uppercase tracking-tight mt-0.5 font-semibold">left</span>
+</div>
+</div>
+<!-- Spend Stats -->
+<div class="flex flex-col min-w-0 flex-1">
+<span class="font-body-sm text-body-sm text-[#5A665E]">Spent this month</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-md text-headline-md text-[#18251D] font-bold tracking-tight">₹18,450</span>
+<span class="font-body-sm text-body-sm text-[#5A665E]">/ ₹25,000</span>
+</div>
+<div class="mt-2 pt-2 bg-[#F6F4EE]/80 border border-black/[0.04] rounded-xl p-2.5 shadow-sm">
+<div class="flex items-center justify-between text-[#18251D]">
+<span class="font-body-sm text-body-sm text-[#365226] flex items-center gap-1 font-semibold">
+<span class="material-symbols-outlined text-[15px]">timer</span> ₹6,550 left
+              </span>
+<span class="font-label-md text-[11px] text-[#5A665E]">11 days left</span>
+</div>
+<div class="font-body-sm text-body-sm text-[#5A665E] mt-0.5">
+              Daily safe spend: <span class="font-semibold text-[#18251D]">₹595/day</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="grid grid-cols-2 gap-space-sm mt-space-md pt-space-xs">
+<button class="w-full h-10 rounded-xl bg-[#4D6B3C] hover:bg-[#365226] text-white font-body-md text-body-md font-semibold flex items-center justify-center gap-1.5 shadow-[0_4px_14px_rgba(77,107,60,0.25)] active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+          Add Budget
+        </button>
+<button class="w-full h-10 rounded-xl bg-white hover:bg-[#Fbf9f3] border border-[#DCDAD4] text-[#18251D] font-body-md text-body-md font-medium flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[18px] text-[#5A665E]">tune</span>
+          Adjust Limits
+        </button>
+</div>
+</div>
+<!-- Amber Alert Strip: Pending Confirmations (Soft Linen Glass with Warm Ochre Accent) -->
+<div class="relative rounded-2xl bg-[#FFF9EE]/90 border border-[#E9C46A]/45 p-3.5 backdrop-blur-md shadow-[0_6px_20px_rgba(70,60,50,0.04)]">
+<!-- Amber Corner Flare Indicator -->
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<span class="flex h-2.5 w-2.5 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D48B28] opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#D48B28]"></span>
+</span>
+<span class="font-headline-sm text-[14px] leading-5 text-[#18251D] font-semibold">3 SMS Drafts to Categorize</span>
+</div>
+<span class="font-label-caps text-[11px] px-2 py-0.5 rounded-full bg-[#F5E6CC] text-[#8C5810] border border-[#E9C46A]/50 font-bold uppercase tracking-wider">
+          Needs Action
+        </span>
+</div>
+<!-- Swipeable Horizontal Cards -->
+<div class="flex gap-space-sm overflow-x-auto no-scrollbar scroll-smooth pb-1 -mx-1 px-1">
+<!-- Pending Card 1 -->
+<div class="flex-shrink-0 w-72 rounded-xl bg-white/95 border border-white shadow-[0_4px_14px_rgba(70,60,50,0.06)] backdrop-blur-xl p-3 flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-[#E07A5F]/15 text-[#BA4F34] flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">lunch_dining</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md text-[#18251D] font-semibold leading-tight">Swiggy</span>
+<span class="font-body-sm text-body-sm text-[#5A665E]">Parsed from HDFC Bank SMS</span>
+</div>
+</div>
+<span class="font-headline-sm text-[18px] text-[#18251D] font-bold">₹850</span>
+</div>
+<div class="mt-3">
+<span class="font-label-caps text-[10px] text-[#5A665E] uppercase tracking-wider block mb-1.5">Assign Category:</span>
+<div class="flex flex-wrap gap-1.5">
+<button class="px-2.5 py-1 rounded-full font-label-caps text-[11px] bg-[#E9B44C] text-[#2C210A] font-bold shadow-sm active:scale-95 transition-all" type="button">Food</button>
+<button class="px-2.5 py-1 rounded-full font-label-caps text-[11px] bg-[#F4F1EA] border border-[#DCDAD4] text-[#5A665E] hover:text-[#18251D] active:scale-95 transition-all" type="button">Travel</button>
+<button class="px-2.5 py-1 rounded-full font-label-caps text-[11px] bg-[#F4F1EA] border border-[#DCDAD4] text-[#5A665E] hover:text-[#18251D] active:scale-95 transition-all" type="button">Shopping</button>
+</div>
+</div>
+<div class="mt-3 pt-2 flex items-center justify-between border-t border-black/[0.04]">
+<button class="font-body-sm text-body-sm text-[#5A665E] hover:text-[#BA4F34] transition-colors" type="button">Ignore</button>
+<button class="h-7 px-3 rounded-lg bg-[#4D6B3C] hover:bg-[#365226] text-white font-body-sm text-body-sm font-semibold flex items-center gap-1 active:scale-95 transition-transform shadow-sm" type="button">
+<span class="material-symbols-outlined text-[15px]">done</span> Confirm
+            </button>
+</div>
+</div>
+<!-- Pending Card 2 -->
+<div class="flex-shrink-0 w-72 rounded-xl bg-white/95 border border-white shadow-[0_4px_14px_rgba(70,60,50,0.06)] backdrop-blur-xl p-3 flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-[#4D6B3C]/15 text-[#4D6B3C] flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md text-[#18251D] font-semibold leading-tight">Amazon Pay</span>
+<span class="font-body-sm text-body-sm text-[#5A665E]">Parsed from ICICI SMS</span>
+</div>
+</div>
+<span class="font-headline-sm text-[18px] text-[#18251D] font-bold">₹1,499</span>
+</div>
+<div class="mt-3">
+<span class="font-label-caps text-[10px] text-[#5A665E] uppercase tracking-wider block mb-1.5">Assign Category:</span>
+<div class="flex flex-wrap gap-1.5">
+<button class="px-2.5 py-1 rounded-full font-label-caps text-[11px] bg-[#4D6B3C] text-white font-semibold shadow-sm active:scale-95 transition-all" type="button">Shopping</button>
+<button class="px-2.5 py-1 rounded-full font-label-caps text-[11px] bg-[#F4F1EA] border border-[#DCDAD4] text-[#5A665E] hover:text-[#18251D] active:scale-95 transition-all" type="button">Bills</button>
+<button class="px-2.5 py-1 rounded-full font-label-caps text-[11px] bg-[#F4F1EA] border border-[#DCDAD4] text-[#5A665E] hover:text-[#18251D] active:scale-95 transition-all" type="button">Electronics</button>
+</div>
+</div>
+<div class="mt-3 pt-2 flex items-center justify-between border-t border-black/[0.04]">
+<button class="font-body-sm text-body-sm text-[#5A665E] hover:text-[#BA4F34] transition-colors" type="button">Ignore</button>
+<button class="h-7 px-3 rounded-lg bg-[#4D6B3C] hover:bg-[#365226] text-white font-body-sm text-body-sm font-semibold flex items-center gap-1 active:scale-95 transition-transform shadow-sm" type="button">
+<span class="material-symbols-outlined text-[15px]">done</span> Confirm
+            </button>
+</div>
+</div>
+<!-- Pending Card 3 -->
+<div class="flex-shrink-0 w-72 rounded-xl bg-white/95 border border-white shadow-[0_4px_14px_rgba(70,60,50,0.06)] backdrop-blur-xl p-3 flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-[#E9B44C]/20 text-[#A06C12] flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">local_taxi</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md text-[#18251D] font-semibold leading-tight">Uber India</span>
+<span class="font-body-sm text-body-sm text-[#5A665E]">Parsed from SBI Card</span>
+</div>
+</div>
+<span class="font-headline-sm text-[18px] text-[#18251D] font-bold">₹220</span>
+</div>
+<div class="mt-3">
+<span class="font-label-caps text-[10px] text-[#5A665E] uppercase tracking-wider block mb-1.5">Assign Category:</span>
+<div class="flex flex-wrap gap-1.5">
+<button class="px-2.5 py-1 rounded-full font-label-caps text-[11px] bg-[#4D6B3C] text-white font-semibold shadow-sm active:scale-95 transition-all" type="button">Travel</button>
+<button class="px-2.5 py-1 rounded-full font-label-caps text-[11px] bg-[#F4F1EA] border border-[#DCDAD4] text-[#5A665E] hover:text-[#18251D] active:scale-95 transition-all" type="button">Commute</button>
+</div>
+</div>
+<div class="mt-3 pt-2 flex items-center justify-between border-t border-black/[0.04]">
+<button class="font-body-sm text-body-sm text-[#5A665E] hover:text-[#BA4F34] transition-colors" type="button">Ignore</button>
+<button class="h-7 px-3 rounded-lg bg-[#4D6B3C] hover:bg-[#365226] text-white font-body-sm text-body-sm font-semibold flex items-center gap-1 active:scale-95 transition-transform shadow-sm" type="button">
+<span class="material-symbols-outlined text-[15px]">done</span> Confirm
+            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Transactions Header -->
+<div class="flex items-center justify-between mt-space-xs">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-[#18251D] font-semibold">Recent Activity</span>
+<span class="font-label-caps text-[11px] bg-[#E2EDDA] text-[#365226] border border-[#4D6B3C]/20 px-2 py-0.5 rounded-full font-semibold">Live</span>
+</div>
+<a class="font-body-sm text-body-sm text-[#4D6B3C] font-semibold flex items-center gap-0.5 hover:underline" data-path="transactions" href="#">
+        See all
+        <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+</div>
+<!-- 5 Transaction Rows -->
+<div class="rounded-2xl bg-white/75 backdrop-blur-lg border border-white/90 p-2 shadow-[0_8px_30px_rgba(70,60,50,0.05)] flex flex-col gap-1">
+<!-- Row 1: Swiggy -->
+<div class="flex items-center justify-between p-2.5 rounded-xl hover:bg-[#F6F4EE]/60 transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-full bg-[#E07A5F]/15 text-[#BA4F34] flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">restaurant</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-body-md text-body-md text-[#18251D] font-semibold truncate">Swiggy Food Delivery</span>
+<span class="px-1.5 py-0.2 rounded font-label-caps text-[9px] bg-[#E2EDDA] text-[#365226] font-bold uppercase">GPay</span>
+</div>
+<span class="font-body-sm text-body-sm text-[#5A665E]">Today, 1:15 PM</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0 pl-2">
+<span class="font-headline-sm text-[16px] text-[#18251D] font-bold tracking-tight">-₹420</span>
+<span class="font-label-md text-[10px] text-[#5A665E]">Food &amp; Dining</span>
+</div>
+</div>
+<!-- Row 2: Uber Ride -->
+<div class="flex items-center justify-between p-2.5 rounded-xl hover:bg-[#F6F4EE]/60 transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-full bg-[#4D6B3C]/12 text-[#4D6B3C] flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">directions_car</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-body-md text-body-md text-[#18251D] font-semibold truncate">Uber Ride</span>
+<span class="px-1.5 py-0.2 rounded font-label-caps text-[9px] bg-[#E2EDDA] text-[#365226] font-bold uppercase">SMS</span>
+</div>
+<span class="font-body-sm text-body-sm text-[#5A665E]">Today, 9:30 AM</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0 pl-2">
+<span class="font-headline-sm text-[16px] text-[#18251D] font-bold tracking-tight">-₹280</span>
+<span class="font-label-md text-[10px] text-[#5A665E]">Transport</span>
+</div>
+</div>
+<!-- Row 3: Salary Credited (Leaf Green) -->
+<div class="flex items-center justify-between p-2.5 rounded-xl bg-[#E2EDDA]/60 border border-[#4D6B3C]/20 transition-colors shadow-sm">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-full bg-[#4D6B3C]/20 text-[#365226] flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-body-md text-body-md text-[#18251D] font-semibold truncate">Salary Credited</span>
+<span class="px-1.5 py-0.2 rounded font-label-caps text-[9px] bg-[#365226] text-white font-bold uppercase">Bank</span>
+</div>
+<span class="font-body-sm text-body-sm text-[#5A665E]">Yesterday, 6:00 PM</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0 pl-2">
+<span class="font-headline-sm text-[18px] text-[#365226] font-bold tracking-tight">+₹85,000</span>
+<span class="font-label-md text-[10px] text-[#365226] font-semibold">Income Inflow</span>
+</div>
+</div>
+<!-- Row 4: Blue Tokai Coffee -->
+<div class="flex items-center justify-between p-2.5 rounded-xl hover:bg-[#F6F4EE]/60 transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-full bg-[#E9B44C]/20 text-[#A06C12] flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">coffee</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-body-md text-body-md text-[#18251D] font-semibold truncate">Blue Tokai Coffee</span>
+<span class="px-1.5 py-0.2 rounded font-label-caps text-[9px] bg-[#E2EDDA] text-[#365226] font-bold uppercase">GPay</span>
+</div>
+<span class="font-body-sm text-body-sm text-[#5A665E]">Yesterday, 11:20 AM</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0 pl-2">
+<span class="font-headline-sm text-[16px] text-[#18251D] font-bold tracking-tight">-₹240</span>
+<span class="font-label-md text-[10px] text-[#5A665E]">Café</span>
+</div>
+</div>
+<!-- Row 5: Netflix Subscription -->
+<div class="flex items-center justify-between p-2.5 rounded-xl hover:bg-[#F6F4EE]/60 transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-full bg-[#DCDAD4] text-[#566250] flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">movie</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-body-md text-body-md text-[#18251D] font-semibold truncate">Netflix Subscription</span>
+<span class="px-1.5 py-0.2 rounded font-label-caps text-[9px] bg-[#E4E2DD] text-[#566250] font-bold uppercase">Auto-Debit</span>
+</div>
+<span class="font-body-sm text-body-sm text-[#5A665E]">2 days ago</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0 pl-2">
+<span class="font-headline-sm text-[16px] text-[#18251D] font-bold tracking-tight">-₹649</span>
+<span class="font-label-md text-[10px] text-[#5A665E]">Entertainment</span>
+</div>
+</div>
+</div>
+<!-- Mini Visual Wealth Breakdown Card -->
+<div class="rounded-2xl bg-white/75 backdrop-blur-lg border border-white/90 p-space-md shadow-[0_8px_30px_rgba(70,60,50,0.05)] flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-[#4D6B3C]/12 text-[#4D6B3C] flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[22px]">auto_awesome</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md text-[#18251D] font-semibold">Spending Pace Alert</span>
+<span class="font-body-sm text-body-sm text-[#365226] font-medium">Safe track: 14% below threshold</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[#5A665E] text-[20px]">trending_down</span>
+</div>
+</div>
+</div>
+<script>
+  // Interactive category pills toggle logic
+  document.querySelectorAll('.flex-wrap button').forEach(button => {
+    button.addEventListener('click', (e) => {
+      const parent = e.target.closest('.flex-wrap');
+      if (!parent) return;
+      parent.querySelectorAll('button').forEach(btn => {
+        btn.classList.remove('bg-[#E9B44C]', 'text-[#2C210A]', 'font-bold', 'bg-[#4D6B3C]', 'text-white');
+        btn.classList.add('bg-[#F4F1EA]', 'text-[#5A665E]', 'border', 'border-[#DCDAD4]');
+      });
+      e.target.classList.remove('bg-[#F4F1EA]', 'text-[#5A665E]', 'border-[#DCDAD4]');
+      e.target.classList.add('bg-[#4D6B3C]', 'text-white', 'font-semibold');
+    });
+  });
+</script></main><div class="fixed bottom-0 inset-x-0 z-50 pointer-events-none pb-safe"><div class="px-4 pb-4 max-w-md mx-auto w-full"><nav class="pointer-events-auto h-16 w-full rounded-full bg-white/85 backdrop-blur-xl border border-white/90 shadow-[0_12px_40px_-6px_rgba(70,60,50,0.14)] flex items-center justify-around px-2 relative"><a aria-current="page" class="flex flex-col items-center justify-center min-w-[48px] h-12 rounded-full transition-all px-3 text-[#365226] bg-[#4D6B3C]/12" data-path="home" href="#"><span class="material-symbols-outlined text-[22px]">grid_view</span><span class="font-label-caps text-[11px] mt-0.5 font-bold">Home</span></a><a class="flex flex-col items-center justify-center min-w-[48px] h-12 rounded-full text-[#5A665E] hover:text-[#18251D] transition-all px-3 relative" data-path="transactions" href="#"><div class="relative flex items-center justify-center"><span class="material-symbols-outlined text-[22px]">receipt_long</span><span class="absolute -top-0.5 -right-1 w-2 h-2 rounded-full bg-[#D48B28] shadow-[0_0_6px_#D48B28]"></span></div><span class="font-label-caps text-[11px] mt-0.5">Activity</span></a><div class="relative -top-3 flex items-center justify-center px-1"><a class="w-14 h-14 rounded-full bg-[#4D6B3C] hover:bg-[#365226] shadow-[0_6px_20px_rgba(77,107,60,0.4)] flex items-center justify-center text-white border-2 border-white active:scale-95 transition-transform" data-path="add-expense" href="#"><span class="material-symbols-outlined text-[28px] font-bold">add</span></a></div><a class="flex flex-col items-center justify-center min-w-[48px] h-12 rounded-full text-[#5A665E] hover:text-[#18251D] transition-all px-3" data-path="insights" href="#"><span class="material-symbols-outlined text-[22px]">insert_chart</span><span class="font-label-caps text-[11px] mt-0.5">Insights</span></a><a class="flex flex-col items-center justify-center min-w-[48px] h-12 rounded-full text-[#5A665E] hover:text-[#18251D] transition-all px-3" data-path="profile" href="#"><span class="material-symbols-outlined text-[22px]">account_circle</span><span class="font-label-caps text-[11px] mt-0.5">Profile</span></a></nav></div></div>
+</body></html>

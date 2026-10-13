@@ -1,10 +1,48 @@
+# Android / Gradle
 *.iml
-.gradle
-/local.properties
+.gradle/
 .idea/
-.DS_Store
 build/
-/captures
-.externalNativeBuild
-.cxx
+captures/
+.externalNativeBuild/
+.cxx/
 local.properties
+*.jks
+*.keystore
+
+# Environment files and secrets. Keep safe templates in Git.
+.env
+.env.*
+!.env.example
+!**/.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Local databases and generated Databricks/Spark data
+*.db
+*.sqlite
+*.sqlite3
+delta_lake_data/
+spark-warehouse/
+metastore_db/
+derby.log
+
+# Web / Node
+node_modules/
+.next/
+out/
+coverage/
+
+# Logs and operating-system files
+*.log
+.DS_Store
+Thumbs.db

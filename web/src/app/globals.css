@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-main: #F6F4EE;
+  --text-main: #18251D;
+  --text-muted: #5A665E;
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --card-border: rgba(0, 0, 0, 0.08);
+  --card-shadow: 0 8px 30px rgba(70, 60, 50, 0.06);
+  --primary-accent: #4D6B3C;
+  --primary-accent-hover: #365226;
+  --primary-btn-text: #ffffff;
+  --badge-bg: #E2EDDA;
+  --badge-text: #365226;
+  --alert-bg: rgba(255, 249, 238, 0.95);
+  --alert-border: rgba(233, 196, 106, 0.5);
+  --alert-text: #8C5810;
+  --input-bg: rgba(246, 244, 238, 0.9);
+  --input-border: rgba(0, 0, 0, 0.12);
+  --table-header-bg: rgba(240, 238, 232, 0.9);
+}
+
+html.dark {
+  --bg-main: #111613;
+  --text-main: #dee4dd;
+  --text-muted: #c4c8bb;
+  --card-bg: rgba(26, 36, 30, 0.75);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --card-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  --primary-accent: #7E9A68;
+  --primary-accent-hover: #97B082;
+  --primary-btn-text: #111613;
+  --badge-bg: rgba(126, 154, 104, 0.2);
+  --badge-text: #b4cf9b;
+  --alert-bg: rgba(233, 180, 76, 0.12);
+  --alert-border: rgba(233, 180, 76, 0.35);
+  --alert-text: #E9B44C;
+  --input-bg: rgba(15, 21, 17, 0.85);
+  --input-border: rgba(255, 255, 255, 0.1);
+  --table-header-bg: rgba(27, 33, 29, 0.9);
+}
+
+body {
+  color: var(--text-main);
+  background-color: var(--bg-main);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.glass-panel {
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
+  border-radius: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.glass-button {
+  background: var(--primary-accent);
+  color: var(--primary-btn-text);
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+
+.glass-button:hover {
+  background: var(--primary-accent-hover);
+  transform: translateY(-1px);
+}
+
+.alert-panel {
+  background: var(--alert-bg);
+  border: 1px solid var(--alert-border);
+  backdrop-filter: blur(12px);
+  border-radius: 1rem;
+}

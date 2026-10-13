@@ -9,6 +9,8 @@ import kotlinx.coroutines.withContext
 interface DataRepository {
     val allTransactions: Flow<List<TransactionEntity>>
     suspend fun insert(transaction: TransactionEntity)
+    suspend fun insertAll(transactions: List<TransactionEntity>)
+    suspend fun replaceAll(transactions: List<TransactionEntity>)
     suspend fun delete(transaction: TransactionEntity)
     suspend fun deleteById(id: Long)
     suspend fun update(transaction: TransactionEntity)
@@ -21,6 +23,19 @@ class DefaultDataRepository(private val transactionDao: TransactionDao) : DataRe
     override suspend fun insert(transaction: TransactionEntity) {
         withContext(Dispatchers.IO) {
             transactionDao.insertTransaction(transaction)
+        }
+    }
+
+    override suspend fun insertAll(transactions: List<TransactionEntity>) {
+        withContext(Dispatchers.IO) {
+            transactionDao.insertAllTransactions(transactions)
+        }
+    }
+
+    override suspend fun replaceAll(transactions: List<TransactionEntity>) {
+        withContext(Dispatchers.IO) {
+            transactionDao.deleteAllTransactions()
+            transactionDao.insertAllTransactions(transactions)
         }
     }
 

@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Telephony
 import android.util.Log
+import com.example.gpayexpensetracker.data.BackendSyncUtility
 import com.example.gpayexpensetracker.data.DefaultDataRepository
+import com.example.gpayexpensetracker.data.SheetsSyncUtility
 import com.example.gpayexpensetracker.data.TransactionDatabase
 import com.example.gpayexpensetracker.data.TransactionEntity
 import kotlinx.coroutines.CoroutineScope
@@ -36,7 +38,9 @@ class SmsReceiver : BroadcastReceiver() {
                 val transaction = parseSmsText(fullText)
                 if (transaction != null) {
                     repository.insert(transaction)
-                    Log.d(TAG, "Inserted pending transaction: ₹${transaction.amount} from SMS")
+                    SheetsSyncUtility.sync(context.applicationContext, transaction)
+                    BackendSyncUtility.sync(context.applicationContext, transaction)
+                    Log.d(TAG, "Inserted pending transaction: ₹${transaction.amount} from SMS and synced to backend")
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error processing incoming SMS", e)

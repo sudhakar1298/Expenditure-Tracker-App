@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#111613;}body{overscroll-behavior:none;font-family:'Inter',sans-serif;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-primary-container": "#283d17",
+          "on-secondary": "#32302e",
+          "surface": "#0f1511",
+          "surface-container": "#1b211d",
+          "tertiary-container": "#ca9933",
+          "outline-variant": "#44483e",
+          "primary-container": "#8fa978",
+          "secondary-fixed": "#e7e1dd",
+          "surface-container-high": "#252b27",
+          "background": "#111613",
+          "tertiary-fixed-dim": "#f4be55",
+          "outline": "#8e9286",
+          "on-surface": "#dee4dd",
+          "inverse-on-surface": "#2c322d",
+          "on-primary-fixed": "#0c2001",
+          "surface-container-lowest": "#0a100c",
+          "inverse-primary": "#4e653b",
+          "on-secondary-fixed": "#1d1b19",
+          "on-tertiary": "#412d00",
+          "on-background": "#dee4dd",
+          "on-tertiary-fixed": "#271900",
+          "surface-variant": "#303632",
+          "on-tertiary-fixed-variant": "#5e4200",
+          "on-surface-variant": "#c4c8bb",
+          "secondary-container": "#4b4946",
+          "on-secondary-fixed-variant": "#494644",
+          "tertiary": "#f4be55",
+          "inverse-surface": "#dee4dd",
+          "on-tertiary-container": "#4b3400",
+          "on-error": "#690005",
+          "primary-fixed-dim": "#b4cf9b",
+          "surface-container-low": "#171d19",
+          "surface-bright": "#343b36",
+          "primary-fixed": "#d0ebb5",
+          "on-secondary-container": "#bcb7b4",
+          "error": "#ffb4ab",
+          "primary": "#b4cf9b",
+          "secondary-fixed-dim": "#cbc5c2",
+          "tertiary-fixed": "#ffdea7",
+          "surface-tint": "#b4cf9b",
+          "surface-dim": "#0f1511",
+          "on-error-container": "#ffdad6",
+          "error-container": "#93000a",
+          "on-primary": "#213611",
+          "on-primary-fixed-variant": "#374d25",
+          "surface-container-highest": "#303632",
+          "secondary": "#cbc5c2"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-sm": "0.5rem",
+          "gutter": "1.25rem",
+          "space-xs": "0.25rem",
+          "space-xl": "2.25rem",
+          "space-lg": "1.5rem",
+          "margin-mobile": "1rem",
+          "space-2xl": "3.5rem",
+          "space-md": "1rem",
+          "margin": "2.5rem",
+          "gutter-mobile": "0.75rem"
+        },
+        "fontFamily": {
+          "title-md": ["Inter"],
+          "headline-xl-mobile": ["Inter"],
+          "body-md": ["Inter"],
+          "body-sm": ["Inter"],
+          "label-md": ["Inter"],
+          "metric-hero-mobile": ["Inter"],
+          "headline-sm": ["Inter"],
+          "headline-lg-mobile": ["Inter"],
+          "body-lg": ["Inter"],
+          "headline-xl": ["Inter"],
+          "headline-lg": ["Inter"],
+          "headline-md": ["Inter"],
+          "label-sm": ["Inter"],
+          "metric-hero": ["Inter"]
+        },
+        "fontSize": {
+          "title-md": ["16px", {"lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "600"}],
+          "headline-xl-mobile": ["32px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+          "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400"}],
+          "body-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400"}],
+          "label-md": ["13px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+          "metric-hero-mobile": ["36px", {"lineHeight": "40px", "letterSpacing": "-0.025em", "fontWeight": "500"}],
+          "headline-sm": ["20px", {"lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "500"}],
+          "headline-lg-mobile": ["26px", {"lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "500"}],
+          "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400"}],
+          "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+          "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.015em", "fontWeight": "500"}],
+          "headline-md": ["24px", {"lineHeight": "30px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+          "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "600"}],
+          "metric-hero": ["48px", {"lineHeight": "52px", "letterSpacing": "-0.03em", "fontWeight": "500"}]
+        }
+      }
+    }
+  }
+</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head><body class="bg-[#111613] text-on-surface antialiased min-h-screen flex flex-col"><header class="fixed top-0 w-full z-50 pt-safe bg-[#111613]/85 backdrop-blur-xl border-b border-white/[0.05] shadow-[0_4px_20px_rgba(0,0,0,0.5)]"><div class="h-16 px-margin-mobile flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-lg bg-surface-container-high border border-primary/20 flex items-center justify-center text-primary shadow-[0_0_12px_rgba(180,207,155,0.15)]"><span class="material-symbols-outlined text-[20px]">shield</span></div><span class="font-headline-sm text-[18px] text-on-surface tracking-tight font-semibold">VaultGlass</span></div><div class="flex items-center gap-space-sm"><span class="text-body-md text-on-surface-variant font-medium tracking-tight">Profile</span><img alt="Profile" class="w-8 h-8 rounded-full object-cover ml-space-xs ring-1 ring-primary/40" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAA4kMTTqtOacroeT9E9KGiGU8d8TFLTLdD9r1z-ukX6SNIu1kGaaegy_5YGkJ5AW1LCiCk7zGGIlor-lV7tfQtboLlJqOfWsfMO7S5qfdt45Qq_qvHyFpUBOk76i09N5qLoWgpOyGP7zNxS9WXSTTVNc_smBGMkjC7_flhGImKyn3QEeOJj9yzWvSEn8ObQqDbeGrZeZJfeIAjKyKBduGAye4Mv8lGrmDBx7ApOjhHtg-aVH6FyM9v-r4Vhh2Pwvo5kw"/></div></div></header><main class="flex-1 w-full bg-[#111613] pt-16 pb-28"><div class="flex flex-col w-full px-margin-mobile pb-28 gap-space-lg">
+<!-- Glowing Botanical Ambient Highlights -->
+<div class="fixed top-12 left-1/2 -translate-x-1/2 w-80 h-80 bg-primary/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+<div class="fixed top-96 -right-20 w-80 h-80 bg-[#7E9A68]/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+<!-- User Profile Header Card -->
+<div class="relative w-full rounded-xl bg-surface-container/70 backdrop-blur-md border border-white/[0.06] p-space-lg shadow-xl overflow-hidden flex flex-col items-center text-center">
+<div class="absolute -top-12 -right-12 w-32 h-32 bg-primary/15 rounded-full blur-2xl pointer-events-none"></div>
+<!-- Avatar with Warm Olive/Pistachio Ring -->
+<div class="relative mb-space-md">
+<div class="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-[#7E9A68] via-primary to-[#5b7549] shadow-[0_0_24px_rgba(180,207,155,0.35)]">
+<img class="w-full h-full rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApzfmYOMH1rrCZkNtUU8id-DGhAyrTqf3nbOi8eBAXRH3JYodxW6RLhhVH9NBunzgtT7T6BU5v7ImgHtd7z5HCpxKt9sEjxMWbeI_3g-hwhFDYs2oaTCihlgM3x6b5Iflu5CNb_vWzSrZUFAkf9reBLUXuXEj4WfrX09z56CNWhMAYlGlShxtmPfNbzr1a6YlMEy0gLBXhJnajOgAIHcWyzrNhqRyMOWFbbMqwdK09SJ2UtzTp_Enx2DX_eb1yveQSWQ"/>
+</div>
+<div class="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-surface-container-lowest flex items-center justify-center ring-2 ring-[#111613] shadow-[0_0_8px_#b4cf9b]">
+<div class="w-2.5 h-2.5 rounded-full bg-primary"></div>
+</div>
+</div>
+<!-- Identification Details -->
+<h2 class="font-headline-md text-headline-md text-on-surface font-semibold">Sudhakar</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-0.5">sudhakar@example.com</p>
+<!-- Frosted Spruce with Soft Olive Moss Pill Badge -->
+<div class="mt-space-sm inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-surface-container-high/80 border border-primary/30 text-primary shadow-[0_0_16px_rgba(180,207,155,0.2)]">
+<span class="material-symbols-outlined text-[15px] text-primary" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-semibold">VaultGlass Pro Member</span>
+</div>
+<!-- Quick Lifetime Stats Grid Card (Frosted spruce with pistachio and cashmere tabular numbers) -->
+<div class="grid grid-cols-3 gap-2 w-full mt-space-lg pt-space-md bg-surface-container-lowest/80 border border-white/[0.05] rounded-lg p-space-sm">
+<div class="flex flex-col items-center">
+<span class="font-headline-sm text-headline-sm text-secondary-fixed font-semibold">342</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase mt-1 text-center">Transactions</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="font-headline-sm text-headline-sm text-primary font-semibold">6 Mo</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase mt-1 text-center">Active Span</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="font-headline-sm text-headline-sm text-primary-fixed font-semibold">98%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase mt-1 text-center">Categorized</span>
+</div>
+</div>
+</div>
+<!-- Reconcile Statement Priority Entry -->
+<div class="relative w-full rounded-xl bg-gradient-to-br from-surface-container/90 via-surface-container-high/60 to-surface-container/90 backdrop-blur-md border border-white/[0.07] p-space-lg shadow-xl overflow-hidden">
+<div class="absolute -right-8 -bottom-8 w-28 h-28 bg-[#7E9A68]/15 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-start justify-between gap-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-xl bg-primary/15 border border-primary/25 flex items-center justify-center text-primary shadow-[0_0_16px_rgba(180,207,155,0.25)]">
+<span class="material-symbols-outlined text-[26px]">account_balance</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim font-medium">Precision Ledger</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Reconcile Statement</h3>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-primary/15 border border-primary/30 text-primary font-label-sm text-label-sm uppercase tracking-wider">Synced</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-sm">
+      Audit your digital ledger against raw bank data. Reconciled 2 statements • Latest: 15 Oct 2024.
+    </p>
+<div class="flex items-center gap-space-sm mt-space-md">
+<button class="flex-1 py-3 px-space-md rounded-lg bg-[#7E9A68] hover:bg-[#8fa978] text-surface-container-lowest font-title-md text-[14px] font-semibold flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(126,154,104,0.45)] active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined text-[18px]">upload_file</span>
+<span>Import CSV / PDF</span>
+</button>
+<button class="py-3 px-space-md rounded-lg bg-surface-container-high/80 hover:bg-surface-bright text-on-surface font-title-md text-[14px] flex items-center justify-center border border-white/[0.08] transition-colors">
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Budget Settings -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between px-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-[0.08em] text-on-surface-variant">Budget Settings</span>
+<span class="font-label-sm text-label-sm uppercase text-primary cursor-pointer hover:underline">Modify All</span>
+</div>
+<div class="w-full rounded-xl bg-surface-container/70 backdrop-blur-md border border-white/[0.06] p-space-md shadow-xl flex flex-col gap-space-md">
+<!-- Master Limit Row -->
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Monthly Master Target</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">₹25,000</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">/ month</span>
+</div>
+</div>
+<button class="w-9 h-9 rounded-lg bg-surface-container-high/80 border border-white/[0.08] flex items-center justify-center text-primary hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+</div>
+<!-- Categories Progress Stack (Olive moss & warm pistachio accents) -->
+<div class="flex flex-col gap-space-sm">
+<div>
+<div class="flex justify-between items-center text-body-sm font-body-sm mb-1">
+<span class="text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">restaurant</span> Food &amp; Dining
+            </span>
+<span class="text-on-surface-variant font-medium">₹4,820 / <span class="text-on-surface">₹6,000</span></span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container-lowest overflow-hidden border border-white/[0.04]">
+<div class="h-full bg-[#7E9A68] rounded-full shadow-[0_0_10px_rgba(126,154,104,0.6)]" style="width: 80%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center text-body-sm font-body-sm mb-1">
+<span class="text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary-fixed-dim">shopping_bag</span> Shopping
+            </span>
+<span class="text-on-surface-variant font-medium">₹3,150 / <span class="text-on-surface">₹5,000</span></span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container-lowest overflow-hidden border border-white/[0.04]">
+<div class="h-full bg-gradient-to-r from-[#7E9A68] to-primary rounded-full shadow-[0_0_10px_rgba(180,207,155,0.5)]" style="width: 63%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center text-body-sm font-body-sm mb-1">
+<span class="text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">commute</span> Transit
+            </span>
+<span class="text-on-surface-variant font-medium">₹1,240 / <span class="text-on-surface">₹3,000</span></span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container-lowest overflow-hidden border border-white/[0.04]">
+<div class="h-full bg-primary rounded-full shadow-[0_0_10px_rgba(180,207,155,0.4)]" style="width: 41%;"></div>
+</div>
+</div>
+</div>
+<!-- Daily Cap Toggle Row -->
+<div class="flex items-center justify-between pt-space-sm bg-surface-container-lowest/80 border border-white/[0.04] rounded-lg p-3">
+<div class="flex flex-col pr-space-sm">
+<span class="font-body-md text-body-md text-on-surface font-medium">Daily Spending Cap Alert</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Notify when daily burn exceeds ₹1,800</span>
+</div>
+<button aria-pressed="true" class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full bg-[#7E9A68] shadow-[0_0_12px_rgba(126,154,104,0.5)] p-0.5 transition-colors duration-200 ease-in-out" id="daily-cap-toggle">
+<span class="translate-x-5 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition duration-200 ease-in-out"></span>
+</button>
+</div>
+</div>
+</div>
+<!-- Automated Sources Section -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between px-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-[0.08em] text-on-surface-variant">Automated Sources</span>
+<span class="material-symbols-outlined text-primary text-[18px]">sync</span>
+</div>
+<div class="w-full rounded-xl bg-surface-container/70 backdrop-blur-md border border-white/[0.06] p-space-md shadow-xl flex flex-col gap-space-md">
+<!-- Source 1: Google Pay -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-primary/15 border border-primary/25 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">payments</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-body-md text-body-md text-on-surface font-semibold">Google Pay (GPay)</span>
+<span class="px-2 py-0.5 rounded-full bg-primary/15 text-primary font-label-sm text-[10px] uppercase border border-primary/25">Connected</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Synced 4 mins ago</span>
+</div>
+</div>
+<button aria-pressed="true" class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full bg-[#7E9A68] shadow-[0_0_12px_rgba(126,154,104,0.5)] p-0.5 transition-colors">
+<span class="translate-x-5 inline-block h-5 w-5 transform rounded-full bg-white shadow-md"></span>
+</button>
+</div>
+<!-- Source 2: Android SMS Parser -->
+<div class="flex items-center justify-between pt-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-primary/15 border border-primary/25 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">sms</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-body-md text-body-md text-on-surface font-semibold">Android SMS Parser</span>
+<span class="px-2 py-0.5 rounded-full bg-primary/15 text-primary font-label-sm text-[10px] uppercase border border-primary/25">Active</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">HDFC, SBI, ICICI • Auto-detect OTP &amp; debits</span>
+</div>
+</div>
+<button aria-pressed="true" class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full bg-[#7E9A68] shadow-[0_0_12px_rgba(126,154,104,0.5)] p-0.5 transition-colors">
+<span class="translate-x-5 inline-block h-5 w-5 transform rounded-full bg-white shadow-md"></span>
+</button>
+</div>
+<!-- Source 3: UPI Auto-Drafting -->
+<div class="flex items-center justify-between pt-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-primary/15 border border-primary/25 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">bolt</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-body-md text-body-md text-on-surface font-semibold">UPI Auto-Drafting</span>
+<span class="px-2 py-0.5 rounded-full bg-primary/15 text-primary font-label-sm text-[10px] uppercase border border-primary/25">Active</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Instant micro-mandate reconciliations</span>
+</div>
+</div>
+<button aria-pressed="true" class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full bg-[#7E9A68] shadow-[0_0_12px_rgba(126,154,104,0.5)] p-0.5 transition-colors">
+<span class="translate-x-5 inline-block h-5 w-5 transform rounded-full bg-white shadow-md"></span>
+</button>
+</div>
+</div>
+</div>
+<!-- App Preferences & Security -->
+<div class="flex flex-col gap-space-sm">
+<div class="px-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-[0.08em] text-on-surface-variant">Preferences &amp; Security</span>
+</div>
+<div class="w-full rounded-xl bg-surface-container/70 backdrop-blur-md border border-white/[0.06] p-space-md shadow-xl flex flex-col gap-space-md">
+<!-- Biometric Row -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-surface-container-high/80 border border-white/[0.08] flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[22px]">fingerprint</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-semibold">Biometric Lock</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">FaceID or Fingerprint authentication</span>
+</div>
+</div>
+<button aria-pressed="true" class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full bg-[#7E9A68] shadow-[0_0_12px_rgba(126,154,104,0.5)] p-0.5 transition-colors">
+<span class="translate-x-5 inline-block h-5 w-5 transform rounded-full bg-white shadow-md"></span>
+</button>
+</div>
+<!-- Theme Selector Row -->
+<div class="flex items-center justify-between pt-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-surface-container-high/80 border border-white/[0.08] flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[22px]">palette</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-semibold">Atmospheric Theme</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Botanical Cashmere (Organic Luxury)</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high/80 border border-white/[0.08] text-on-surface text-body-sm font-medium">
+<span class="w-2.5 h-2.5 rounded-full bg-[#7E9A68] shadow-[0_0_6px_#b4cf9b]"></span>
+<span>Olive</span>
+</div>
+</div>
+<!-- Data Export Row -->
+<div class="flex items-center justify-between pt-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-surface-container-high/80 border border-white/[0.08] flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[22px]">download_for_offline</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-semibold">Encrypted Vault Export</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Export ledger to JSON or CSV format</span>
+</div>
+</div>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-high/80 hover:bg-surface-bright border border-white/[0.08] text-on-surface text-body-sm font-medium flex items-center gap-1 transition-colors">
+<span>Export</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Sign Out & Danger Zone -->
+<div class="w-full rounded-xl bg-[#7A2E22]/15 backdrop-blur-md border border-[#C85A48]/30 p-space-md flex flex-col gap-space-sm">
+<button class="w-full py-3.5 px-space-md rounded-lg bg-[#7A2E22]/50 hover:bg-[#7A2E22]/70 text-secondary-fixed font-title-md text-[15px] flex items-center justify-center gap-2 active:scale-[0.98] transition-all border border-[#C85A48]/30">
+<span class="material-symbols-outlined text-[20px] text-[#ffb4ab]">logout</span>
+<span>Sign Out of VaultGlass</span>
+</button>
+<div class="flex items-center justify-center gap-1.5 text-center mt-1">
+<span class="material-symbols-outlined text-[14px] text-outline">verified_user</span>
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">VaultGlass v2.4.0 (Jetpack Compose Engine)</span>
+</div>
+</div>
+</div>
+<script>
+  // Micro-interaction toggles in warm olive moss
+  document.querySelectorAll('button[aria-pressed]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const isPressed = btn.getAttribute('aria-pressed') === 'true';
+      btn.setAttribute('aria-pressed', !isPressed);
+      const dot = btn.querySelector('span');
+      if (isPressed) {
+        btn.classList.remove('bg-[#7E9A68]', 'shadow-[0_0_12px_rgba(126,154,104,0.5)]');
+        btn.classList.add('bg-surface-variant');
+        dot.classList.remove('translate-x-5');
+        dot.classList.add('translate-x-0');
+      } else {
+        btn.classList.remove('bg-surface-variant');
+        btn.classList.add('bg-[#7E9A68]', 'shadow-[0_0_12px_rgba(126,154,104,0.5)]');
+        dot.classList.remove('translate-x-0');
+        dot.classList.add('translate-x-5');
+      }
+    });
+  });
+</script></main><div class="fixed bottom-0 inset-x-0 z-50 pointer-events-none pb-safe"><div class="px-4 pb-4 max-w-md mx-auto w-full"><nav class="pointer-events-auto h-16 w-full rounded-full bg-surface-container/85 backdrop-blur-xl border border-white/10 shadow-[0_16px_48px_-8px_rgba(0,0,0,0.7)] flex items-center justify-around px-2 relative" data-active-classes="text-primary bg-primary/20"><a class="flex flex-col items-center justify-center min-w-[48px] h-12 rounded-full text-on-surface-variant hover:text-on-surface transition-all px-3" data-path="home" href="#"><span class="material-symbols-outlined text-[22px]">grid_view</span><span class="font-label-sm text-[10px] mt-0.5">Home</span></a><a class="flex flex-col items-center justify-center min-w-[48px] h-12 rounded-full text-on-surface-variant hover:text-on-surface transition-all px-3 relative" data-path="transactions" href="#"><div class="relative flex items-center justify-center"><span class="material-symbols-outlined text-[22px]">receipt_long</span><span class="absolute -top-0.5 -right-1 w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#b4cf9b]"></span></div><span class="font-label-sm text-[10px] mt-0.5">Activity</span></a><div class="relative -top-3 flex items-center justify-center px-1"><a class="w-14 h-14 rounded-full bg-gradient-to-tr from-[#7E9A68] to-primary shadow-[0_4px_22px_rgba(126,154,104,0.5)] flex items-center justify-center text-surface-container-lowest border border-white/20 active:scale-95 transition-transform" data-path="add-expense" href="#"><span class="material-symbols-outlined text-[28px] font-bold">add</span></a></div><a class="flex flex-col items-center justify-center min-w-[48px] h-12 rounded-full text-on-surface-variant hover:text-on-surface transition-all px-3" data-path="insights" href="#"><span class="material-symbols-outlined text-[22px]">insert_chart</span><span class="font-label-sm text-[10px] mt-0.5">Insights</span></a><a aria-current="page" class="flex flex-col items-center justify-center min-w-[48px] h-12 rounded-full transition-all px-3 text-primary bg-[#7E9A68]/20 shadow-[0_0_12px_rgba(126,154,104,0.25)]" data-path="profile" href="#"><span class="material-symbols-outlined text-[22px]">account_circle</span><span class="font-label-sm text-[10px] mt-0.5">Profile</span></a></nav></div></div>
+</body></html>

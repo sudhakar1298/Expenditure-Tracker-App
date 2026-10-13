@@ -4,6 +4,7 @@ import android.app.Notification
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
+import com.example.gpayexpensetracker.data.BackendSyncUtility
 import com.example.gpayexpensetracker.data.DefaultDataRepository
 import com.example.gpayexpensetracker.data.TransactionDatabase
 import com.example.gpayexpensetracker.data.TransactionEntity
@@ -45,6 +46,7 @@ class ExpenseNotificationListener : NotificationListenerService() {
             scope.launch {
                 repository.insert(transaction)
                 com.example.gpayexpensetracker.data.SheetsSyncUtility.sync(applicationContext, transaction)
+                BackendSyncUtility.sync(applicationContext, transaction)
                 Log.d(TAG, "Successfully inserted and synced transaction: ${transaction.amount} to ${transaction.merchant}")
             }
         }

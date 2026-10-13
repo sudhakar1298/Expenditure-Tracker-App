@@ -1,0 +1,1826 @@
+[
+  {
+    "id": "df973bda-ad8c-41c5-820b-c9acffda387e",
+    "amount": 450.0,
+    "merchant": "swiggy",
+    "category": "Food",
+    "source": "Manual",
+    "transaction_date": "2026-10-02T06:15:42.246000"
+  },
+  {
+    "id": "d7500ad5-8424-44c2-b054-f142a9c52cf6",
+    "amount": 1.0,
+    "merchant": "food",
+    "category": "Food",
+    "source": "Manual",
+    "transaction_date": "2026-06-02T21:15:53"
+  },
+  {
+    "id": "79627f2b-dcef-4dc4-8e69-1855ea194ac3",
+    "amount": 1.0,
+    "merchant": "kavisomuu@ok",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-02T21:20:30"
+  },
+  {
+    "id": "8737f7a2-3c24-4c1c-9fed-354c49277d49",
+    "amount": 1.0,
+    "merchant": "shopping",
+    "category": "Shopping",
+    "source": "Manual",
+    "transaction_date": "2026-06-02T21:29:46"
+  },
+  {
+    "id": "d3d6e008-1ddf-472e-984b-fed3b445b113",
+    "amount": 1.0,
+    "merchant": "kavisomuu@ok",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-02T21:54:49"
+  },
+  {
+    "id": "712c328f-e149-4ae0-ba8a-aa8fa9e20ff1",
+    "amount": 37.0,
+    "merchant": "DAVID J Onion 1 kg",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-06-03T07:56:02"
+  },
+  {
+    "id": "a0866086-08e0-45c3-9418-a58586e1dbb2",
+    "amount": 647.82,
+    "merchant": "Udemy India linux",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-03T08:37:49"
+  },
+  {
+    "id": "4f3e7d45-70be-469c-9817-438ad6fbed02",
+    "amount": 96.0,
+    "merchant": "metro",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-06-03T12:01:43"
+  },
+  {
+    "id": "e18232e0-5104-41d4-b2a0-6249d6d8a9cd",
+    "amount": 600.0,
+    "merchant": "Vellore Inst transcript and provisional",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-04T09:54:13"
+  },
+  {
+    "id": "6b5f2379-3a58-40a4-aec5-b5ecca64a084",
+    "amount": 443.0,
+    "merchant": "medicine",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-06-05T12:32:00"
+  },
+  {
+    "id": "0ecc6e67-bd15-4762-82af-958cd222964a",
+    "amount": 160.0,
+    "merchant": "Distilled water",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-06-05T12:44:11"
+  },
+  {
+    "id": "56050937-0057-46e7-9af2-f2308a530fd8",
+    "amount": 20.0,
+    "merchant": "air for cycle wheel",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-05T17:17:53"
+  },
+  {
+    "id": "dad07a28-72f0-46ea-ab0c-5bdd3c83e445",
+    "amount": 82.0,
+    "merchant": "packing for appa office marriage",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-06-06T09:45:21"
+  },
+  {
+    "id": "fcc376f4-aa28-4e4a-a469-271f75be8d3c",
+    "amount": 1589.0,
+    "merchant": "Flipkart Pay Home",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-06-06T12:11:12"
+  },
+  {
+    "id": "018625b4-50ec-4d64-bf7e-bf78e8e50028",
+    "amount": 150.0,
+    "merchant": "turf",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-06-06T19:05:16"
+  },
+  {
+    "id": "ab756e2b-994b-4fa1-bbb1-d99674469f3c",
+    "amount": 70.0,
+    "merchant": "Rose Milk",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-06-06T20:11:03"
+  },
+  {
+    "id": "d902b7ab-4895-440c-88d3-07b5dd830106",
+    "amount": 527.1,
+    "merchant": "DOMINOS PIZZ",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-06-06T21:45:10"
+  },
+  {
+    "id": "c08b70d6-178d-403e-bbed-bc9c15753d5a",
+    "amount": 130.0,
+    "merchant": "print",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-07T17:14:57"
+  },
+  {
+    "id": "fa61755d-8735-4926-9add-87358a8d6296",
+    "amount": 3.0,
+    "merchant": "print",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-07T18:17:10"
+  },
+  {
+    "id": "fe08bd4f-c586-4395-9238-56e22a805524",
+    "amount": 20.0,
+    "merchant": "two wheeler tire air",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-06-08T20:59:24"
+  },
+  {
+    "id": "04857f9b-d86c-4967-ae35-a6fe27f4131a",
+    "amount": 39.0,
+    "merchant": "Milk half litre",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-06-10T07:01:54"
+  },
+  {
+    "id": "350d3163-2d98-4701-b67e-f410df1d437c",
+    "amount": 20.0,
+    "merchant": "aplam",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-06-11T07:54:41"
+  },
+  {
+    "id": "1c238d6a-cb27-4992-bef8-2742e5a41a7a",
+    "amount": 32.0,
+    "merchant": "metro",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-13T15:10:17"
+  },
+  {
+    "id": "c66500fd-f043-4c44-bf5d-6199b848e85e",
+    "amount": 128.0,
+    "merchant": "metro movie disclore day",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-13T19:02:01"
+  },
+  {
+    "id": "2138ef0a-8b7e-4e6a-aecb-a0f44f35c1ae",
+    "amount": 60.0,
+    "merchant": "DEERENDRAKUM disclosure day movie",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-13T15:52:36"
+  },
+  {
+    "id": "9efbfe15-a9be-4382-a3e9-df52ffe540b8",
+    "amount": 120.0,
+    "merchant": "Hari cut",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-14T08:58:41"
+  },
+  {
+    "id": "a0e393c9-46b1-455e-ad89-8d2f6a5994cc",
+    "amount": 120.0,
+    "merchant": "hair cut",
+    "category": "Bills",
+    "source": "Manual",
+    "transaction_date": "2026-06-14T09:03:49"
+  },
+  {
+    "id": "eec968a1-e7cb-47d9-8a02-fa45317cd727",
+    "amount": 345.0,
+    "merchant": "vegetable",
+    "category": "Food",
+    "source": "Manual",
+    "transaction_date": "2026-06-15T06:48:10"
+  },
+  {
+    "id": "b206296a-29b9-491e-b53f-b59ad24e46a4",
+    "amount": 5.0,
+    "merchant": "chocolate",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-15T16:22:24"
+  },
+  {
+    "id": "994d47a3-78a1-4f47-8309-2a67385abf9d",
+    "amount": 20.0,
+    "merchant": "mountain dew",
+    "category": "Food",
+    "source": "Manual",
+    "transaction_date": "2026-06-15T17:25:35"
+  },
+  {
+    "id": "cc04dede-eece-4cdf-80e5-ae6272ac7aed",
+    "amount": 40.0,
+    "merchant": "bus",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-06-16T07:22:23"
+  },
+  {
+    "id": "5715c64d-47cb-465f-b077-1250434b9068",
+    "amount": 120.0,
+    "merchant": "Atto",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-06-15T18:51:12"
+  },
+  {
+    "id": "dc191ca8-560a-4236-ac54-a42f415d2a03",
+    "amount": 40.0,
+    "merchant": "milk",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-16T19:32:14"
+  },
+  {
+    "id": "c43e72e7-7b8f-4856-abd9-ca7c1936e5ca",
+    "amount": 39.0,
+    "merchant": "milk",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-17T06:12:49"
+  },
+  {
+    "id": "ee08f571-74c0-4e3b-8ad5-ff247f827ebb",
+    "amount": 8.0,
+    "merchant": "graph",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-17T20:14:11"
+  },
+  {
+    "id": "03871bcd-2bfa-4b03-93a3-3ac0d609f303",
+    "amount": 400.0,
+    "merchant": "petrol",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-19T11:44:22"
+  },
+  {
+    "id": "999e91d7-69ef-4993-80b0-de63927b477f",
+    "amount": 120.0,
+    "merchant": "Snack",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-20T16:28:28"
+  },
+  {
+    "id": "93af1656-1485-41c1-b6a3-218575b36af6",
+    "amount": 80.0,
+    "merchant": "lunch sat",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-20T14:02:59"
+  },
+  {
+    "id": "d0b2da99-6f67-4dbc-9b95-7943bee88e2f",
+    "amount": 180.0,
+    "merchant": "hospital",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-06-22T20:52:22"
+  },
+  {
+    "id": "0dd9fa0f-d4bb-4e0b-813c-b7157d721c03",
+    "amount": 137.0,
+    "merchant": "hospital",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-22T21:31:23"
+  },
+  {
+    "id": "e6f00430-35e4-41fc-b095-639d7ee8280b",
+    "amount": 126.0,
+    "merchant": "hospital",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-06-22T21:36:45"
+  },
+  {
+    "id": "951d1d6f-0565-45bf-94e8-f09584e90f32",
+    "amount": 459.0,
+    "merchant": "petrol",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-06-23T08:28:52"
+  },
+  {
+    "id": "b090dd9f-a60f-4e33-94f9-27606ea9dd79",
+    "amount": 58.0,
+    "merchant": "noodles",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-06-24T00:08:32"
+  },
+  {
+    "id": "d34e1202-ed68-4b46-b0cd-640c29dfe111",
+    "amount": 120.0,
+    "merchant": "noodles",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-06-24T19:56:07"
+  },
+  {
+    "id": "c91820ab-6517-421f-9cd6-42c0db2dcd3c",
+    "amount": 130.0,
+    "merchant": "lunch",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-06-26T15:40:56"
+  },
+  {
+    "id": "9f5400cf-de11-426b-a168-7ed0e69e265c",
+    "amount": 39.9,
+    "merchant": "juice",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-06-26T15:41:34"
+  },
+  {
+    "id": "657d75fb-4cdf-41bf-ab18-21471c217856",
+    "amount": 476.0,
+    "merchant": "petrol",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-06-26T18:20:07"
+  },
+  {
+    "id": "c765cb26-d23e-4cd8-b847-b1c8e38bda0b",
+    "amount": 110.0,
+    "merchant": "egg mullai and fried rice podi",
+    "category": "Shopping",
+    "source": "SMS",
+    "transaction_date": "2026-06-27T09:02:37"
+  },
+  {
+    "id": "a88c2841-aab2-4ccd-bf9e-176f2f26f409",
+    "amount": 72.0,
+    "merchant": "Battery",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-06-28T19:09:58"
+  },
+  {
+    "id": "febcf4a4-2a27-4bb1-b033-ba7a422c34ba",
+    "amount": 12.0,
+    "merchant": "print",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-06-29T20:29:23"
+  },
+  {
+    "id": "628802fa-aa03-451e-87fe-c98c60427f8f",
+    "amount": 120.0,
+    "merchant": "snacks",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-06-29T19:22:07"
+  },
+  {
+    "id": "a500be15-5bff-44f4-a011-d5ce83ca7f2c",
+    "amount": 503.0,
+    "merchant": "petrol",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-06-30T18:39:15"
+  },
+  {
+    "id": "e173b3aa-b0f6-4f54-b03b-c7e5e9183541",
+    "amount": 15.0,
+    "merchant": "snacks",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-06-30T13:28:18"
+  },
+  {
+    "id": "cfce177a-3c4d-4cbc-8163-2aa6544ff10e",
+    "amount": 10.0,
+    "merchant": "air",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-02T19:07:45"
+  },
+  {
+    "id": "c988a190-c237-4b65-be8e-6dbbca4f0128",
+    "amount": 20.0,
+    "merchant": "putiyna",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-02T08:01:53"
+  },
+  {
+    "id": "2e702712-ee14-4a63-bee3-9fe81989af48",
+    "amount": 84.0,
+    "merchant": "vada",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-04T08:06:18"
+  },
+  {
+    "id": "a18262c6-5890-479b-9573-8cc3685fda83",
+    "amount": 60.0,
+    "merchant": "Vishal cycle grip",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-07-06T18:52:34"
+  },
+  {
+    "id": "1df6441b-d667-420b-94e7-2924d273ab3b",
+    "amount": 3.0,
+    "merchant": "Fuse",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-07-06T18:38:41"
+  },
+  {
+    "id": "3a9f252a-1e73-4b00-83ec-01a09380b315",
+    "amount": 90.0,
+    "merchant": "Bread Svs",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-06T18:05:46"
+  },
+  {
+    "id": "19d4b5a7-058e-46ce-96ad-713934d878e0",
+    "amount": 50.0,
+    "merchant": "kann mye and comb",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-07-06T18:03:17"
+  },
+  {
+    "id": "5e5eb94d-d29d-4639-8173-2deef132ade7",
+    "amount": 30.0,
+    "merchant": "bag zip",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-07-06T18:00:46"
+  },
+  {
+    "id": "539b9dd5-d614-480a-89e1-bfcc28559774",
+    "amount": 160.0,
+    "merchant": "onimemt",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-07-06T17:51:31"
+  },
+  {
+    "id": "bcfc9871-0f90-4125-a7e4-93e68aee5f65",
+    "amount": 443.0,
+    "merchant": "aachi tata Medicenes",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-07-06T10:47:20"
+  },
+  {
+    "id": "52102bd1-14fd-45c2-8d46-b2aa050f5202",
+    "amount": 1110.0,
+    "merchant": "tbm kama things",
+    "category": "Shopping",
+    "source": "SMS",
+    "transaction_date": "2026-07-05T12:22:20"
+  },
+  {
+    "id": "52fbe985-3a94-48e3-b2da-1c971e7429db",
+    "amount": 123.0,
+    "merchant": "Noodles",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-04T12:59:15"
+  },
+  {
+    "id": "78bec129-5d13-423e-bcc0-4f3fa95a096a",
+    "amount": 100.0,
+    "merchant": "bhel puri",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-04T16:57:32"
+  },
+  {
+    "id": "8922d004-4ebc-4577-bfdb-922d2c9ce9f3",
+    "amount": 50.0,
+    "merchant": "gotumai",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-07-04T17:08:33"
+  },
+  {
+    "id": "4dd506c9-7b52-4a55-adf9-a0d35cc4fb60",
+    "amount": 168.0,
+    "merchant": "medical",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-07-04T10:04:30"
+  },
+  {
+    "id": "4061bd2e-9d36-4c2d-b4b9-7b0f39ed9b23",
+    "amount": 150.0,
+    "merchant": "temper",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-07-08T18:35:21"
+  },
+  {
+    "id": "e526beb5-31e8-4f26-86a5-a599639a7d81",
+    "amount": 120.0,
+    "merchant": "hair cut",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-07-09T09:58:29"
+  },
+  {
+    "id": "fb071e14-ecf9-4742-a265-1d81961c0227",
+    "amount": 82.0,
+    "merchant": "Milk",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-07-09T07:09:06"
+  },
+  {
+    "id": "45b688cc-a9bc-49cd-a3f4-f8416d47997d",
+    "amount": 192.0,
+    "merchant": "mango",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-07-08T13:11:52"
+  },
+  {
+    "id": "a16b386c-2c1c-46bd-8352-754a3ea647cd",
+    "amount": 456.67,
+    "merchant": "petrol",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-08T09:22:01"
+  },
+  {
+    "id": "679c7944-a2cd-4b92-96a3-849f350a043a",
+    "amount": 48.0,
+    "merchant": "6 egg",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-07T14:47:05"
+  },
+  {
+    "id": "356a008d-570b-4b31-85f9-77cf7841f9df",
+    "amount": 165.0,
+    "merchant": "ironing shirts and pants",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-07-09T18:57:11"
+  },
+  {
+    "id": "f781b3c1-dd7c-435e-a2a2-77e4bb61f740",
+    "amount": 51.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-13T10:02:26"
+  },
+  {
+    "id": "f1b50889-045d-4a39-bfcb-486415386df5",
+    "amount": 233.0,
+    "merchant": "Dinner",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-07-12T19:40:30"
+  },
+  {
+    "id": "41dde50f-5f45-4464-85a9-e1bdc963ace1",
+    "amount": 262.18,
+    "merchant": "Lunch",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-12T12:06:23"
+  },
+  {
+    "id": "552abc4c-f014-4050-8f10-beefb743018c",
+    "amount": 1000.0,
+    "merchant": "Atm trial",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-07-11T00:51:34"
+  },
+  {
+    "id": "b61d9737-36e7-4e2c-93dc-27083e1edfbc",
+    "amount": 210.0,
+    "merchant": "night dinner",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-13T20:26:38"
+  },
+  {
+    "id": "6adc8359-30f4-4fae-9507-132d6a361474",
+    "amount": 30.0,
+    "merchant": "morning share auto",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-14T09:34:21"
+  },
+  {
+    "id": "829d879c-5910-484e-940f-514b28ba73b9",
+    "amount": 153.0,
+    "merchant": "dinner",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-14T19:43:14"
+  },
+  {
+    "id": "c085487a-7416-4772-9949-a02b54a1d6c5",
+    "amount": 30.0,
+    "merchant": "mrng auto",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-15T10:26:25"
+  },
+  {
+    "id": "b2fe9dde-772b-43e1-a6bc-223eee5e8b68",
+    "amount": 30.0,
+    "merchant": "mrng tracel",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-16T10:56:58"
+  },
+  {
+    "id": "455c2454-0abb-4166-a601-5f45c5b56ba2",
+    "amount": 10.0,
+    "merchant": "trial",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-07-16T09:41:16"
+  },
+  {
+    "id": "08293291-039f-4e21-92bb-44520755b6f6",
+    "amount": 186.0,
+    "merchant": "night dinner",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-15T19:38:35"
+  },
+  {
+    "id": "1c684f5c-b6fd-46c1-a8cc-0be6a2160421",
+    "amount": 212.0,
+    "merchant": "dinner",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-07-16T19:20:18"
+  },
+  {
+    "id": "9c0e4b1a-2a20-4c05-adbf-a02f30c7bfad",
+    "amount": 30.0,
+    "merchant": "mrng auto",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-17T11:01:42"
+  },
+  {
+    "id": "bce114f4-dc9f-489c-8e96-f67c32004b68",
+    "amount": 30.0,
+    "merchant": "morning travel",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-20T11:12:20"
+  },
+  {
+    "id": "a2bf6d4e-ddac-452b-92c6-9e3347550683",
+    "amount": 134.0,
+    "merchant": "Night dinner",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-19T19:59:35"
+  },
+  {
+    "id": "329a796c-0ae9-4df0-9e99-75955927a3f0",
+    "amount": 57.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-19T19:46:59"
+  },
+  {
+    "id": "eaf4717a-625f-42fa-ad59-813e6069ca15",
+    "amount": 3500.0,
+    "merchant": "advance for pg",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-07-19T18:46:33"
+  },
+  {
+    "id": "db1f4c0b-61a7-47fe-bf35-df1e0ccb11b1",
+    "amount": 64.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-19T09:27:59"
+  },
+  {
+    "id": "6e9efa5a-55ba-4822-a2a8-3cee54cc0ecc",
+    "amount": 42.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-19T09:04:46"
+  },
+  {
+    "id": "9bc2d269-1384-4978-a2ac-b3a45e9e0f35",
+    "amount": 186.0,
+    "merchant": "9289592895-Indian Bank",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-17T19:36:16"
+  },
+  {
+    "id": "5cbd79a9-a325-4efd-890e-8111434a641d",
+    "amount": 210.0,
+    "merchant": "9289592895-Indian Bank",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-18T13:00:49"
+  },
+  {
+    "id": "97cebbdf-2ab6-45f5-bc3d-b8be0c36be9a",
+    "amount": 112.0,
+    "merchant": "9289592895-Indian Bank",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-18T19:14:55"
+  },
+  {
+    "id": "0257f986-3281-4a6d-b79e-82500eef89a9",
+    "amount": 145.0,
+    "merchant": "9289592895-Indian Bank",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-18T19:16:21"
+  },
+  {
+    "id": "adbda089-395c-412d-9a7d-443b9abe2afe",
+    "amount": 222.0,
+    "merchant": "dinner",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-21T18:39:08"
+  },
+  {
+    "id": "b96518c8-ffd9-4639-8ee1-b2b712715dd1",
+    "amount": 765.0,
+    "merchant": "movie",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-07-21T18:21:57"
+  },
+  {
+    "id": "b435cf87-d19f-43dd-80f1-c5785afa3dae",
+    "amount": 1598.0,
+    "merchant": "dress",
+    "category": "Shopping",
+    "source": "SMS",
+    "transaction_date": "2026-07-21T17:12:37"
+  },
+  {
+    "id": "f7e8b165-fa8e-4b4e-a9a0-efa4a2e3e71a",
+    "amount": 30.0,
+    "merchant": "travel mrng",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-21T11:17:56"
+  },
+  {
+    "id": "79367cb9-35da-473b-8676-aee066cb5309",
+    "amount": 2938.75,
+    "merchant": "shoe",
+    "category": "Shopping",
+    "source": "SMS",
+    "transaction_date": "2026-07-20T16:52:14"
+  },
+  {
+    "id": "28a9e1af-927c-43e6-b619-0c5a4572648b",
+    "amount": 68.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-20T16:24:18"
+  },
+  {
+    "id": "905bf450-3e41-422c-9fac-0fc0c0a15491",
+    "amount": 50.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-20T17:17:22"
+  },
+  {
+    "id": "fb1b1645-9667-4917-a8ac-c0f872e5459f",
+    "amount": 226.0,
+    "merchant": "dinner",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-20T18:47:35"
+  },
+  {
+    "id": "8fb7bc6a-4d0f-41f5-a924-4ea99b38103b",
+    "amount": 75.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-21T07:36:20"
+  },
+  {
+    "id": "994b30be-f965-42df-8dff-2487150327ef",
+    "amount": 30.0,
+    "merchant": "mrng auto",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-22T10:58:33"
+  },
+  {
+    "id": "c70d7088-1cb0-4755-8ca8-199dd5b3b8c8",
+    "amount": 105.0,
+    "merchant": "snacks",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-07-22T16:51:33"
+  },
+  {
+    "id": "caf72623-4b6d-43bd-8590-94dc46e74268",
+    "amount": 741.85,
+    "merchant": "dinner",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-22T18:20:46"
+  },
+  {
+    "id": "220caf74-8829-4b49-98c2-43b4fd013a9b",
+    "amount": 30.0,
+    "merchant": "mrng travel",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-23T11:09:33"
+  },
+  {
+    "id": "9be53b26-0a56-4c9a-aaf6-6b250152a2b0",
+    "amount": 163.0,
+    "merchant": "snacks",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-23T17:32:34"
+  },
+  {
+    "id": "57456e21-741c-464d-b2ab-d53e8e161640",
+    "amount": 266.43,
+    "merchant": "dinner",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-23T19:36:15"
+  },
+  {
+    "id": "2fb393e9-75ed-46dc-aa36-9b9caec0cd0d",
+    "amount": 3541.0,
+    "merchant": "Laundry",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-07-24T08:07:27"
+  },
+  {
+    "id": "a251927f-5edc-47ec-bdd2-1b629c8fb1ac",
+    "amount": 37.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-25T12:04:14"
+  },
+  {
+    "id": "67a122ae-c5fb-45a0-9f94-4828b60a4d1d",
+    "amount": 1313.55,
+    "merchant": "basics for pg",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-07-25T11:47:45"
+  },
+  {
+    "id": "95435717-4ca2-4da1-a4b1-627f67fdc79e",
+    "amount": 67.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-25T11:29:42"
+  },
+  {
+    "id": "cb4c6858-bdde-4ab5-ac10-4c3cd9efb2fc",
+    "amount": 390.0,
+    "merchant": "mountain dew",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-25T08:35:02"
+  },
+  {
+    "id": "a77bb93a-0287-4fc3-8bee-3b75fcf204c9",
+    "amount": 51.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-25T07:15:25"
+  },
+  {
+    "id": "d778ec56-9618-4c1a-af24-69f0de7d7b49",
+    "amount": 632.48,
+    "merchant": "the oddessy movie",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-07-24T22:14:38"
+  },
+  {
+    "id": "02516fb4-30e5-4770-a632-fac180616c91",
+    "amount": 10.0,
+    "merchant": "News paper",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-07-24T19:17:47"
+  },
+  {
+    "id": "7f295336-a2d8-429a-a4bb-2759e6970b34",
+    "amount": 130.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-24T11:16:36"
+  },
+  {
+    "id": "6142b486-2226-4e8f-92da-deac8b125bb6",
+    "amount": 68.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-26T15:05:28"
+  },
+  {
+    "id": "2f4d851f-68e6-4c9b-b248-b5fc72293aea",
+    "amount": 79.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-07-26T21:14:50"
+  },
+  {
+    "id": "0773e329-092c-41b9-be27-646b3e4cb5ce",
+    "amount": 179.0,
+    "merchant": "Hot wheels",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-07-27T13:36:39"
+  },
+  {
+    "id": "6e321bc2-6f2d-4c87-8915-2dec06e98869",
+    "amount": 29.0,
+    "merchant": "Dinner",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-27T19:06:31"
+  },
+  {
+    "id": "45a0b725-e3ea-407f-a68a-c7d4a898bf75",
+    "amount": 1993.1,
+    "merchant": "cahoot dress",
+    "category": "Shopping",
+    "source": "SMS",
+    "transaction_date": "2026-07-30T09:26:55"
+  },
+  {
+    "id": "a2d846d1-ace4-4bb9-b011-b6caa5eae719",
+    "amount": 179.0,
+    "merchant": "hot wheels",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-07-30T18:24:43"
+  },
+  {
+    "id": "1c0be11b-758d-4958-a8bc-9c3f7c960247",
+    "amount": 4.0,
+    "merchant": "9289592895-Indian Bank",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-07-30T19:14:43"
+  },
+  {
+    "id": "e1766226-9f11-4625-80c8-553f95544d04",
+    "amount": 61.0,
+    "merchant": "hot wheels",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-08-01T07:46:29"
+  },
+  {
+    "id": "d881b36b-9fc6-4f4a-8d9a-9a943f22baff",
+    "amount": 1749.0,
+    "merchant": "bus to hone",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-01T21:45:11"
+  },
+  {
+    "id": "dc5d53b1-756f-4405-895b-77ca89af093f",
+    "amount": 185.0,
+    "merchant": "dinner",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-08-01T19:48:26"
+  },
+  {
+    "id": "841e23b1-dc0f-4764-bf0b-d47ef8dcbb57",
+    "amount": 82.0,
+    "merchant": "rapido to madhin",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-02T09:59:00"
+  },
+  {
+    "id": "370c8454-d3e3-431a-8369-d2fc11624db4",
+    "amount": 155.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-02T15:07:16"
+  },
+  {
+    "id": "e3191c00-b40e-48f7-9f30-65edf653e7c4",
+    "amount": 80.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-02T19:27:39"
+  },
+  {
+    "id": "99f2b054-fb11-49e5-b657-faa4abeee044",
+    "amount": 105.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-04T20:07:44"
+  },
+  {
+    "id": "3208f84f-7369-4c44-a42d-c662760176b8",
+    "amount": 270.0,
+    "merchant": "Sweet",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-08-04T19:47:38"
+  },
+  {
+    "id": "823a4b04-ab47-4f07-84d3-e31029f41fb4",
+    "amount": 1093.0,
+    "merchant": "sweet",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-08-04T19:46:24"
+  },
+  {
+    "id": "2dc4f1fa-2c64-4329-b7bf-88c01ded4d05",
+    "amount": 108.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-04T18:02:12"
+  },
+  {
+    "id": "750b2797-cc52-4953-9bee-2e76789a6d52",
+    "amount": 390.0,
+    "merchant": "biscuit",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-08-04T17:10:27"
+  },
+  {
+    "id": "f6bfa509-daf5-4ec2-959f-d6ed2ade2ded",
+    "amount": 1783.0,
+    "merchant": "trimmer",
+    "category": "Shopping",
+    "source": "SMS",
+    "transaction_date": "2026-08-04T12:45:22"
+  },
+  {
+    "id": "f4959957-8d5e-405c-876d-932d73e7aa7f",
+    "amount": 3.0,
+    "merchant": "dinner",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-08-03T19:21:31"
+  },
+  {
+    "id": "135bfba2-9edc-4d7e-92a5-4b99a7a36191",
+    "amount": 176.0,
+    "merchant": "stuff",
+    "category": "Shopping",
+    "source": "SMS",
+    "transaction_date": "2026-08-06T20:03:00"
+  },
+  {
+    "id": "6084c133-2996-4b5e-9bde-60a22c9b4b36",
+    "amount": 3500.0,
+    "merchant": "badminton bat lining ignite 8",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-08-06T19:42:58"
+  },
+  {
+    "id": "314ebe70-ff10-41e8-993a-e852c21879b3",
+    "amount": 921.0,
+    "merchant": "tata medicines",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-08-05T14:49:50"
+  },
+  {
+    "id": "7dbbcba2-dd76-4834-81fe-15302758c6cd",
+    "amount": 170.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-11T10:01:03"
+  },
+  {
+    "id": "acb113bb-9100-4445-b8e4-9ab5bb3fd370",
+    "amount": 711.0,
+    "merchant": "minimalist",
+    "category": "Shopping",
+    "source": "SMS",
+    "transaction_date": "2026-08-10T19:10:38"
+  },
+  {
+    "id": "8bf174d9-0add-42ad-9a28-749faca32644",
+    "amount": 750.0,
+    "merchant": "badminton net",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-08-09T17:23:33"
+  },
+  {
+    "id": "3b6bf569-6511-41f8-85c3-5aedb999b36e",
+    "amount": 185.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-05T17:37:28"
+  },
+  {
+    "id": "fe01d493-037f-4e2e-94df-36b8508092af",
+    "amount": 158.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-05T19:07:17"
+  },
+  {
+    "id": "1ee7cc8c-6c36-4595-abb4-269260c02e38",
+    "amount": 1664.5,
+    "merchant": "gta 5",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-08-06T11:51:40"
+  },
+  {
+    "id": "e5bf1e3c-845a-47b2-bc74-cf303c38a237",
+    "amount": 150.0,
+    "merchant": "badminton",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-08-07T10:15:34"
+  },
+  {
+    "id": "b3156fb0-c890-47af-a14a-b3cf28940ca2",
+    "amount": 1492.0,
+    "merchant": "to Hyderabad",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-08T08:58:24"
+  },
+  {
+    "id": "04135c1b-fb69-45cb-8c2d-e286a950cd4d",
+    "amount": 889.0,
+    "merchant": "tata eye medicine",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-08-07T11:32:41"
+  },
+  {
+    "id": "f0f22dd1-c3e8-440f-bb6d-0c993c3b1f72",
+    "amount": 180.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-07T12:02:17"
+  },
+  {
+    "id": "90b5cba0-9ce5-4ea2-9c1b-1b2602197254",
+    "amount": 150.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-10T09:06:45"
+  },
+  {
+    "id": "bacd38c1-fc8b-4e57-80e2-3b43c516023b",
+    "amount": 3400.0,
+    "merchant": "suitcase",
+    "category": "Shopping",
+    "source": "SMS",
+    "transaction_date": "2026-08-11T15:01:01"
+  },
+  {
+    "id": "63c6a3f9-5a6e-4ee1-ae9a-5b91061ba192",
+    "amount": 32.0,
+    "merchant": "metro",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-11T17:48:23"
+  },
+  {
+    "id": "f8c841cf-a2c3-4742-8f07-5decbec50f11",
+    "amount": 160.0,
+    "merchant": "snacks",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-08-11T17:58:02"
+  },
+  {
+    "id": "36b4df17-4f73-49aa-9eea-490088871aca",
+    "amount": 200.0,
+    "merchant": "invest",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-08-12T09:37:11"
+  },
+  {
+    "id": "0d786f0e-f0fb-483b-96ab-57ee856ebaa2",
+    "amount": 45.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-12T13:21:21"
+  },
+  {
+    "id": "11b4edc4-2d5b-407f-add1-20dc1d1b2ff5",
+    "amount": 161.35,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-12T09:57:04"
+  },
+  {
+    "id": "f4f3b9f8-9ac7-4ffb-8eb0-a442ebb98199",
+    "amount": 69.0,
+    "merchant": "metro",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-12T08:01:02"
+  },
+  {
+    "id": "7afc4905-2d74-4057-9f60-cfa0934a0c0b",
+    "amount": 232.0,
+    "merchant": "volini",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-08-12T18:26:52"
+  },
+  {
+    "id": "0392b86a-e878-49c2-a0c5-81769f930d98",
+    "amount": 30.0,
+    "merchant": "banana",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-08-12T19:40:35"
+  },
+  {
+    "id": "cb73dcc6-a2e2-4ae5-8a66-3385f2035a6c",
+    "amount": 45.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-13T04:53:00"
+  },
+  {
+    "id": "cc771879-9276-4f6c-8951-57513a2494f0",
+    "amount": 45.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-13T06:35:58"
+  },
+  {
+    "id": "9c21895a-4a3b-4238-aa83-1d6ad955463c",
+    "amount": 45.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-15T05:03:00"
+  },
+  {
+    "id": "9d057105-fe5b-4f72-a6e1-17ec85081bc0",
+    "amount": 122.0,
+    "merchant": "badminton",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-08-15T06:22:40"
+  },
+  {
+    "id": "b07f82e0-81f7-4db6-8b31-cdf7d4b9713d",
+    "amount": 53.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-15T07:21:48"
+  },
+  {
+    "id": "81c17632-be3d-4dec-9cbf-491af2c2731d",
+    "amount": 20.0,
+    "merchant": "sprite",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-08-15T18:12:25"
+  },
+  {
+    "id": "80195df0-59da-490d-8df8-ff5e5a730334",
+    "amount": 164.58,
+    "merchant": "mefil briyani not so good don't buy again until you want to eat white rice",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-08-15T19:21:57"
+  },
+  {
+    "id": "6b99546e-a1cd-4692-960d-2aa6b3014dcd",
+    "amount": 1062.54,
+    "merchant": "rock climbing",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-08-18T11:42:15"
+  },
+  {
+    "id": "e21abb17-7eb1-469a-b1b5-f319ba8c0838",
+    "amount": 300.0,
+    "merchant": "kite",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-08-17T15:17:58"
+  },
+  {
+    "id": "a68f28b9-96bd-4d6f-804d-a6f55662d708",
+    "amount": 125.0,
+    "merchant": "badminton",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-08-17T06:14:20"
+  },
+  {
+    "id": "2ff95d3f-76c1-4ae4-ba78-6eda1157c321",
+    "amount": 45.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-17T04:53:10"
+  },
+  {
+    "id": "8250ab57-75ab-4366-b871-89f623d44af1",
+    "amount": 142.93,
+    "merchant": "noodles",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-08-16T15:39:24"
+  },
+  {
+    "id": "0139ed1f-37b5-4c1f-a0d8-ed8d7f904af8",
+    "amount": 4534.12,
+    "merchant": "Bus",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-18T22:24:37"
+  },
+  {
+    "id": "b7241b65-be6f-42a0-95ee-67b2bae1a086",
+    "amount": 117.0,
+    "merchant": "french fries",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-08-19T06:09:03"
+  },
+  {
+    "id": "39eca3b8-9d95-4f04-87a0-4e0753d31e82",
+    "amount": 145.72,
+    "merchant": "noodles",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-08-19T08:46:47"
+  },
+  {
+    "id": "e708ede2-4402-4c7a-b6bc-1213ab6bf6fa",
+    "amount": 66.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-20T16:07:17"
+  },
+  {
+    "id": "1d6298ec-1a7b-43a3-8cbc-fccc68fc1a55",
+    "amount": 175.23,
+    "merchant": "fried rice",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-08-20T16:37:29"
+  },
+  {
+    "id": "b78b11d3-56b3-4eeb-bfa8-33b256598823",
+    "amount": 20.0,
+    "merchant": "banana",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-08-20T21:20:48"
+  },
+  {
+    "id": "67b17129-b87b-4ad1-9752-4b9fd5ce7e32",
+    "amount": 133.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-21T09:47:26"
+  },
+  {
+    "id": "636bafaa-b856-4e1d-abfd-5cc63dfe2c91",
+    "amount": 528.56,
+    "merchant": "petrol destiny",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-08-22T13:59:25"
+  },
+  {
+    "id": "060357d5-be2d-4585-a57e-2f79dd4102a9",
+    "amount": 100.0,
+    "merchant": "investment",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-09-02T11:59:04"
+  },
+  {
+    "id": "751b0de6-3dda-44c9-b089-fdcbe48ddfa7",
+    "amount": 100.0,
+    "merchant": "investment",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-09-02T11:58:44"
+  },
+  {
+    "id": "90de5d10-444c-403b-95b7-1c428efb73e8",
+    "amount": 8500.0,
+    "merchant": "eent",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-09-02T08:16:28"
+  },
+  {
+    "id": "fb693fc6-1db7-4031-a472-c831844aba52",
+    "amount": 120.48,
+    "merchant": "kara dosa and idili",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-09-02T08:17:26"
+  },
+  {
+    "id": "26462663-a8cb-439d-9a98-66f091d28717",
+    "amount": 118.0,
+    "merchant": "badminton",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-09-02T06:04:21"
+  },
+  {
+    "id": "8ac7bd7e-8077-4377-8561-ad4a55d2b2ad",
+    "amount": 500.0,
+    "merchant": "investment",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-09-01T22:51:04"
+  },
+  {
+    "id": "6309db59-2925-461f-965b-6b1a47185bc3",
+    "amount": 500.0,
+    "merchant": "investment",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-09-01T22:50:49"
+  },
+  {
+    "id": "ffd6f834-bc78-4ead-a80f-08ab6c90be5b",
+    "amount": 3409.0,
+    "merchant": "decathlon shoes bag trouser socks",
+    "category": "Shopping",
+    "source": "SMS",
+    "transaction_date": "2026-08-31T18:32:44"
+  },
+  {
+    "id": "c52dd09c-58d9-48f9-8528-1e0b7f6becd1",
+    "amount": 10.0,
+    "merchant": "bananaa",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-08-31T20:49:22"
+  },
+  {
+    "id": "e62d53bb-aeab-44d2-9f6f-4e490f333a1e",
+    "amount": 95.0,
+    "merchant": "badminton",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-09-03T06:04:08"
+  },
+  {
+    "id": "803601a8-00a6-495f-b840-2f2c1948ad98",
+    "amount": 45.0,
+    "merchant": "Maggie",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-09-03T09:16:06"
+  },
+  {
+    "id": "ac941f7f-1770-4167-984e-dc5da8aefb24",
+    "amount": 161.13,
+    "merchant": "Dinner",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-09-03T20:32:34"
+  },
+  {
+    "id": "b71fed97-c121-458e-855e-5d2f4f8aa508",
+    "amount": 27.0,
+    "merchant": "egg and sprite",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-09-06T19:01:09"
+  },
+  {
+    "id": "351b3e70-97e5-415c-8475-fc74e65955f4",
+    "amount": 526.0,
+    "merchant": "soap and shampoo",
+    "category": "Shopping",
+    "source": "SMS",
+    "transaction_date": "2026-09-06T18:46:16"
+  },
+  {
+    "id": "81fdb3f1-5660-4b84-bcb7-d00eba5660f2",
+    "amount": 1768.4,
+    "merchant": "jeans",
+    "category": "Shopping",
+    "source": "SMS",
+    "transaction_date": "2026-09-06T17:11:49"
+  },
+  {
+    "id": "0b210638-6d37-41c5-ac58-de2e94307ae5",
+    "amount": 259.0,
+    "merchant": "movies",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-09-05T20:18:11"
+  },
+  {
+    "id": "862bec74-84b5-4bbe-8723-483dcc1f5001",
+    "amount": 226.17,
+    "merchant": "badminton",
+    "category": "Others",
+    "source": "SMS",
+    "transaction_date": "2026-09-06T13:54:35"
+  },
+  {
+    "id": "b6cab9ba-5d7b-42c7-ba9c-859a81f0da2e",
+    "amount": 38.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-09-08T06:25:30"
+  },
+  {
+    "id": "fee400e0-a448-427b-a3ad-98d87ca96fbc",
+    "amount": 118.0,
+    "merchant": "badminton",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-09-08T06:03:25"
+  },
+  {
+    "id": "4b844355-7d68-4948-90e4-cd38d222f12c",
+    "amount": 141.59,
+    "merchant": "breakfast",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-09-09T08:11:08"
+  },
+  {
+    "id": "0aa67a5a-8e65-4210-bf59-c7c9ea076000",
+    "amount": 14.0,
+    "merchant": "dinner",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-09-08T19:34:25"
+  },
+  {
+    "id": "8d493cde-9271-4418-a745-3bdead0b267c",
+    "amount": 230.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-09-10T22:26:40"
+  },
+  {
+    "id": "23d2859d-f6fb-4354-b2d0-85e69dfd36f1",
+    "amount": 1.0,
+    "merchant": "dinner",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-09-10T19:02:13"
+  },
+  {
+    "id": "92d24624-9c1e-4f12-aae5-21a86c400af3",
+    "amount": 181.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-09-15T22:34:09"
+  },
+  {
+    "id": "bfc25368-a70e-40fd-aabe-95451a6bc929",
+    "amount": 240.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-09-15T00:13:48"
+  },
+  {
+    "id": "9f1beeb7-3697-4bf8-b003-ca80df6eb362",
+    "amount": 3265.0,
+    "merchant": "trip",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-09-15T00:09:23"
+  },
+  {
+    "id": "baf65c63-8817-4e49-beff-1e60d2e77669",
+    "amount": 326.0,
+    "merchant": "ice cream",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-09-21T14:19:21"
+  },
+  {
+    "id": "8891f8b6-a086-4d74-8f5f-3c69d99d4723",
+    "amount": 153.0,
+    "merchant": "badminton",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-09-21T12:30:12"
+  },
+  {
+    "id": "5560a5ce-2283-4cd0-b02a-394cf4b1b75c",
+    "amount": 50.0,
+    "merchant": "rapido",
+    "category": "Travel",
+    "source": "SMS",
+    "transaction_date": "2026-09-20T22:40:52"
+  },
+  {
+    "id": "fedbc36c-9fe4-4504-933c-5ab03704d367",
+    "amount": 230.0,
+    "merchant": "dinner",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-09-20T21:53:22"
+  },
+  {
+    "id": "29cc2e00-288a-45a2-948d-1c44d75d5ce7",
+    "amount": 280.0,
+    "merchant": "lunch",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-09-20T20:32:56"
+  },
+  {
+    "id": "5f3df48f-f2ba-4f1e-82d8-18de8bc71b03",
+    "amount": 50.0,
+    "merchant": "chocolate",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-09-23T21:20:27"
+  },
+  {
+    "id": "30b84e71-1762-4cfb-9ee0-2771c396e446",
+    "amount": 11.0,
+    "merchant": "cake",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-09-23T16:12:45"
+  },
+  {
+    "id": "42f430bb-6fed-4c16-a72c-5a4e4a0831bf",
+    "amount": 184.0,
+    "merchant": "Hotwheels",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-09-29T07:39:36"
+  },
+  {
+    "id": "63cc99c0-c15d-42b0-b90c-cc7ddad343c7",
+    "amount": 2390.0,
+    "merchant": "shirts flipkart",
+    "category": "Shopping",
+    "source": "SMS",
+    "transaction_date": "2026-09-29T07:27:07"
+  },
+  {
+    "id": "6c86db02-450a-4204-8b90-112eabe70f2c",
+    "amount": 4850.0,
+    "merchant": "trip",
+    "category": "Entertainment",
+    "source": "SMS",
+    "transaction_date": "2026-09-29T07:05:30"
+  },
+  {
+    "id": "e20bbe8e-1bc8-4b98-91fd-e395ba3fc6b1",
+    "amount": 80.0,
+    "merchant": "Noodles",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-09-27T20:33:26"
+  },
+  {
+    "id": "86e1f62c-5ab0-4a01-9d4d-ffe1a1707dc3",
+    "amount": 50.0,
+    "merchant": "Chocolate",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-09-27T16:38:42"
+  },
+  {
+    "id": "a2b3219a-d324-4ef8-8e4b-1e228353809d",
+    "amount": 1368.0,
+    "merchant": "shirts flipkart",
+    "category": "Shopping",
+    "source": "SMS",
+    "transaction_date": "2026-09-26T09:18:45"
+  },
+  {
+    "id": "6c0fb383-acb9-44ab-8b52-6393048df77b",
+    "amount": 2648.0,
+    "merchant": "souled store dress",
+    "category": "Shopping",
+    "source": "SMS",
+    "transaction_date": "2026-09-29T19:07:35"
+  },
+  {
+    "id": "0c3d5959-f299-4805-8eb5-5c6f6ad3feeb",
+    "amount": 628.0,
+    "merchant": "potluck",
+    "category": "Food",
+    "source": "SMS",
+    "transaction_date": "2026-09-29T20:07:50"
+  },
+  {
+    "id": "f3ef0ca5-5e31-4301-865c-ab0d50c59afa",
+    "amount": 1200.0,
+    "merchant": "investment",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-09-30T17:47:52"
+  },
+  {
+    "id": "b88e9f7a-2b85-4df1-972a-247bd9de6ccc",
+    "amount": 700.0,
+    "merchant": "investment",
+    "category": "Bills",
+    "source": "SMS",
+    "transaction_date": "2026-09-30T17:44:37"
+  }
+]
