@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import text
+from sqlalchemy import func, text
 
 from app.core.config import settings
 from app.core.database import engine, Base
@@ -47,9 +47,16 @@ app.include_router(api_router, prefix=settings.API_V1_STR)
 @app.get("/api/v1/databricks/status")
 def databricks_status():
     with SessionLocal() as db:
+        errors = dict(db.query(
+            DatabricksOutbox.last_error,
+            func.count(DatabricksOutbox.expense_id),
+        ).filter(
+            DatabricksOutbox.last_error.is_not(None)
+        ).group_by(DatabricksOutbox.last_error).all())
         return {"enabled": databricks_settings.DATABRICKS_SYNC_ENABLED,
                 "pending": db.query(DatabricksOutbox).count(),
-                "failed_attempts": db.query(DatabricksOutbox).filter(DatabricksOutbox.attempts > 0).count()}
+                "failed_attempts": db.query(DatabricksOutbox).filter(DatabricksOutbox.attempts > 0).count(),
+                "errors": errors}
 
 @app.get("/")
 def root():

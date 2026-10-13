@@ -14,6 +14,13 @@ from app.models.databricks_outbox import DatabricksOutbox
 log = logging.getLogger(__name__)
 
 
+def safe_error_label(exc):
+    """Return actionable diagnostics without persisting response bodies or secrets."""
+    if isinstance(exc, httpx.HTTPStatusError):
+        return f"Databricks HTTP {exc.response.status_code}"
+    return type(exc).__name__
+
+
 def queue_expense(db, expense, operation="upsert"):
     # Called in the same DB transaction as the expense write. Queue even while
     # disabled so saves can be delivered after credentials are configured.
@@ -105,7 +112,7 @@ def deliver_pending(session_factory, writer):
         try:
             writer.write_batch([json.loads(row[3]) for row in group], operation)
         except Exception as exc:
-            error = type(exc).__name__
+            error = safe_error_label(exc)
             log.warning("Databricks delivery pending (%s)", error)
         with session_factory() as db:
             # A concurrent edit gets a new revision and must not be acknowledged

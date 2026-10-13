@@ -129,7 +129,7 @@ class DeliveryTests(unittest.TestCase):
         writer.client.close()
         with self.Session() as db:
             row = db.query(DatabricksOutbox).one()
-            self.assertEqual(row.last_error, "HTTPStatusError")
+            self.assertEqual(row.last_error, "Databricks HTTP 401")
             self.assertEqual(json.loads(row.payload)["amount"], 42.5)
 
     def test_partial_remote_failure_retries_both_merges(self):
