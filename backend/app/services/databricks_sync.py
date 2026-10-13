@@ -17,7 +17,19 @@ log = logging.getLogger(__name__)
 def safe_error_label(exc):
     """Return actionable diagnostics without persisting response bodies or secrets."""
     if isinstance(exc, httpx.HTTPStatusError):
-        return f"Databricks HTTP {exc.response.status_code}"
+        response = exc.response
+        endpoint = response.request.url.path
+        if endpoint.startswith("/api/2.0/sql/statements/"):
+            endpoint = "/api/2.0/sql/statements/{id}"
+        try:
+            error_code = response.json().get("error_code")
+        except (ValueError, AttributeError):
+            error_code = None
+        details = [f"Databricks HTTP {response.status_code}"]
+        if error_code:
+            details.append(str(error_code)[:80])
+        details.extend((response.request.method, endpoint))
+        return " ".join(details)
     return type(exc).__name__
 
 
