@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -51,6 +53,7 @@ import com.example.gpayexpensetracker.data.TransactionDatabase
 import com.example.gpayexpensetracker.data.TransactionEntity
 import com.example.gpayexpensetracker.theme.*
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -79,7 +82,10 @@ fun VaultGlassApp(
     viewModel: MainScreenViewModel,
     modifier: Modifier = Modifier
 ) {
-    var activeTab by remember { mutableIntStateOf(0) } // 0: Home, 1: Activity, 3: Insights, 4: Profile
+    val tabs = remember { listOf(0, 1, 3, 4) }
+    val pagerState = rememberPagerState(pageCount = { tabs.size })
+    val activeTab = tabs[pagerState.currentPage]
+    val coroutineScope = rememberCoroutineScope()
     var showAddBottomSheet by remember { mutableStateOf(false) }
     var showSettingsDialog by remember { mutableStateOf(false) }
 
@@ -125,19 +131,24 @@ fun VaultGlassApp(
                         if (tabIdx == 2) {
                             showAddBottomSheet = true
                         } else {
-                            activeTab = tabIdx
+                            val page = tabs.indexOf(tabIdx)
+                            if (page >= 0) {
+                                coroutineScope.launch { pagerState.animateScrollToPage(page) }
+                            }
                         }
                     }
                 )
             },
             containerColor = Color.Transparent
         ) { paddingValues ->
-            Box(
+            HorizontalPager(
+                state = pagerState,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues)
-            ) {
-                when (activeTab) {
+                    .padding(paddingValues),
+                key = { page -> tabs[page] }
+            ) { page ->
+                when (tabs[page]) {
                     0 -> VaultGlassHomeScreen(viewModel = viewModel, onOpenSettings = { showSettingsDialog = true })
                     1 -> VaultGlassActivityScreen(viewModel = viewModel)
                     3 -> VaultGlassInsightsScreen(viewModel = viewModel)
