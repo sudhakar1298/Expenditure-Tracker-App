@@ -21,6 +21,7 @@ import java.util.TimeZone
 
 object BackendSyncUtility {
     private const val TAG = "BackendSync"
+    const val DEFAULT_BACKEND_BASE_URL = "https://expenditure-tracker-app.onrender.com"
     val status = MutableStateFlow("Sync not checked")
     private val uploadLock = Mutex()
 
@@ -42,7 +43,9 @@ object BackendSyncUtility {
             })
             return list
         }
-        // Fallback LAN IP and Emulator IP
+        // The hosted backend is the default. LAN addresses remain available as
+        // development fallbacks when the user has not configured another URL.
+        list.add("$DEFAULT_BACKEND_BASE_URL/api/v1/expenses/")
         list.add("http://192.168.1.37:8000/api/v1/expenses/")
         list.add("http://10.0.2.2:8000/api/v1/expenses/")
         return list.distinct()

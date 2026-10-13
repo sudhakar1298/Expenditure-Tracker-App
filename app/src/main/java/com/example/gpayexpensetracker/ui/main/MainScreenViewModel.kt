@@ -35,7 +35,11 @@ class MainScreenViewModel(
     private val _googleSheetsUrl = MutableStateFlow(sharedPrefs.getString("google_sheets_url", "") ?: "")
     val googleSheetsUrl: StateFlow<String> = _googleSheetsUrl.asStateFlow()
 
-    private val _backendApiUrl = MutableStateFlow(sharedPrefs.getString("backend_api_url", "") ?: "")
+    private val _backendApiUrl = MutableStateFlow(
+        sharedPrefs.getString("backend_api_url", null)
+            ?.takeUnless { it.isBlank() }
+            ?: BackendSyncUtility.DEFAULT_BACKEND_BASE_URL
+    )
     val backendApiUrl: StateFlow<String> = _backendApiUrl.asStateFlow()
     val syncStatus: StateFlow<String> = BackendSyncUtility.status.asStateFlow()
 

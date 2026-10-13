@@ -41,6 +41,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavKey
+import com.example.gpayexpensetracker.data.BackendSyncUtility
 import com.example.gpayexpensetracker.data.DefaultDataRepository
 import com.example.gpayexpensetracker.data.TransactionDatabase
 import com.example.gpayexpensetracker.data.TransactionEntity
@@ -1235,8 +1236,8 @@ fun VaultGlassSettingsDialog(
                 OutlinedTextField(
                     value = backendApiUrl,
                     onValueChange = { backendApiUrl = it },
-                    label = { Text("Backend API URL (optional)") },
-                    placeholder = { Text("http://192.168.x.x:8000/api/v1/expenses/") },
+                    label = { Text("Backend API URL") },
+                    placeholder = { Text(BackendSyncUtility.DEFAULT_BACKEND_BASE_URL) },
                     colors = OutlinedTextFieldDefaults.colors(focusedTextColor = primaryText, unfocusedTextColor = primaryText, focusedBorderColor = primaryAccent),
                     modifier = Modifier.fillMaxWidth()
                 )
