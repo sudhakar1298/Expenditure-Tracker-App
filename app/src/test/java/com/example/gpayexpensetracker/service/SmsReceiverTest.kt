@@ -13,7 +13,7 @@ class SmsReceiverTest {
         assertNotNull("Transaction should not be null", transaction)
         assertEquals(78.00, transaction!!.amount, 0.0)
         assertEquals("CHITHRA AGEN", transaction.merchant)
-        assertEquals("Others", transaction.category) // Always defaults to Others for confirmation
+        assertEquals("Other", transaction.category)
         assertEquals("SMS", transaction.sourceApp)
         assertTrue(transaction.isPending) // Must be pending details
     }
@@ -26,6 +26,7 @@ class SmsReceiverTest {
         assertNotNull("Transaction should not be null", transaction)
         assertEquals(1250.50, transaction!!.amount, 0.0)
         assertEquals("AMAZON PAY", transaction.merchant)
+        assertEquals("Shopping", transaction.category)
         assertTrue(transaction.isPending)
     }
 

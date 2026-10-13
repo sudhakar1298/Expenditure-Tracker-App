@@ -6,6 +6,7 @@ import android.service.notification.StatusBarNotification
 import android.util.Log
 import com.example.gpayexpensetracker.data.BackendSyncUtility
 import com.example.gpayexpensetracker.data.DefaultDataRepository
+import com.example.gpayexpensetracker.data.ExpenseCategories
 import com.example.gpayexpensetracker.data.TransactionDatabase
 import com.example.gpayexpensetracker.data.TransactionEntity
 import kotlinx.coroutines.CoroutineScope
@@ -71,7 +72,7 @@ class ExpenseNotificationListener : NotificationListenerService() {
                 val amount = amountStr.toDoubleOrNull() ?: return null
                 val merchant = match.groupValues[3].trim()
                 
-                val category = categorizeMerchant(merchant)
+                val category = ExpenseCategories.suggest(merchant)
                 
                 return TransactionEntity(
                     amount,
@@ -79,7 +80,8 @@ class ExpenseNotificationListener : NotificationListenerService() {
                     category,
                     System.currentTimeMillis(),
                     "GPay",
-                    text
+                    text,
+                    true
                 )
             } catch (e: Exception) {
                 Log.e(TAG, "Error parsing transaction text: $text", e)
@@ -87,26 +89,5 @@ class ExpenseNotificationListener : NotificationListenerService() {
             }
         }
 
-        private fun categorizeMerchant(merchant: String): String {
-            val lower = merchant.lowercase()
-            return when {
-                // Food
-                containsAny(lower, "chai", "tea", "coffee", "restaurant", "cafe", "food", "ramen", "canteen", "hotel", "bakery", "dhaba", "pizza", "burger", "swiggy", "zomato", "kitchen", "eats", "lunch", "dinner", "breakfast", "sweet", "sweets") -> "Food"
-                // Travel
-                containsAny(lower, "uber", "ola", "metro", "auto", "railway", "irctc", "flight", "cab", "travel", "petrol", "fuel", "shell", "hpcl", "bpcl", "toll", "fastag", "taxi", "bus") -> "Travel"
-                // Shopping
-                containsAny(lower, "amazon", "flipkart", "myntra", "mall", "store", "supermarket", "mart", "grocery", "groceries", "reliance", "fashion", "clothing", "bazaar", "apparel", "retail", "wear") -> "Shopping"
-                // Bills
-                containsAny(lower, "electricity", "bill", "recharge", "bescom", "airtel", "jio", "vi", "broadband", "water", "gas", "insurance", "tata sky", "dth") -> "Bills"
-                // Entertainment
-                containsAny(lower, "netflix", "prime", "hotstar", "spotify", "bookmyshow", "cinema", "movie", "theater", "gaming", "steam", "club", "pub", "bar", "music") -> "Entertainment"
-                // Others
-                else -> "Others"
-            }
-        }
-
-        private fun containsAny(text: String, vararg keywords: String): Boolean {
-            return keywords.any { text.contains(it) }
-        }
     }
 }

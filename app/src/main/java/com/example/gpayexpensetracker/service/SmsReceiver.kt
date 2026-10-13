@@ -7,6 +7,7 @@ import android.provider.Telephony
 import android.util.Log
 import com.example.gpayexpensetracker.data.BackendSyncUtility
 import com.example.gpayexpensetracker.data.DefaultDataRepository
+import com.example.gpayexpensetracker.data.ExpenseCategories
 import com.example.gpayexpensetracker.data.SheetsSyncUtility
 import com.example.gpayexpensetracker.data.TransactionDatabase
 import com.example.gpayexpensetracker.data.TransactionEntity
@@ -87,7 +88,7 @@ class SmsReceiver : BroadcastReceiver() {
                 return TransactionEntity(
                     amount,
                     merchant,
-                    "Others", // Default category, user will change this
+                    ExpenseCategories.suggest(merchant),
                     System.currentTimeMillis(),
                     "SMS",
                     text,

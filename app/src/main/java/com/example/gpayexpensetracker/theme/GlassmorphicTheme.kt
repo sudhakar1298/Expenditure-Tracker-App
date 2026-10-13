@@ -34,7 +34,7 @@ val DarkGlassColorScheme = darkColorScheme(
 
 val LightGlassColorScheme = lightColorScheme(
     primary = BotanicalSagePrimary,
-    onPrimary = BotanicalLightSurface,
+    onPrimary = BotanicalLightTextPrimary,
     primaryContainer = BotanicalLinenContainer,
     onPrimaryContainer = BotanicalDeepOlivePrimary,
     secondary = BotanicalDeepOlivePrimary,
@@ -69,7 +69,7 @@ fun Modifier.glassPanel(
     isDark: Boolean = true
 ): Modifier {
     val backgroundColor = if (isDark) {
-        Color(0xFF1A241E).copy(alpha = 0.75f)
+        BotanicalDarkSurface.copy(alpha = 0.78f)
     } else {
         Color.White.copy(alpha = 0.85f)
     }
@@ -93,14 +93,14 @@ fun Modifier.glassAlertPanel(
     isDark: Boolean = true
 ): Modifier {
     val bg = if (isDark) {
-        Color(0xFFE9B44C).copy(alpha = 0.12f)
+        BotanicalAmberAlert.copy(alpha = 0.12f)
     } else {
-        Color(0xFFFFF9EE).copy(alpha = 0.95f)
+        Color(0xFFFFF5F1).copy(alpha = 0.95f)
     }
     val border = if (isDark) {
-        Color(0xFFE9B44C).copy(alpha = 0.35f)
+        BotanicalAmberAlert.copy(alpha = 0.35f)
     } else {
-        Color(0xFFE9C46A).copy(alpha = 0.5f)
+        BotanicalWarmOchreAlert.copy(alpha = 0.45f)
     }
     val shape = RoundedCornerShape(cornerRadius)
 

@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -45,6 +46,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavKey
 import com.example.gpayexpensetracker.data.BackendSyncUtility
 import com.example.gpayexpensetracker.data.DefaultDataRepository
+import com.example.gpayexpensetracker.data.ExpenseCategories
 import com.example.gpayexpensetracker.data.TransactionDatabase
 import com.example.gpayexpensetracker.data.TransactionEntity
 import com.example.gpayexpensetracker.theme.*
@@ -135,7 +137,7 @@ fun VaultGlassApp(
                     .padding(paddingValues)
             ) {
                 when (activeTab) {
-                    0 -> VaultGlassHomeScreen(viewModel = viewModel)
+                    0 -> VaultGlassHomeScreen(viewModel = viewModel, onOpenSettings = { showSettingsDialog = true })
                     1 -> VaultGlassActivityScreen(viewModel = viewModel)
                     3 -> VaultGlassInsightsScreen(viewModel = viewModel)
                     else -> VaultGlassProfileScreen(viewModel = viewModel)
@@ -251,7 +253,7 @@ fun VaultGlassTopBar(
 }
 
 @Composable
-fun VaultGlassHomeScreen(viewModel: MainScreenViewModel) {
+fun VaultGlassHomeScreen(viewModel: MainScreenViewModel, onOpenSettings: () -> Unit) {
     val transactions by viewModel.allTransactions.collectAsStateWithLifecycle()
     val budget by viewModel.monthlyBudget.collectAsStateWithLifecycle()
     val isPermissionEnabled by viewModel.isNotificationServiceEnabled.collectAsStateWithLifecycle()
@@ -368,7 +370,7 @@ fun VaultGlassHomeScreen(viewModel: MainScreenViewModel) {
         }
 
         item {
-            VaultTrackHeroCard(totalSpent = totalSpent, budget = budget)
+            VaultTrackHeroCard(totalSpent = totalSpent, budget = budget, onEditBudget = onOpenSettings)
         }
 
         if (pendingTransactions.isNotEmpty()) {
@@ -465,8 +467,8 @@ fun VaultGlassHomeScreen(viewModel: MainScreenViewModel) {
         ConfirmPendingTransactionDialog(
             transaction = selectedTransactionForConfirm!!,
             onDismiss = { selectedTransactionForConfirm = null },
-            onConfirm = { merchant, category ->
-                viewModel.finalizePendingTransaction(selectedTransactionForConfirm!!, merchant, category)
+            onConfirm = { merchant, category, reason ->
+                viewModel.finalizePendingTransaction(selectedTransactionForConfirm!!, merchant, category, reason)
                 selectedTransactionForConfirm = null
             }
         )
@@ -474,7 +476,7 @@ fun VaultGlassHomeScreen(viewModel: MainScreenViewModel) {
 }
 
 @Composable
-fun VaultTrackHeroCard(totalSpent: Double, budget: Double) {
+fun VaultTrackHeroCard(totalSpent: Double, budget: Double, onEditBudget: () -> Unit) {
     val isDark = isSystemInDarkTheme()
     val progress = if (budget > 0) (totalSpent / budget).toFloat() else 0f
     val remaining = budget - totalSpent
@@ -486,6 +488,9 @@ fun VaultTrackHeroCard(totalSpent: Double, budget: Double) {
 
     val cal = Calendar.getInstance()
     val monthName = SimpleDateFormat("MMM", Locale.getDefault()).format(cal.time)
+    val daysLeft = (cal.getActualMaximum(Calendar.DAY_OF_MONTH) - cal.get(Calendar.DAY_OF_MONTH) + 1)
+        .coerceAtLeast(1)
+    val dailySafeSpend = remaining.coerceAtLeast(0.0) / daysLeft
 
     Box(
         modifier = Modifier
@@ -561,9 +566,9 @@ fun VaultTrackHeroCard(totalSpent: Double, budget: Double) {
                         Column {
                             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                                 Text("⏱ ₹%,.0f left".format(remaining), color = Color(0xFF52B788), fontSize = 11.sp, fontWeight = FontWeight.Bold)
-                                Text("11 days left", color = mutedText, fontSize = 10.sp)
+                                Text("$daysLeft days left", color = mutedText, fontSize = 10.sp)
                             }
-                            Text("Daily safe spend: ₹595/day", color = mutedText, fontSize = 11.sp)
+                            Text("Daily safe spend: ₹%,.0f/day".format(dailySafeSpend), color = mutedText, fontSize = 11.sp)
                         }
                     }
                 }
@@ -571,7 +576,7 @@ fun VaultTrackHeroCard(totalSpent: Double, budget: Double) {
 
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Button(
-                    onClick = {},
+                    onClick = onEditBudget,
                     colors = ButtonDefaults.buttonColors(containerColor = primaryAccent, contentColor = if (isDark) BotanicalDarkBackground else Color.White),
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.weight(1f).height(42.dp)
@@ -582,7 +587,7 @@ fun VaultTrackHeroCard(totalSpent: Double, budget: Double) {
                 }
 
                 Button(
-                    onClick = {},
+                    onClick = onEditBudget,
                     colors = ButtonDefaults.buttonColors(containerColor = mutedText.copy(alpha = 0.15f), contentColor = primaryText),
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.weight(1f).height(42.dp)
@@ -637,19 +642,19 @@ fun PendingDraftCard(
                 Text("₹%,.0f".format(transaction.amount), color = primaryText, fontWeight = FontWeight.Black, fontSize = 16.sp)
             }
 
-            Text("ASSIGN CATEGORY:", color = mutedText, fontSize = 9.sp, fontWeight = FontWeight.Bold)
-
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                listOf("Food", "Travel", "Shopping").forEach { cat ->
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(if (cat == "Food") Color(0xFFE9B44C) else mutedText.copy(alpha = 0.15f))
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                    ) {
-                        Text(cat, color = if (cat == "Food") Color.Black else primaryText, fontSize = 10.sp, fontWeight = FontWeight.Bold)
-                    }
-                }
+            Text("SUGGESTED CATEGORY", color = mutedText, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(getCategoryColor(transaction.category).copy(alpha = 0.18f))
+                    .padding(horizontal = 10.dp, vertical = 5.dp)
+            ) {
+                Text(
+                    ExpenseCategories.normalize(transaction.category),
+                    color = getCategoryColor(transaction.category),
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
 
             Row(
@@ -718,6 +723,9 @@ fun VaultGlassTransactionRow(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(transaction.merchant, color = primaryText, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                transaction.reason?.takeUnless { it.isBlank() }?.let { reason ->
+                    Text(reason, color = mutedText, fontSize = 11.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
                 Spacer(modifier = Modifier.height(2.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(dateStr, color = mutedText, fontSize = 11.sp)
@@ -751,9 +759,26 @@ fun VaultGlassActivityScreen(viewModel: MainScreenViewModel) {
     val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
     val mutedText = if (isDark) BotanicalDarkTextMuted else BotanicalLightTextMuted
 
-    val filtered = transactions.filter {
-        it.merchant.contains(search, ignoreCase = true) || it.category.contains(search, ignoreCase = true)
+    val searchFiltered = transactions.filter {
+        it.merchant.contains(search, ignoreCase = true) ||
+            it.category.contains(search, ignoreCase = true) ||
+            it.reason.orEmpty().contains(search, ignoreCase = true) ||
+            it.amount.toString().contains(search)
     }
+    val filtered = searchFiltered.filter {
+        when (selectedFilter) {
+            "Pending" -> it.isPending
+            "GPay" -> it.sourceApp.equals("GPay", ignoreCase = true)
+            "SMS" -> it.sourceApp.equals("SMS", ignoreCase = true)
+            else -> true
+        }
+    }
+    val filterOptions = listOf(
+        "All" to transactions.size,
+        "Pending" to transactions.count { it.isPending },
+        "GPay" to transactions.count { it.sourceApp.equals("GPay", ignoreCase = true) },
+        "SMS" to transactions.count { it.sourceApp.equals("SMS", ignoreCase = true) }
+    )
 
     // Dynamic Today Spent Calculation
     val todayCal = Calendar.getInstance().apply {
@@ -785,14 +810,6 @@ fun VaultGlassActivityScreen(viewModel: MainScreenViewModel) {
                     Text("Transactions", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 24.sp)
                     Text("🟢 ${transactions.size} Logged total", color = mutedText, fontSize = 12.sp)
                 }
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    IconButton(onClick = {}, modifier = Modifier.glassPanel(cornerRadius = 12.dp, isDark = isDark)) {
-                        Icon(Icons.Default.Menu, contentDescription = "Filter", tint = primaryText)
-                    }
-                    IconButton(onClick = {}, modifier = Modifier.glassPanel(cornerRadius = 12.dp, isDark = isDark)) {
-                        Icon(Icons.Default.Share, contentDescription = "Export", tint = primaryText)
-                    }
-                }
             }
         }
 
@@ -816,16 +833,16 @@ fun VaultGlassActivityScreen(viewModel: MainScreenViewModel) {
 
         item {
             LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(listOf("All (${transactions.size})", "Pending (3)", "GPay (28)", "SMS Drafts")) { filter ->
-                    val isSelected = filter.startsWith(selectedFilter) || (selectedFilter == "All" && filter.startsWith("All"))
+                items(filterOptions) { (filter, count) ->
+                    val isSelected = selectedFilter == filter
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(20.dp))
                             .background(if (isSelected) BotanicalSageContainer else mutedText.copy(alpha = 0.15f))
-                            .clickable { selectedFilter = filter.split(" ")[0] }
+                            .clickable { selectedFilter = filter }
                             .padding(horizontal = 14.dp, vertical = 6.dp)
                     ) {
-                        Text(filter, color = if (isSelected) Color.White else mutedText, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                        Text("$filter ($count)", color = if (isSelected) Color.White else mutedText, fontSize = 11.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -866,7 +883,7 @@ fun VaultGlassActivityScreen(viewModel: MainScreenViewModel) {
 
         // Dynamic Date Group Header
         item {
-            Text("$todayHeaderStr (${filtered.size} items)", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            Text("$todayHeaderStr · ${filtered.size} matching", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 15.sp)
         }
 
         items(filtered, key = { it.id }) { item ->
@@ -877,10 +894,26 @@ fun VaultGlassActivityScreen(viewModel: MainScreenViewModel) {
 
 @Composable
 fun VaultGlassInsightsScreen(viewModel: MainScreenViewModel) {
+    val transactions by viewModel.allTransactions.collectAsStateWithLifecycle()
     val isDark = isSystemInDarkTheme()
     val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
     val mutedText = if (isDark) BotanicalDarkTextMuted else BotanicalLightTextMuted
     val primaryAccent = if (isDark) BotanicalOlivePrimary else BotanicalSagePrimary
+
+    val now = Calendar.getInstance()
+    val currentMonthTransactions = transactions.filter { transaction ->
+        if (transaction.isPending) return@filter false
+        val date = Calendar.getInstance().apply { timeInMillis = transaction.timestamp }
+        date.get(Calendar.MONTH) == now.get(Calendar.MONTH) &&
+            date.get(Calendar.YEAR) == now.get(Calendar.YEAR)
+    }
+    val categoryTotals = currentMonthTransactions
+        .groupBy { ExpenseCategories.normalize(it.category) }
+        .mapValues { (_, entries) -> entries.sumOf { it.amount } }
+        .toList()
+        .sortedByDescending { it.second }
+    val totalSpent = categoryTotals.sumOf { it.second }
+    val topCategory = categoryTotals.firstOrNull()
 
     LazyColumn(
         modifier = Modifier
@@ -917,28 +950,60 @@ fun VaultGlassInsightsScreen(viewModel: MainScreenViewModel) {
                             val size = Size(size.width - stroke, size.height - stroke)
                             val offset = Offset(stroke / 2, stroke / 2)
 
-                            drawArc(Color(0xFFD48B28), -90f, 100f, false, topLeft = offset, size = size, style = Stroke(stroke))
-                            drawArc(Color(0xFF4D6B3C), 10f, 85f, false, topLeft = offset, size = size, style = Stroke(stroke))
-                            drawArc(Color(0xFF52B788), 95f, 72f, false, topLeft = offset, size = size, style = Stroke(stroke))
-                            drawArc(Color(0xFF3B82F6), 167f, 58f, false, topLeft = offset, size = size, style = Stroke(stroke))
-                            drawArc(Color(0xFF8E9286), 225f, 45f, false, topLeft = offset, size = size, style = Stroke(stroke))
+                            if (totalSpent <= 0.0) {
+                                drawArc(mutedText.copy(alpha = 0.18f), -90f, 360f, false, topLeft = offset, size = size, style = Stroke(stroke))
+                            } else {
+                                var startAngle = -90f
+                                categoryTotals.forEach { (category, amount) ->
+                                    val sweep = (amount / totalSpent * 360f).toFloat()
+                                    drawArc(
+                                        color = getCategoryColor(category),
+                                        startAngle = startAngle,
+                                        sweepAngle = (sweep - 2f).coerceAtLeast(0.5f),
+                                        useCenter = false,
+                                        topLeft = offset,
+                                        size = size,
+                                        style = Stroke(stroke)
+                                    )
+                                    startAngle += sweep
+                                }
+                            }
                         }
 
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text("TOTAL SPENT", color = mutedText, fontSize = 9.sp, fontWeight = FontWeight.Bold)
-                            Text("₹18,450", color = primaryText, fontWeight = FontWeight.Black, fontSize = 22.sp)
-                            Text("94 Transactions", color = mutedText, fontSize = 10.sp)
+                            Text("₹%,.0f".format(totalSpent), color = primaryText, fontWeight = FontWeight.Black, fontSize = 22.sp)
+                            Text("${currentMonthTransactions.size} Transactions", color = mutedText, fontSize = 10.sp)
                         }
                     }
 
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Column {
-                            Text("🟠 Food & Dining: 28% (₹5,166)", color = primaryText, fontSize = 11.sp)
-                            Text("🟢 Utility Bills: 20% (₹3,690)", color = primaryText, fontSize = 11.sp)
-                        }
-                        Column {
-                            Text("🟢 Shopping: 24% (₹4,428)", color = primaryText, fontSize = 11.sp)
-                            Text("🔵 Travel & Cab: 16% (₹2,952)", color = primaryText, fontSize = 11.sp)
+                    if (categoryTotals.isEmpty()) {
+                        Text("No confirmed expenses this month yet.", color = mutedText, fontSize = 12.sp)
+                    } else {
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            categoryTotals.take(6).forEach { (category, amount) ->
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(9.dp)
+                                                .clip(CircleShape)
+                                                .background(getCategoryColor(category))
+                                        )
+                                        Spacer(modifier = Modifier.width(8.dp))
+                                        Text(category, color = primaryText, fontSize = 11.sp)
+                                    }
+                                    Text(
+                                        "%.0f%% · ₹%,.0f".format(amount / totalSpent * 100, amount),
+                                        color = mutedText,
+                                        fontSize = 11.sp
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -953,12 +1018,17 @@ fun VaultGlassInsightsScreen(viewModel: MainScreenViewModel) {
                     .padding(18.dp)
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text("🔥 TOP SPENDING CATEGORY", color = Color(0xFFD48B28), fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                    Text("TOP SPENDING CATEGORY", color = primaryAccent, fontSize = 10.sp, fontWeight = FontWeight.Bold)
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("Food & Dining", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                        Text("₹5,200", color = Color(0xFFD48B28), fontWeight = FontWeight.Black, fontSize = 20.sp)
+                        Text(topCategory?.first ?: "No spending yet", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                        Text("₹%,.0f".format(topCategory?.second ?: 0.0), color = primaryAccent, fontWeight = FontWeight.Black, fontSize = 20.sp)
                     }
-                    Text("⚠️ ₹840 higher than 3-month average. Takeout spiked noticeably during late-night hours.", color = mutedText, fontSize = 12.sp)
+                    Text(
+                        if (topCategory == null) "Confirm an expense to see your monthly insights."
+                        else "Your largest confirmed spending category for this month.",
+                        color = mutedText,
+                        fontSize = 12.sp
+                    )
                 }
             }
         }
@@ -967,6 +1037,7 @@ fun VaultGlassInsightsScreen(viewModel: MainScreenViewModel) {
 
 @Composable
 fun VaultGlassProfileScreen(viewModel: MainScreenViewModel) {
+    val transactions by viewModel.allTransactions.collectAsStateWithLifecycle()
     val isDark = isSystemInDarkTheme()
     val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
     val mutedText = if (isDark) BotanicalDarkTextMuted else BotanicalLightTextMuted
@@ -1021,15 +1092,17 @@ fun VaultGlassProfileScreen(viewModel: MainScreenViewModel) {
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("342", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Text("${transactions.size}", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                             Text("TRANSACTIONS", color = mutedText, fontSize = 9.sp)
                         }
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("6 Mo", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                            Text("ACTIVE SPAN", color = mutedText, fontSize = 9.sp)
+                            Text("${transactions.count { it.isPending }}", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Text("PENDING", color = mutedText, fontSize = 9.sp)
                         }
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("98%", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            val categorizedPercent = if (transactions.isEmpty()) 0 else
+                                transactions.count { ExpenseCategories.normalize(it.category) != ExpenseCategories.OTHER } * 100 / transactions.size
+                            Text("$categorizedPercent%", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                             Text("CATEGORIZED", color = mutedText, fontSize = 9.sp)
                         }
                     }
@@ -1045,16 +1118,9 @@ fun VaultGlassProfileScreen(viewModel: MainScreenViewModel) {
                     .padding(18.dp)
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text("🏛️ PRECISION LEDGER • SYNCED", color = primaryAccent, fontSize = 10.sp, fontWeight = FontWeight.Bold)
-                    Text("Reconcile Statement", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                    Text("Audit your digital ledger against raw bank data. Reconciled 2 statements • Latest: 15 Oct 2024.", color = mutedText, fontSize = 11.sp)
-                    Button(
-                        onClick = {},
-                        colors = ButtonDefaults.buttonColors(containerColor = primaryAccent, contentColor = if (isDark) BotanicalDarkBackground else Color.White),
-                        shape = RoundedCornerShape(12.dp)
-                    ) {
-                        Text("📄 Import CSV / PDF", fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                    }
+                    Text("PRECISION LEDGER", color = primaryAccent, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                    Text("Expense summary", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                    Text("Your dashboard currently contains ${transactions.size} transactions, including ${transactions.count { it.isPending }} that still need confirmation.", color = mutedText, fontSize = 11.sp)
                 }
             }
         }
@@ -1095,7 +1161,7 @@ fun VaultGlassBottomBar(
                 }
 
                 IconButton(onClick = { onTabSelected(1) }) {
-                    Icon(Icons.Default.List, contentDescription = "Activity", tint = if (activeTab == 1) primaryAccent else mutedText)
+                    Icon(Icons.AutoMirrored.Filled.List, contentDescription = "Activity", tint = if (activeTab == 1) primaryAccent else mutedText)
                 }
 
                 Box(
@@ -1175,6 +1241,12 @@ fun AddExpenseBottomSheet(
                 modifier = Modifier.fillMaxWidth()
             )
 
+            ExpenseCategorySelector(
+                selected = category,
+                onSelected = { category = it },
+                isDark = isDark
+            )
+
             OutlinedTextField(
                 value = reason,
                 onValueChange = { reason = it },
@@ -1185,7 +1257,7 @@ fun AddExpenseBottomSheet(
                 onClick = {
                     val doubleAmt = amount.toDoubleOrNull()
                     if (doubleAmt != null && merchant.isNotBlank()) {
-                        onSave(doubleAmt, merchant, category, reason.ifBlank { merchant })
+                        onSave(doubleAmt, merchant, category, reason.trim())
                     }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = primaryAccent, contentColor = if (isDark) BotanicalDarkBackground else Color.White),
@@ -1193,6 +1265,44 @@ fun AddExpenseBottomSheet(
                 modifier = Modifier.fillMaxWidth().height(48.dp)
             ) {
                 Text("✓ Save Expense", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            }
+        }
+    }
+}
+
+@Composable
+fun ExpenseCategorySelector(
+    selected: String,
+    onSelected: (String) -> Unit,
+    isDark: Boolean
+) {
+    val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
+    val mutedText = if (isDark) BotanicalDarkTextMuted else BotanicalLightTextMuted
+    val normalized = ExpenseCategories.normalize(selected)
+
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Text("Category", color = mutedText, fontSize = 12.sp, fontWeight = FontWeight.Medium)
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            items(ExpenseCategories.all) { option ->
+                FilterChip(
+                    selected = normalized == option,
+                    onClick = { onSelected(option) },
+                    label = { Text(option) },
+                    leadingIcon = {
+                        Icon(
+                            getCategoryIcon(option),
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    },
+                    colors = FilterChipDefaults.filterChipColors(
+                        labelColor = primaryText,
+                        iconColor = mutedText,
+                        selectedContainerColor = BotanicalSagePrimary,
+                        selectedLabelColor = BotanicalLightTextPrimary,
+                        selectedLeadingIconColor = BotanicalLightTextPrimary
+                    )
+                )
             }
         }
     }
@@ -1271,11 +1381,12 @@ fun VaultGlassSettingsDialog(
 fun ConfirmPendingTransactionDialog(
     transaction: TransactionEntity,
     onDismiss: () -> Unit,
-    onConfirm: (String, String) -> Unit
+    onConfirm: (String, String, String) -> Unit
 ) {
     val isDark = isSystemInDarkTheme()
     var merchant by remember { mutableStateOf(transaction.merchant) }
-    var category by remember { mutableStateOf(transaction.category) }
+    var category by remember { mutableStateOf(ExpenseCategories.normalize(transaction.category)) }
+    var reason by remember { mutableStateOf(transaction.reason ?: "") }
 
     val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
     val primaryAccent = if (isDark) BotanicalOlivePrimary else BotanicalSagePrimary
@@ -1285,7 +1396,10 @@ fun ConfirmPendingTransactionDialog(
         title = { Text("Confirm SMS Transaction", color = primaryText, fontWeight = FontWeight.Bold) },
         containerColor = if (isDark) BotanicalDarkSurface else BotanicalLightSurface,
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.verticalScroll(rememberScrollState())
+            ) {
                 Text("Amount: ₹%,.2f".format(transaction.amount), color = primaryAccent, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                 OutlinedTextField(
                     value = merchant,
@@ -1294,11 +1408,28 @@ fun ConfirmPendingTransactionDialog(
                     colors = OutlinedTextFieldDefaults.colors(focusedTextColor = primaryText, unfocusedTextColor = primaryText, focusedBorderColor = primaryAccent),
                     modifier = Modifier.fillMaxWidth()
                 )
+                ExpenseCategorySelector(
+                    selected = category,
+                    onSelected = { category = it },
+                    isDark = isDark
+                )
+                OutlinedTextField(
+                    value = reason,
+                    onValueChange = { reason = it },
+                    label = { Text("Reason / purpose (optional)") },
+                    placeholder = { Text("Lunch, medicine, commute…") },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = primaryText,
+                        unfocusedTextColor = primaryText,
+                        focusedBorderColor = primaryAccent
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         },
         confirmButton = {
             Button(
-                onClick = { if (merchant.isNotBlank()) onConfirm(merchant, category) },
+                onClick = { if (merchant.isNotBlank()) onConfirm(merchant, category, reason) },
                 colors = ButtonDefaults.buttonColors(containerColor = primaryAccent, contentColor = if (isDark) BotanicalDarkBackground else Color.White)
             ) {
                 Text("Confirm", fontWeight = FontWeight.Bold)
@@ -1313,23 +1444,30 @@ fun ConfirmPendingTransactionDialog(
 }
 
 fun getCategoryIcon(category: String): ImageVector {
-    return when (category) {
-        "Food", "Food & Dining" -> Icons.Default.Home
-        "Shopping" -> Icons.Default.ShoppingCart
-        "Travel", "Travel & Cab" -> Icons.Default.Place
-        "Bills" -> Icons.Default.Info
-        "Entertainment" -> Icons.Default.Star
-        else -> Icons.Default.List
+    return when (ExpenseCategories.normalize(category)) {
+        ExpenseCategories.FOOD -> Icons.Default.Home
+        ExpenseCategories.GROCERIES, ExpenseCategories.SHOPPING -> Icons.Default.ShoppingCart
+        ExpenseCategories.TRANSPORT, ExpenseCategories.TRAVEL -> Icons.Default.Place
+        ExpenseCategories.BILLS, ExpenseCategories.EDUCATION -> Icons.Default.Info
+        ExpenseCategories.ENTERTAINMENT -> Icons.Default.Star
+        ExpenseCategories.HEALTH -> Icons.Default.Favorite
+        ExpenseCategories.RENT -> Icons.Default.Home
+        else -> Icons.AutoMirrored.Filled.List
     }
 }
 
 fun getCategoryColor(category: String): Color {
-    return when (category) {
-        "Food", "Food & Dining" -> Color(0xFFD48B28)
-        "Shopping" -> Color(0xFF4D6B3C)
-        "Travel", "Travel & Cab" -> Color(0xFF3B82F6)
-        "Bills" -> Color(0xFFEF4444)
-        "Entertainment" -> Color(0xFF10B981)
-        else -> Color(0xFF8E9286)
+    return when (ExpenseCategories.normalize(category)) {
+        ExpenseCategories.FOOD -> Color(0xFFFF8A65)
+        ExpenseCategories.GROCERIES -> Color(0xFF5BC5A7)
+        ExpenseCategories.TRANSPORT -> Color(0xFF4C9AFF)
+        ExpenseCategories.SHOPPING -> Color(0xFF8B6FC0)
+        ExpenseCategories.BILLS -> Color(0xFFFFB74D)
+        ExpenseCategories.ENTERTAINMENT -> Color(0xFFEC6F91)
+        ExpenseCategories.HEALTH -> Color(0xFFE35D6A)
+        ExpenseCategories.EDUCATION -> Color(0xFF3DA5A0)
+        ExpenseCategories.RENT -> Color(0xFF2E8B73)
+        ExpenseCategories.TRAVEL -> Color(0xFF3478C9)
+        else -> Color(0xFF7D878A)
     }
 }

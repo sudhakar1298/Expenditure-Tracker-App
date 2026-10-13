@@ -15,6 +15,7 @@ public class TransactionEntity {
     private long timestamp;
     private String sourceApp;
     private String rawText;
+    private String reason;
     private boolean isPending = false;
 
     // Default Constructor for Room
@@ -58,6 +59,9 @@ public class TransactionEntity {
     
     public String getRawText() { return rawText; }
     public void setRawText(String rawText) { this.rawText = rawText; }
+
+    public String getReason() { return reason; }
+    public void setReason(String reason) { this.reason = reason; }
 
     public boolean isPending() { return isPending; }
     public void setPending(boolean pending) { isPending = pending; }

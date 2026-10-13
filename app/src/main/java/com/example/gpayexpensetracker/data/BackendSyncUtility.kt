@@ -62,10 +62,8 @@ object BackendSyncUtility {
             put("transaction_id", transactionId)
             put("amount", transaction.amount)
             put("merchant", transaction.merchant)
-            put("reason", if (transaction.sourceApp == "Manual")
-                transaction.rawText?.takeUnless { it == "Manually entered" || it.isBlank() }
-                    ?: transaction.merchant else JSONObject.NULL)
-            put("category", transaction.category)
+            put("reason", transaction.reason?.takeUnless { it.isBlank() } ?: JSONObject.NULL)
+            put("category", ExpenseCategories.normalize(transaction.category))
             put("source", transaction.sourceApp)
             put("is_pending", transaction.isPending)
             put("transaction_date", isoFormat.format(Date(transaction.timestamp)))
@@ -176,10 +174,12 @@ object BackendSyncUtility {
                             val item = jsonArray.getJSONObject(i)
                             val amount = item.optDouble("amount", 0.0)
                             val merchant = item.optString("merchant", "Expense")
-                            val category = item.optString("category", "Others")
+                            val category = ExpenseCategories.normalize(item.optString("category", ExpenseCategories.OTHER))
                             val source = item.optString("source", "Web")
                             val isPending = item.optBoolean("is_pending", false)
                             val rawMsg = item.optString("raw_message", "")
+                            val reason = item.optString("reason", "")
+                                .takeUnless { item.isNull("reason") || it.isBlank() || it == "null" }
                             
                             val dateStr = item.optString("transaction_date", "")
                             var timestamp = System.currentTimeMillis()
@@ -203,6 +203,7 @@ object BackendSyncUtility {
                                 rawMsg,
                                 isPending
                             )
+                            entity.reason = reason
 
                             entityList.add(entity)
                         }

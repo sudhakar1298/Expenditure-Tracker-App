@@ -5,15 +5,22 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.Executors;
 
-@Database(entities = {TransactionEntity.class}, version = 5, exportSchema = false)
+@Database(entities = {TransactionEntity.class}, version = 6, exportSchema = false)
 public abstract class TransactionDatabase extends RoomDatabase {
     public abstract TransactionDao getTransactionDao();
 
     private static volatile TransactionDatabase INSTANCE = null;
+    private static final Migration MIGRATION_5_6 = new Migration(5, 6) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE transactions ADD COLUMN reason TEXT");
+        }
+    };
 
     public static TransactionDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
@@ -24,6 +31,7 @@ public abstract class TransactionDatabase extends RoomDatabase {
                         TransactionDatabase.class,
                         "gpay_expense_tracker_db"
                     )
+                    .addMigrations(MIGRATION_5_6)
                     .fallbackToDestructiveMigration()
                     .addCallback(new RoomDatabase.Callback() {
                         @Override

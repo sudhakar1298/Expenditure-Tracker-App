@@ -13,8 +13,9 @@ class ExpenseNotificationListenerTest {
         assertNotNull(transaction)
         assertEquals(150.0, transaction!!.amount, 0.0)
         assertEquals("Ramen Shop", transaction.merchant)
-        assertEquals("Food", transaction.category)
+        assertEquals("Food & Dining", transaction.category)
         assertEquals("GPay", transaction.sourceApp)
+        assertTrue(transaction.isPending)
     }
 
     @Test
@@ -25,7 +26,7 @@ class ExpenseNotificationListenerTest {
         assertNotNull(transaction)
         assertEquals(500.0, transaction!!.amount, 0.0)
         assertEquals("Ramesh", transaction.merchant)
-        assertEquals("Others", transaction.category) // Not matching specific keywords
+        assertEquals("Other", transaction.category)
     }
 
     @Test
@@ -36,7 +37,7 @@ class ExpenseNotificationListenerTest {
         assertNotNull(transaction)
         assertEquals(2500.50, transaction!!.amount, 0.0)
         assertEquals("Bescom Electricity", transaction.merchant)
-        assertEquals("Bills", transaction.category)
+        assertEquals("Bills & Utilities", transaction.category)
     }
 
     @Test
@@ -59,16 +60,16 @@ class ExpenseNotificationListenerTest {
     fun testCategorizeMerchant() {
         // We test the private categorization logic via parsing
         val foodTrans = ExpenseNotificationListener.parseTransactionText("Paid ₹50 to Swiggy")
-        assertEquals("Food", foodTrans?.category)
+        assertEquals("Food & Dining", foodTrans?.category)
 
         val travelTrans = ExpenseNotificationListener.parseTransactionText("Paid ₹250 to Uber")
-        assertEquals("Travel", travelTrans?.category)
+        assertEquals("Transport", travelTrans?.category)
 
         val shoppingTrans = ExpenseNotificationListener.parseTransactionText("Paid ₹1200 to Amazon Store")
         assertEquals("Shopping", shoppingTrans?.category)
 
         val billsTrans = ExpenseNotificationListener.parseTransactionText("Paid ₹800 to Jio Recharge")
-        assertEquals("Bills", billsTrans?.category)
+        assertEquals("Bills & Utilities", billsTrans?.category)
 
         val entTrans = ExpenseNotificationListener.parseTransactionText("Paid ₹199 to Netflix India")
         assertEquals("Entertainment", entTrans?.category)

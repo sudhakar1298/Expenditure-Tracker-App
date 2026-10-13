@@ -22,7 +22,7 @@ private val DarkColorScheme = darkColorScheme(
 
 private val LightColorScheme = lightColorScheme(
     primary = BotanicalSagePrimary,
-    onPrimary = BotanicalLightSurface,
+    onPrimary = BotanicalLightTextPrimary,
     primaryContainer = BotanicalLinenContainer,
     onPrimaryContainer = BotanicalDeepOlivePrimary,
     secondary = BotanicalDeepOlivePrimary,

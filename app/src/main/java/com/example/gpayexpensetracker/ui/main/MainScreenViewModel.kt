@@ -94,8 +94,9 @@ class MainScreenViewModel(
                 category,
                 System.currentTimeMillis(),
                 "Manual",
-                reason
+                "Manually entered"
             )
+            transaction.reason = reason.trim().takeUnless { it.isBlank() }
             repository.insert(transaction)
             SheetsSyncUtility.sync(appContext, transaction)
             BackendSyncUtility.sync(appContext, transaction)
@@ -106,6 +107,7 @@ class MainScreenViewModel(
         viewModelScope.launch {
             transaction.category = newCategory
             repository.update(transaction)
+            BackendSyncUtility.sync(appContext, transaction)
         }
     }
 
@@ -115,10 +117,11 @@ class MainScreenViewModel(
         }
     }
 
-    fun finalizePendingTransaction(transaction: TransactionEntity, merchant: String, category: String) {
+    fun finalizePendingTransaction(transaction: TransactionEntity, merchant: String, category: String, reason: String) {
         viewModelScope.launch {
             transaction.merchant = merchant
             transaction.category = category
+            transaction.reason = reason.trim().takeUnless { it.isBlank() }
             transaction.isPending = false
             repository.update(transaction)
             SheetsSyncUtility.sync(appContext, transaction)
