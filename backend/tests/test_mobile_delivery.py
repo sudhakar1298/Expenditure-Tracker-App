@@ -54,6 +54,11 @@ class MobileDeliveryTest(unittest.TestCase):
                     rows = fetch_expenses_from_api(limit=1)
                 self.assertEqual(len(rows), 2)
                 self.assertTrue(all(row["reason"] == "Corrected reason" for row in rows))
+
+                deleted = client.delete("/api/v1/expenses/by-transaction/phone-test-1")
+                self.assertEqual(deleted.status_code, 204)
+                remaining = client.get("/api/v1/expenses/").json()
+                self.assertEqual([row["transaction_id"] for row in remaining], ["phone-test-2"])
         finally:
             app.dependency_overrides.clear()
             engine.dispose()

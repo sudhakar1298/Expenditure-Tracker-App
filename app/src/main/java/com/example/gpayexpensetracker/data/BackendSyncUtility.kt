@@ -14,6 +14,7 @@ import org.json.JSONObject
 import org.json.JSONArray
 import java.net.HttpURLConnection
 import java.net.URL
+import java.net.URLEncoder
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -80,6 +81,36 @@ object BackendSyncUtility {
         }
         retryPending(context)
         !queue.contains(transactionId)
+    }
+
+    suspend fun delete(context: Context, transaction: TransactionEntity): Boolean = withContext(Dispatchers.IO) {
+        val transactionId = "android-${transaction.timestamp}-${transaction.amount}-${transaction.sourceApp}"
+        val queue = context.getSharedPreferences("BackendOutbox", Context.MODE_PRIVATE)
+        synchronized(queue) { queue.edit().remove(transactionId).commit() }
+
+        val encodedId = URLEncoder.encode(transactionId, Charsets.UTF_8.name())
+        for (backendUrl in getCandidateUrls(context)) {
+            var connection: HttpURLConnection? = null
+            try {
+                connection = (URL("${backendUrl}by-transaction/$encodedId").openConnection() as HttpURLConnection).apply {
+                    requestMethod = "DELETE"
+                    connectTimeout = 5000
+                    readTimeout = 5000
+                }
+                val responseCode = connection.responseCode
+                if (responseCode == HttpURLConnection.HTTP_NO_CONTENT || responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
+                    status.value = "Activity deleted"
+                    return@withContext true
+                }
+                Log.w(TAG, "Backend delete returned HTTP $responseCode")
+            } catch (error: Exception) {
+                Log.e(TAG, "Backend delete failed", error)
+            } finally {
+                connection?.disconnect()
+            }
+        }
+        status.value = "Deleted from phone; server deletion pending"
+        false
     }
 
     suspend fun retryPending(context: Context) = withContext(Dispatchers.IO) {

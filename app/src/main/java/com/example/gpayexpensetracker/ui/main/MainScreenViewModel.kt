@@ -136,7 +136,13 @@ class MainScreenViewModel(
 
     fun deleteTransaction(transaction: TransactionEntity) {
         viewModelScope.launch {
-            repository.delete(transaction)
+            try {
+                repository.delete(transaction)
+                BackendSyncUtility.delete(appContext, transaction)
+            } catch (error: Exception) {
+                Log.e("MainScreenViewModel", "Expense deletion failed", error)
+                BackendSyncUtility.status.value = "Could not delete activity"
+            }
         }
     }
 

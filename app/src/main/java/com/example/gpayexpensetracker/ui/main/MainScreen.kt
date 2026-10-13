@@ -50,6 +50,7 @@ import com.example.gpayexpensetracker.data.ExpenseCategories
 import com.example.gpayexpensetracker.data.TransactionDatabase
 import com.example.gpayexpensetracker.data.TransactionEntity
 import com.example.gpayexpensetracker.theme.*
+import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -161,9 +162,30 @@ fun VaultGlassApp(
         val sheetsUrl by viewModel.googleSheetsUrl.collectAsStateWithLifecycle()
         val backendApiUrl by viewModel.backendApiUrl.collectAsStateWithLifecycle()
         val syncStatus by viewModel.syncStatus.collectAsStateWithLifecycle()
-        Text(syncStatus, modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 90.dp)
-            .background(MaterialTheme.colorScheme.surface).padding(8.dp),
-            color = MaterialTheme.colorScheme.onSurface, fontSize = 12.sp)
+        var visibleSyncStatus by remember { mutableStateOf<String?>(null) }
+        LaunchedEffect(syncStatus) {
+            if (syncStatus == "Sync not checked") {
+                visibleSyncStatus = null
+            } else {
+                visibleSyncStatus = syncStatus
+                delay(3500)
+                if (visibleSyncStatus == syncStatus) visibleSyncStatus = null
+            }
+        }
+        visibleSyncStatus?.let { message ->
+            Text(
+                message,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 90.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(MaterialTheme.colorScheme.surface)
+                    .clickable { visibleSyncStatus = null }
+                    .padding(horizontal = 14.dp, vertical = 9.dp),
+                color = MaterialTheme.colorScheme.onSurface,
+                fontSize = 12.sp
+            )
+        }
 
         if (showSettingsDialog) {
             VaultGlassSettingsDialog(
@@ -689,6 +711,7 @@ fun VaultGlassTransactionRow(
     transaction: TransactionEntity,
     onDeleteClick: () -> Unit
 ) {
+    var showDeleteConfirmation by remember(transaction.id) { mutableStateOf(false) }
     val isDark = isSystemInDarkTheme()
     val sdf = SimpleDateFormat("EEE, hh:mm a", Locale.getDefault())
     val dateStr = sdf.format(Date(transaction.timestamp))
@@ -746,8 +769,38 @@ fun VaultGlassTransactionRow(
             Column(horizontalAlignment = Alignment.End) {
                 Text("-₹%,.0f".format(transaction.amount), color = Color(0xFFEF4444), fontWeight = FontWeight.Black, fontSize = 15.sp)
                 Text(transaction.category, color = mutedText, fontSize = 10.sp)
+                IconButton(
+                    onClick = { showDeleteConfirmation = true },
+                    modifier = Modifier.size(32.dp)
+                ) {
+                    Icon(
+                        Icons.Default.Delete,
+                        contentDescription = "Delete activity",
+                        tint = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
             }
         }
+    }
+
+    if (showDeleteConfirmation) {
+        AlertDialog(
+            onDismissRequest = { showDeleteConfirmation = false },
+            title = { Text("Delete activity?") },
+            text = { Text("This will remove ${transaction.merchant} for ₹%,.0f from your activity.".format(transaction.amount)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDeleteConfirmation = false
+                    onDeleteClick()
+                }) {
+                    Text("Delete", color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteConfirmation = false }) { Text("Cancel") }
+            }
+        )
     }
 }
 

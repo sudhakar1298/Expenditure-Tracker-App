@@ -81,6 +81,17 @@ def get_expenses(
         query = query.filter(Expense.source == source)
     return query.order_by(Expense.transaction_date.desc(), Expense.id).offset(skip).limit(limit).all()
 
+@router.delete("/by-transaction/{transaction_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_expense_by_transaction_id(transaction_id: str, db: Session = Depends(get_db)):
+    """Delete a phone-created expense using its stable client transaction ID."""
+    expense = db.query(Expense).filter(Expense.transaction_id == transaction_id).first()
+    if not expense:
+        raise HTTPException(status_code=404, detail="Expense not found")
+    queue_expense(db, expense, "delete")
+    db.delete(expense)
+    db.commit()
+    return None
+
 @router.get("/{expense_id}", response_model=ExpenseResponse)
 def get_expense(expense_id: str, db: Session = Depends(get_db)):
     expense = db.query(Expense).filter(Expense.id == expense_id).first()
