@@ -98,7 +98,7 @@ class MainScreenViewModel(
             try {
                 val transaction = TransactionEntity(
                     amount,
-                    merchant.trim(),
+                    resolveManualMerchant(merchant, reason),
                     ExpenseCategories.normalize(category),
                     System.currentTimeMillis(),
                     "Manual",
@@ -158,3 +158,6 @@ class MainScreenViewModel(
         }
     }
 }
+
+fun resolveManualMerchant(merchant: String, reason: String): String =
+    merchant.trim().ifBlank { reason.trim().ifBlank { "Manual expense" } }

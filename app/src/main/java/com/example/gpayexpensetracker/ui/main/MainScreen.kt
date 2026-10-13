@@ -1293,7 +1293,7 @@ fun AddExpenseBottomSheet(
             OutlinedTextField(
                 value = merchant,
                 onValueChange = { merchant = it },
-                label = { Text("Merchant / Purpose") },
+                label = { Text("Merchant / Purpose (optional)") },
                 colors = OutlinedTextFieldDefaults.colors(focusedTextColor = primaryText, unfocusedTextColor = primaryText, focusedBorderColor = primaryAccent),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -1319,11 +1319,10 @@ fun AddExpenseBottomSheet(
                     when {
                         doubleAmt == null || !doubleAmt.isFinite() || doubleAmt <= 0.0 ->
                             saveError = "Enter a valid amount greater than zero."
-                        merchant.isBlank() -> saveError = "Enter a merchant or purpose."
                         else -> {
                             saveError = null
                             isSaving = true
-                            onSave(doubleAmt, merchant.trim(), category, reason.trim()) { error ->
+                            onSave(doubleAmt, merchant, category, reason.trim()) { error ->
                                 saveError = error
                                 if (error != null) isSaving = false
                             }
