@@ -46,6 +46,7 @@ class SmsReceiver : BroadcastReceiver() {
                         transaction.category
                     )
                     repository.insert(transaction)
+                    ExpenseReminderNotifications.showNewExpense(context.applicationContext, transaction)
                     SheetsSyncUtility.sync(context.applicationContext, transaction)
                     BackendSyncUtility.sync(context.applicationContext, transaction)
                     Log.d(TAG, "Inserted pending transaction: ₹${transaction.amount} from SMS and synced to backend")

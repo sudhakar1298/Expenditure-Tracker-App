@@ -48,6 +48,7 @@ class ExpenseNotificationListener : NotificationListenerService() {
             transaction.category = CategoryStore.resolveSuggested(applicationContext, transaction.category)
             scope.launch {
                 repository.insert(transaction)
+                ExpenseReminderNotifications.showNewExpense(applicationContext, transaction)
                 com.example.gpayexpensetracker.data.SheetsSyncUtility.sync(applicationContext, transaction)
                 BackendSyncUtility.sync(applicationContext, transaction)
                 Log.d(TAG, "Successfully inserted and synced transaction: ${transaction.amount} to ${transaction.merchant}")
