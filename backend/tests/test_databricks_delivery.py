@@ -116,6 +116,23 @@ class DeliveryTests(unittest.TestCase):
         with self.Session() as db:
             self.assertEqual(db.query(DatabricksOutbox).count(), 0)
 
+    def test_clear_pending_keeps_confirmed_expenses(self):
+        for index in range(2):
+            response = self.client.post("/api/v1/expenses/", json=dict(amount=10 + index,
+                merchant="Pending Details", category="Other", source="SMS",
+                transaction_id=f"pending-{index}", is_pending=True,
+                transaction_date="2026-10-14T12:00:00Z"))
+            self.assertEqual(response.status_code, 201)
+        confirmed = self.save()
+
+        response = self.client.delete("/api/v1/expenses/pending")
+        self.assertEqual(response.status_code, 204)
+        remaining = self.client.get("/api/v1/expenses/").json()
+        self.assertEqual([row["id"] for row in remaining], [confirmed["id"]])
+        with self.Session() as db:
+            operations = sorted(row.operation for row in db.query(DatabricksOutbox).all())
+            self.assertEqual(operations, ["delete", "delete", "upsert"])
+
     def test_http_200_failed_statement_keeps_queue(self):
         self.save()
         writer = self.writer(lambda req: httpx.Response(200, json={"status": {"state": "FAILED"}}))

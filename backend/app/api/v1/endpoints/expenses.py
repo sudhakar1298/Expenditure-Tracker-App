@@ -92,6 +92,17 @@ def delete_expense_by_transaction_id(transaction_id: str, db: Session = Depends(
     db.commit()
     return None
 
+@router.delete("/pending", status_code=status.HTTP_204_NO_CONTENT)
+def delete_pending_expenses(db: Session = Depends(get_db)):
+    """Remove all unconfirmed drafts without touching confirmed expenses."""
+    pending_expenses = db.query(Expense).filter(Expense.is_pending.is_(True)).all()
+    for expense in pending_expenses:
+        # A delete also removes drafts accidentally delivered by older versions.
+        queue_expense(db, expense, "delete")
+        db.delete(expense)
+    db.commit()
+    return None
+
 @router.get("/{expense_id}", response_model=ExpenseResponse)
 def get_expense(expense_id: str, db: Session = Depends(get_db)):
     expense = db.query(Expense).filter(Expense.id == expense_id).first()
