@@ -32,4 +32,7 @@ public interface TransactionDao {
 
     @Query("DELETE FROM transactions")
     void deleteAllTransactions();
+
+    @Query("DELETE FROM transactions WHERE isPending = 1")
+    void deletePendingTransactions();
 }

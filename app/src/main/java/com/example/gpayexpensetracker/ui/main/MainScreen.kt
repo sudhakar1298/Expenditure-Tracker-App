@@ -82,6 +82,7 @@ fun VaultGlassApp(
     viewModel: MainScreenViewModel,
     modifier: Modifier = Modifier
 ) {
+    val categories by viewModel.categories.collectAsStateWithLifecycle()
     val tabs = remember { listOf(0, 1, 3, 4) }
     val pagerState = rememberPagerState(pageCount = { tabs.size })
     val activeTab = tabs[pagerState.currentPage]
@@ -149,7 +150,15 @@ fun VaultGlassApp(
                 key = { page -> tabs[page] }
             ) { page ->
                 when (tabs[page]) {
-                    0 -> VaultGlassHomeScreen(viewModel = viewModel, onOpenSettings = { showSettingsDialog = true })
+                    0 -> VaultGlassHomeScreen(
+                        viewModel = viewModel,
+                        onOpenSettings = { showSettingsDialog = true },
+                        onSeeAll = {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(tabs.indexOf(1))
+                            }
+                        }
+                    )
                     1 -> VaultGlassActivityScreen(viewModel = viewModel)
                     3 -> VaultGlassInsightsScreen(viewModel = viewModel)
                     else -> VaultGlassProfileScreen(viewModel = viewModel)
@@ -159,6 +168,7 @@ fun VaultGlassApp(
 
         if (showAddBottomSheet) {
             AddExpenseBottomSheet(
+                categories = categories,
                 onDismiss = { showAddBottomSheet = false },
                 onSave = { amount, merchant, category, reason, onResult ->
                     viewModel.addManualTransaction(amount, merchant, category, reason) { error ->
@@ -288,8 +298,13 @@ fun VaultGlassTopBar(
 }
 
 @Composable
-fun VaultGlassHomeScreen(viewModel: MainScreenViewModel, onOpenSettings: () -> Unit) {
+fun VaultGlassHomeScreen(
+    viewModel: MainScreenViewModel,
+    onOpenSettings: () -> Unit,
+    onSeeAll: () -> Unit
+) {
     val transactions by viewModel.allTransactions.collectAsStateWithLifecycle()
+    val categories by viewModel.categories.collectAsStateWithLifecycle()
     val budget by viewModel.monthlyBudget.collectAsStateWithLifecycle()
     val isPermissionEnabled by viewModel.isNotificationServiceEnabled.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -313,6 +328,9 @@ fun VaultGlassHomeScreen(viewModel: MainScreenViewModel, onOpenSettings: () -> U
     val amberAlert = if (isDark) BotanicalAmberAlert else BotanicalWarmOchreAlert
 
     var selectedTransactionForConfirm by remember { mutableStateOf<TransactionEntity?>(null) }
+    var showClearPendingDialog by remember { mutableStateOf(false) }
+    var isClearingPending by remember { mutableStateOf(false) }
+    var clearPendingError by remember { mutableStateOf<String?>(null) }
 
     LazyColumn(
         modifier = Modifier
@@ -416,18 +434,31 @@ fun VaultGlassHomeScreen(viewModel: MainScreenViewModel, onOpenSettings: () -> U
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.weight(1f)
+                        ) {
                             Box(modifier = Modifier.size(8.dp).clip(CircleShape).background(amberAlert))
                             Spacer(modifier = Modifier.width(6.dp))
-                            Text("${pendingTransactions.size} SMS Drafts to Categorize", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                            Text(
+                                "${pendingTransactions.size} SMS Drafts to Categorize",
+                                color = primaryText,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 14.sp,
+                                maxLines = 2
+                            )
                         }
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(amberAlert.copy(alpha = 0.2f))
-                                .padding(horizontal = 8.dp, vertical = 2.dp)
+                        TextButton(
+                            onClick = { showClearPendingDialog = true },
+                            enabled = !isClearingPending,
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
                         ) {
-                            Text("NEEDS ACTION", color = amberAlert, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+                            Text(
+                                if (isClearingPending) "Clearing…" else "Clear all",
+                                color = amberAlert,
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold
+                            )
                         }
                     }
 
@@ -462,7 +493,12 @@ fun VaultGlassHomeScreen(viewModel: MainScreenViewModel, onOpenSettings: () -> U
                         Text("Live", color = Color(0xFF52B788), fontSize = 10.sp, fontWeight = FontWeight.Bold)
                     }
                 }
-                Text("See all >", color = mutedText, fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                TextButton(
+                    onClick = onSeeAll,
+                    contentPadding = PaddingValues(horizontal = 6.dp, vertical = 0.dp)
+                ) {
+                    Text("See all >", color = mutedText, fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                }
             }
         }
 
@@ -501,10 +537,47 @@ fun VaultGlassHomeScreen(viewModel: MainScreenViewModel, onOpenSettings: () -> U
     if (selectedTransactionForConfirm != null) {
         ConfirmPendingTransactionDialog(
             transaction = selectedTransactionForConfirm!!,
+            categories = categories,
             onDismiss = { selectedTransactionForConfirm = null },
             onConfirm = { merchant, category, reason ->
                 viewModel.finalizePendingTransaction(selectedTransactionForConfirm!!, merchant, category, reason)
                 selectedTransactionForConfirm = null
+            }
+        )
+    }
+
+    if (showClearPendingDialog) {
+        AlertDialog(
+            onDismissRequest = { showClearPendingDialog = false },
+            title = { Text("Clear all pending drafts?") },
+            text = {
+                Text("This will permanently remove all ${pendingTransactions.size} messages marked Needs Action. Confirmed transactions will not be removed.")
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showClearPendingDialog = false
+                    isClearingPending = true
+                    viewModel.clearPendingTransactions { error ->
+                        isClearingPending = false
+                        clearPendingError = error
+                    }
+                }) {
+                    Text("Clear all", color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showClearPendingDialog = false }) { Text("Cancel") }
+            }
+        )
+    }
+
+    clearPendingError?.let { error ->
+        AlertDialog(
+            onDismissRequest = { clearPendingError = null },
+            title = { Text("Could not clear drafts") },
+            text = { Text(error) },
+            confirmButton = {
+                TextButton(onClick = { clearPendingError = null }) { Text("OK") }
             }
         )
     }
@@ -1104,10 +1177,14 @@ fun VaultGlassInsightsScreen(viewModel: MainScreenViewModel) {
 @Composable
 fun VaultGlassProfileScreen(viewModel: MainScreenViewModel) {
     val transactions by viewModel.allTransactions.collectAsStateWithLifecycle()
+    val categories by viewModel.categories.collectAsStateWithLifecycle()
     val isDark = isSystemInDarkTheme()
     val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
     val mutedText = if (isDark) BotanicalDarkTextMuted else BotanicalLightTextMuted
     val primaryAccent = if (isDark) BotanicalOlivePrimary else BotanicalSagePrimary
+    var showAddCategory by remember { mutableStateOf(false) }
+    var editingCategory by remember { mutableStateOf<String?>(null) }
+    var deletingCategory by remember { mutableStateOf<String?>(null) }
 
     LazyColumn(
         modifier = Modifier
@@ -1190,7 +1267,137 @@ fun VaultGlassProfileScreen(viewModel: MainScreenViewModel) {
                 }
             }
         }
+
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .glassPanel(cornerRadius = 20.dp, isDark = isDark)
+                    .padding(18.dp)
+            ) {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text("CATEGORIES", color = primaryAccent, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                            Text("Manage categories", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                        }
+                        FilledTonalButton(onClick = { showAddCategory = true }) {
+                            Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text("Add")
+                        }
+                    }
+                    Text("Rename categories or remove ones you no longer use.", color = mutedText, fontSize = 11.sp)
+
+                    categories.forEachIndexed { index, category ->
+                        if (index > 0) HorizontalDivider(color = mutedText.copy(alpha = 0.15f))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                getCategoryIcon(category),
+                                contentDescription = null,
+                                tint = getCategoryColor(category),
+                                modifier = Modifier.size(22.dp)
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(category, color = primaryText, modifier = Modifier.weight(1f), fontWeight = FontWeight.Medium)
+                            if (category == ExpenseCategories.OTHER) {
+                                Icon(Icons.Default.Lock, contentDescription = "Required category", tint = mutedText, modifier = Modifier.size(18.dp))
+                            } else {
+                                IconButton(onClick = { editingCategory = category }) {
+                                    Icon(Icons.Default.Edit, contentDescription = "Rename $category", tint = mutedText)
+                                }
+                                IconButton(onClick = { deletingCategory = category }) {
+                                    Icon(Icons.Default.Delete, contentDescription = "Delete $category", tint = MaterialTheme.colorScheme.error)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
+
+    if (showAddCategory) {
+        CategoryNameDialog(
+            title = "Add category",
+            initialName = "",
+            confirmLabel = "Add",
+            onDismiss = { showAddCategory = false },
+            onSave = viewModel::addCategory
+        )
+    }
+
+    editingCategory?.let { category ->
+        CategoryNameDialog(
+            title = "Rename category",
+            initialName = category,
+            confirmLabel = "Save",
+            onDismiss = { editingCategory = null },
+            onSave = { newName -> viewModel.renameCategory(category, newName) }
+        )
+    }
+
+    deletingCategory?.let { category ->
+        AlertDialog(
+            onDismissRequest = { deletingCategory = null },
+            title = { Text("Remove $category?") },
+            text = { Text("Existing transactions in this category will be moved to Other.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    viewModel.deleteCategory(category)
+                    deletingCategory = null
+                }) { Text("Remove", color = MaterialTheme.colorScheme.error) }
+            },
+            dismissButton = {
+                TextButton(onClick = { deletingCategory = null }) { Text("Cancel") }
+            }
+        )
+    }
+}
+
+@Composable
+fun CategoryNameDialog(
+    title: String,
+    initialName: String,
+    confirmLabel: String,
+    onDismiss: () -> Unit,
+    onSave: (String) -> String?
+) {
+    var name by remember(initialName) { mutableStateOf(initialName) }
+    var error by remember { mutableStateOf<String?>(null) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title) },
+        text = {
+            OutlinedTextField(
+                value = name,
+                onValueChange = {
+                    name = it
+                    error = null
+                },
+                label = { Text("Category name") },
+                singleLine = true,
+                isError = error != null,
+                supportingText = { error?.let { Text(it) } },
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
+        confirmButton = {
+            Button(onClick = {
+                error = onSave(name)
+                if (error == null) onDismiss()
+            }) { Text(confirmLabel) }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
+    )
 }
 
 @Composable
@@ -1256,13 +1463,14 @@ fun VaultGlassBottomBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddExpenseBottomSheet(
+    categories: List<String>,
     onDismiss: () -> Unit,
     onSave: (Double, String, String, String, (String?) -> Unit) -> Unit
 ) {
     val isDark = isSystemInDarkTheme()
     var amount by remember { mutableStateOf("") }
     var merchant by remember { mutableStateOf("") }
-    var category by remember { mutableStateOf("Food & Dining") }
+    var category by remember(categories) { mutableStateOf(categories.firstOrNull() ?: ExpenseCategories.OTHER) }
     var reason by remember { mutableStateOf("") }
     var saveError by remember { mutableStateOf<String?>(null) }
     var isSaving by remember { mutableStateOf(false) }
@@ -1312,7 +1520,8 @@ fun AddExpenseBottomSheet(
             ExpenseCategorySelector(
                 selected = category,
                 onSelected = { category = it },
-                isDark = isDark
+                isDark = isDark,
+                categories = categories
             )
 
             OutlinedTextField(
@@ -1355,7 +1564,8 @@ fun AddExpenseBottomSheet(
 fun ExpenseCategorySelector(
     selected: String,
     onSelected: (String) -> Unit,
-    isDark: Boolean
+    isDark: Boolean,
+    categories: List<String>
 ) {
     val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
     val mutedText = if (isDark) BotanicalDarkTextMuted else BotanicalLightTextMuted
@@ -1364,7 +1574,7 @@ fun ExpenseCategorySelector(
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text("Category", color = mutedText, fontSize = 12.sp, fontWeight = FontWeight.Medium)
         LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(ExpenseCategories.all) { option ->
+            items(categories) { option ->
                 FilterChip(
                     selected = normalized == option,
                     onClick = { onSelected(option) },
@@ -1461,6 +1671,7 @@ fun VaultGlassSettingsDialog(
 @Composable
 fun ConfirmPendingTransactionDialog(
     transaction: TransactionEntity,
+    categories: List<String>,
     onDismiss: () -> Unit,
     onConfirm: (String, String, String) -> Unit
 ) {
@@ -1492,7 +1703,8 @@ fun ConfirmPendingTransactionDialog(
                 ExpenseCategorySelector(
                     selected = category,
                     onSelected = { category = it },
-                    isDark = isDark
+                    isDark = isDark,
+                    categories = categories
                 )
                 OutlinedTextField(
                     value = reason,

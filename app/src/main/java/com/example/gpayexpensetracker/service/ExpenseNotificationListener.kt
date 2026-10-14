@@ -5,6 +5,7 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
 import com.example.gpayexpensetracker.data.BackendSyncUtility
+import com.example.gpayexpensetracker.data.CategoryStore
 import com.example.gpayexpensetracker.data.DefaultDataRepository
 import com.example.gpayexpensetracker.data.ExpenseCategories
 import com.example.gpayexpensetracker.data.TransactionDatabase
@@ -44,6 +45,7 @@ class ExpenseNotificationListener : NotificationListenerService() {
         // Parse GPay India debit transaction patterns
         val transaction = parseTransactionText(text)
         if (transaction != null) {
+            transaction.category = CategoryStore.resolveSuggested(applicationContext, transaction.category)
             scope.launch {
                 repository.insert(transaction)
                 com.example.gpayexpensetracker.data.SheetsSyncUtility.sync(applicationContext, transaction)

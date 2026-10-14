@@ -3,6 +3,7 @@ package com.example.gpayexpensetracker.data;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.Ignore;
+import androidx.annotation.Nullable;
 
 @Entity(tableName = "transactions")
 public class TransactionEntity {
@@ -15,6 +16,7 @@ public class TransactionEntity {
     private long timestamp;
     private String sourceApp;
     private String rawText;
+    @Nullable
     private String reason;
     private boolean isPending = false;
 
@@ -60,8 +62,9 @@ public class TransactionEntity {
     public String getRawText() { return rawText; }
     public void setRawText(String rawText) { this.rawText = rawText; }
 
+    @Nullable
     public String getReason() { return reason; }
-    public void setReason(String reason) { this.reason = reason; }
+    public void setReason(@Nullable String reason) { this.reason = reason; }
 
     public boolean isPending() { return isPending; }
     public void setPending(boolean pending) { isPending = pending; }

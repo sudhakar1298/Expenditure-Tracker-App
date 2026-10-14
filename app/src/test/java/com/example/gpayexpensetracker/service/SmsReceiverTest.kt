@@ -45,4 +45,17 @@ class SmsReceiverTest {
         
         assertNull("OTP SMS should be ignored", transaction)
     }
+
+    @Test
+    fun testParseSms_PreservesReceivedTimestamp() {
+        val timestamp = 1_729_000_000_000L
+        val transaction = SmsReceiver.parseSmsText(
+            "Rs.499.00 spent on your card at AMAZON.",
+            timestamp
+        )
+
+        assertNotNull(transaction)
+        assertEquals(timestamp, transaction!!.timestamp)
+        assertEquals(499.0, transaction.amount, 0.0)
+    }
 }

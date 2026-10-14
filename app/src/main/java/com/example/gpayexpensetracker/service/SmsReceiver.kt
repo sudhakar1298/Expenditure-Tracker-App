@@ -6,6 +6,7 @@ import android.content.Intent
 import android.provider.Telephony
 import android.util.Log
 import com.example.gpayexpensetracker.data.BackendSyncUtility
+import com.example.gpayexpensetracker.data.CategoryStore
 import com.example.gpayexpensetracker.data.DefaultDataRepository
 import com.example.gpayexpensetracker.data.ExpenseCategories
 import com.example.gpayexpensetracker.data.SheetsSyncUtility
@@ -36,8 +37,14 @@ class SmsReceiver : BroadcastReceiver() {
                 val fullText = messages.joinToString(separator = "") { it.messageBody ?: "" }
                 Log.d(TAG, "Incoming SMS: $fullText")
 
-                val transaction = parseSmsText(fullText)
+                val timestamp = messages.minOfOrNull { it.timestampMillis }
+                    ?: System.currentTimeMillis()
+                val transaction = parseSmsText(fullText, timestamp)
                 if (transaction != null) {
+                    transaction.category = CategoryStore.resolveSuggested(
+                        context.applicationContext,
+                        transaction.category
+                    )
                     repository.insert(transaction)
                     SheetsSyncUtility.sync(context.applicationContext, transaction)
                     BackendSyncUtility.sync(context.applicationContext, transaction)
@@ -54,7 +61,10 @@ class SmsReceiver : BroadcastReceiver() {
     companion object {
         private const val TAG = "SmsReceiver"
 
-        fun parseSmsText(text: String): TransactionEntity? {
+        fun parseSmsText(
+            text: String,
+            timestamp: Long = System.currentTimeMillis()
+        ): TransactionEntity? {
             val lower = text.lowercase()
             // We only look for debit/spent/sent transactions
             if (!lower.contains("debited") && !lower.contains("sent") && !lower.contains("spent") && !lower.contains("paid") && !lower.contains("tx of")) {
@@ -89,7 +99,7 @@ class SmsReceiver : BroadcastReceiver() {
                     amount,
                     merchant,
                     ExpenseCategories.suggest(merchant),
-                    System.currentTimeMillis(),
+                    timestamp,
                     "SMS",
                     text,
                     true // isPending = true! Tells the UI to prompt for confirmation

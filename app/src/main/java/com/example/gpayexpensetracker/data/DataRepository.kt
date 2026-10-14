@@ -13,6 +13,7 @@ interface DataRepository {
     suspend fun replaceAll(transactions: List<TransactionEntity>)
     suspend fun delete(transaction: TransactionEntity)
     suspend fun deleteById(id: Long)
+    suspend fun deletePending()
     suspend fun update(transaction: TransactionEntity)
     fun getTotalSpentBetween(startTime: Long, endTime: Long): Flow<Double?>
 }
@@ -48,6 +49,12 @@ class DefaultDataRepository(private val transactionDao: TransactionDao) : DataRe
     override suspend fun deleteById(id: Long) {
         withContext(Dispatchers.IO) {
             transactionDao.deleteTransactionById(id)
+        }
+    }
+
+    override suspend fun deletePending() {
+        withContext(Dispatchers.IO) {
+            transactionDao.deletePendingTransactions()
         }
     }
 
