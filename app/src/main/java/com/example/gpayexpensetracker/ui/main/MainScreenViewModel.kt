@@ -224,12 +224,12 @@ class MainScreenViewModel(
     fun clearPendingTransactions(onResult: (String?) -> Unit) {
         viewModelScope.launch {
             try {
-                if (!BackendSyncUtility.clearPending(appContext)) {
-                    onResult("Could not clear drafts from the backend. Please try again.")
-                    return@launch
-                }
+                val backendCleared = BackendSyncUtility.clearPending(appContext)
                 repository.deletePending()
-                onResult(null)
+                onResult(
+                    if (backendCleared) null
+                    else "Pending drafts were cleared from this phone. Backend cleanup is still pending."
+                )
             } catch (error: Exception) {
                 Log.e("MainScreenViewModel", "Pending draft cleanup failed", error)
                 onResult("Could not clear pending drafts. Please try again.")

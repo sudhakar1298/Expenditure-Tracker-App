@@ -114,6 +114,7 @@ object BackendSyncUtility {
     }
 
     suspend fun clearPending(context: Context): Boolean = withContext(Dispatchers.IO) {
+        var backendCleared = false
         for (backendUrl in getCandidateUrls(context)) {
             var connection: HttpURLConnection? = null
             try {
@@ -123,19 +124,8 @@ object BackendSyncUtility {
                     readTimeout = 5000
                 }
                 if (connection.responseCode == HttpURLConnection.HTTP_NO_CONTENT) {
-                    val queue = context.getSharedPreferences("BackendOutbox", Context.MODE_PRIVATE)
-                    synchronized(queue) {
-                        val editor = queue.edit()
-                        queue.all.forEach { (id, value) ->
-                            val payload = value as? String ?: return@forEach
-                            if (runCatching { JSONObject(payload).optBoolean("is_pending", false) }.getOrDefault(false)) {
-                                editor.remove(id)
-                            }
-                        }
-                        editor.commit()
-                    }
-                    status.value = "Pending drafts cleared"
-                    return@withContext true
+                    backendCleared = true
+                    break
                 }
                 Log.w(TAG, "Backend clear pending returned HTTP ${connection.responseCode}")
             } catch (error: Exception) {
@@ -144,8 +134,27 @@ object BackendSyncUtility {
                 connection?.disconnect()
             }
         }
-        status.value = "Could not clear drafts; check the backend connection"
-        false
+        removeQueuedPending(context)
+        status.value = if (backendCleared) {
+            "Pending drafts cleared"
+        } else {
+            "Pending drafts cleared from phone; backend cleanup pending"
+        }
+        backendCleared
+    }
+
+    private fun removeQueuedPending(context: Context) {
+        val queue = context.getSharedPreferences("BackendOutbox", Context.MODE_PRIVATE)
+        synchronized(queue) {
+            val editor = queue.edit()
+            queue.all.forEach { (id, value) ->
+                val payload = value as? String ?: return@forEach
+                if (runCatching { JSONObject(payload).optBoolean("is_pending", false) }.getOrDefault(false)) {
+                    editor.remove(id)
+                }
+            }
+            editor.commit()
+        }
     }
 
     suspend fun retryPending(context: Context) = withContext(Dispatchers.IO) {
