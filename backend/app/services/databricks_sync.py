@@ -37,6 +37,14 @@ def queue_expense(db, expense, operation="upsert"):
     # Called in the same DB transaction as the expense write. Queue even while
     # disabled so saves can be delivered after credentials are configured.
     db.flush()
+    # Drafts remain available through the API, but Databricks only receives a
+    # transaction after the user confirms it. Remove any older queued upsert
+    # too, so changing a transaction back to pending cannot leak stale data.
+    if operation == "upsert" and expense.is_pending:
+        db.query(DatabricksOutbox).filter(
+            DatabricksOutbox.expense_id == expense.id
+        ).delete(synchronize_session=False)
+        return
     data = {key: getattr(expense, key) for key in
             ("id", "amount", "merchant", "category", "source", "reason")}
     data["transaction_date"] = expense.transaction_date.isoformat()
@@ -110,6 +118,18 @@ class DatabricksWriter:
 def deliver_pending(session_factory, writer):
     from app.models.expense import Expense
     with session_factory() as db:
+        # Clean up draft upserts created by versions that queued SMS drafts.
+        pending_draft_ids = [row[0] for row in db.query(DatabricksOutbox.expense_id).join(
+            Expense, Expense.id == DatabricksOutbox.expense_id
+        ).filter(
+            DatabricksOutbox.operation == "upsert",
+            Expense.is_pending.is_(True),
+        ).all()]
+        if pending_draft_ids:
+            db.query(DatabricksOutbox).filter(
+                DatabricksOutbox.expense_id.in_(pending_draft_ids)
+            ).delete(synchronize_session=False)
+            db.commit()
         entries = db.query(DatabricksOutbox).filter(or_(
             DatabricksOutbox.next_attempt.is_(None),
             DatabricksOutbox.next_attempt <= datetime.utcnow())).outerjoin(

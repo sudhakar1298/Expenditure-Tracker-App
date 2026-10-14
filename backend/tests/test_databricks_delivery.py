@@ -18,6 +18,7 @@ from app.main import app
 from app.core.database import Base, get_db
 from app.core.databricks_config import DatabricksSettings
 from app.models.databricks_outbox import DatabricksOutbox
+from app.models.expense import Expense
 from app.services.databricks_sync import DatabricksWriter, deliver_pending
 
 
@@ -72,6 +73,46 @@ class DeliveryTests(unittest.TestCase):
             row = json.loads(params["rows"])[0]
             self.assertEqual(row["reason"], record["reason"])
             self.assertEqual(row["id"], record["id"])
+        with self.Session() as db:
+            self.assertEqual(db.query(DatabricksOutbox).count(), 0)
+
+    def test_pending_sms_is_queued_only_after_confirmation(self):
+        draft_payload = dict(amount=78.0, merchant="Pending Details", category="Other",
+            transaction_id="sms-draft-1", transaction_date="2026-10-14T12:00:00Z",
+            source="SMS", raw_message="Account debited Rs.78", is_pending=True)
+
+        draft = self.client.post("/api/v1/expenses/", json=draft_payload)
+        self.assertEqual(draft.status_code, 201)
+        with self.Session() as db:
+            self.assertEqual(db.query(DatabricksOutbox).count(), 0)
+
+        confirmed_payload = dict(draft_payload, merchant="Cafe", category="Food & Dining",
+            reason="Lunch", is_pending=False)
+        confirmed = self.client.post("/api/v1/expenses/", json=confirmed_payload)
+        self.assertEqual(confirmed.status_code, 201)
+        self.assertEqual(confirmed.json()["id"], draft.json()["id"])
+        with self.Session() as db:
+            queued = db.query(DatabricksOutbox).one()
+            payload = json.loads(queued.payload)
+            self.assertEqual(payload["merchant"], "Cafe")
+            self.assertEqual(payload["category"], "Food & Dining")
+            self.assertEqual(payload["reason"], "Lunch")
+
+    def test_delivery_discards_legacy_pending_draft(self):
+        with self.Session() as db:
+            expense = Expense(amount=10, merchant="Pending Details", category="Other",
+                source="SMS", is_pending=True, transaction_date=datetime.utcnow())
+            db.add(expense)
+            db.flush()
+            db.add(DatabricksOutbox(expense_id=expense.id, revision="legacy",
+                operation="upsert", payload="{}", attempts=0))
+            db.commit()
+
+        class RejectWrites:
+            def write_batch(self, rows, operation):
+                raise AssertionError("A pending draft must not reach Databricks")
+
+        deliver_pending(self.Session, RejectWrites())
         with self.Session() as db:
             self.assertEqual(db.query(DatabricksOutbox).count(), 0)
 
