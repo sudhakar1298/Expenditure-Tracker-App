@@ -22,9 +22,19 @@ them together with the backend writer.
 
 ## App preview
 
-<img src="docs/images/app-categories.png" alt="Expense Tracker Android app category management screen" width="320">
+<table>
+  <tr>
+    <td align="center"><img src="docs/images/app-home.jpeg" alt="Expense Tracker home screen" width="220"><br><strong>Home</strong></td>
+    <td align="center"><img src="docs/images/app-transactions.jpeg" alt="Expense Tracker transactions screen" width="220"><br><strong>Transactions</strong></td>
+    <td align="center"><img src="docs/images/app-insights.jpeg" alt="Expense Tracker financial insights screen" width="220"><br><strong>Insights</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/images/app-profile.jpeg" alt="Expense Tracker profile and phone security screen" width="220"><br><strong>Profile &amp; security</strong></td>
+    <td align="center"><img src="docs/images/app-add-expense.jpeg" alt="Expense Tracker add expense form" width="220"><br><strong>Add expense</strong></td>
+  </tr>
+</table>
 
-_Captured from the Android app. This screen contains no private transaction data._
+_Captured from the Android app. Sensitive transaction identifiers are redacted._
 
 ## Repository map
 
