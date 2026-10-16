@@ -1,6 +1,7 @@
 package com.example.gpayexpensetracker.data
 
 import android.content.Context
+import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
@@ -51,7 +52,7 @@ object DeviceAuthManager {
                         Base64.encodeToString(keyPair.public.encoded, Base64.NO_WRAP)
                     )
                     put("pairing_code", pairingCode.trim())
-                    put("label", "Sudhakar's Android phone")
+                    put("label", "${Build.MANUFACTURER} ${Build.MODEL}".trim())
                 }.toString().toByteArray(Charsets.UTF_8)
                 val pairUrl = URL(
                     BackendSyncUtility.primaryExpenseApiUrl(context)

@@ -118,7 +118,8 @@ def main() -> int:
     parser.add_argument(
         "--email",
         type=validate_email,
-        default="sudhakarpappu123@gmail.com",
+        required=True,
+        help="Email address that should receive workflow status notifications",
     )
     parser.add_argument(
         "--events",

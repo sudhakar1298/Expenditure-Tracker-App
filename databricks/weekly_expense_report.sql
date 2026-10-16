@@ -1,4 +1,5 @@
 -- Weekly confirmed-expense report for an AI/BI dashboard subscription.
+-- Replace YOUR_CATALOG with the catalog configured in Render.
 -- Databricks receives only confirmed expenses, so silver_expenses contains no drafts.
 WITH weekly AS (
   SELECT
@@ -6,7 +7,7 @@ WITH weekly AS (
     amount,
     merchant,
     transaction_timestamp
-  FROM workspace.expense_tracker_dw.silver_expenses
+  FROM YOUR_CATALOG.expense_tracker_dw.silver_expenses
   WHERE transaction_timestamp >= current_timestamp() - INTERVAL 7 DAYS
 )
 SELECT

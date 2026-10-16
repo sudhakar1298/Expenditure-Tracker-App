@@ -1,5 +1,10 @@
 # GPay Expense Tracker - Next.js Web Dashboard
 
+> **Authentication note:** This dashboard does not yet sign requests with the
+> Android Keystore key. It is suitable for local development while
+> `DEVICE_AUTH_ENABLED=false`, but protected hosted endpoints will return 401
+> after phone-only authentication is enabled.
+
 Modern, responsive web dashboard built with Next.js App Router, Tailwind CSS, and Lucide Icons.
 
 ## Features

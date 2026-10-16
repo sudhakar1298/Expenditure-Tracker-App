@@ -1,76 +1,244 @@
-# GPay & SMS Expenditure Tracker App
+# Expense Tracker
 
-An Android application designed to track your monthly expenditures dynamically by reading transaction notifications (from Google Pay) and bank transaction SMS alerts. 
+An Android expense tracker that detects debit SMS messages and payment
+notifications, asks the user to confirm incomplete transactions, stores data
+offline in Room, synchronizes it to a FastAPI service on Render, and delivers
+confirmed transactions to Databricks.
 
-## Features
+## Supported production architecture
 
-- **Automated GPay Tracking**: Push notifications from Google Pay (GPay) are intercepted, parsed, and logged automatically.
-- **SMS Draft Confirmations**: Banking SMS debit alerts (such as Indian Bank format) are intercepted, parsed, and added to the app as a "Draft." The app alerts you under **Pending Confirmations**, prompting you to verify/edit the merchant name, select a category, and save the transaction.
-- **Google Sheets Real-Time Sync**: Finalized transactions are instantly synchronized to a Google Sheet via a Google Apps Script Web App webhook.
-- **Local Sandbox Storage**: Uses a Room database to cache your transactions locally on the device, ensuring the app works offline.
-- **Rich Aesthetics**: Premium Dark Mode UI with Glassmorphic styling, Canvas-based custom spending charts, and budget limits.
-
----
-
-## 🚀 Google Sheets Real-Time Sync Setup
-
-To sync your expenses to a Google Sheet:
-
-### 1. Create the Google Apps Script
-1. Open a new or existing **Google Sheet**.
-2. From the top menu, go to **Extensions > Apps Script**.
-3. Delete any default code in the editor and paste the following template:
-
-```javascript
-function doPost(e) {
-  try {
-    var data = JSON.parse(e.postData.contents);
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    
-    // Append [Date, Amount, Merchant, Category, Source]
-    sheet.appendRow([
-      new Date(data.timestamp),
-      data.amount,
-      data.merchant,
-      data.category,
-      data.sourceApp
-    ]);
-    
-    return ContentService.createTextOutput(JSON.stringify({ status: "success" }))
-      .setMimeType(ContentService.MimeType.JSON);
-  } catch (error) {
-    return ContentService.createTextOutput(JSON.stringify({ status: "error", message: error.toString() }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}
+```text
+Android app
+  -> HTTPS + Android Keystore request signatures
+Render FastAPI
+  -> Render PostgreSQL (operational data + retry queue)
+Databricks SQL Warehouse
+  -> Unity Catalog Bronze and Silver Delta tables
 ```
 
-### 2. Deploy the Script as a Web App
-1. Click the **Deploy** button at the top-right of the script editor and select **New deployment**.
-2. Click the gear icon next to "Select type" and choose **Web app**.
-3. Configure the fields as follows:
-   * **Description**: `GPay Expense Webhook`
-   * **Execute as**: `Me (your-email@gmail.com)`
-   * **Who has access**: `Anyone` *(Crucial: This allows the Android app to connect to the script without authentication issues)*.
-4. Click **Deploy**.
-5. Copy the **Web App URL** generated (it will look like `https://script.google.com/macros/s/.../exec`).
+The Render backend is the only supported Databricks writer. The older Spark
+API-polling examples remain in `databricks/jobs` for reference; do not schedule
+them together with the backend writer.
 
-### 3. Configure the Android App
-1. Open the app on your phone.
-2. Tap the **Settings Gear Icon** in the top-right corner.
-3. Paste the copied URL into the **Google Sheets Web App URL** text field.
-4. Set your monthly budget limit and tap **Save**.
+## Repository map
 
----
+| Path | Purpose |
+| --- | --- |
+| `app/` | Android application (Kotlin, Compose, Room) |
+| `backend/` | FastAPI service, Render Blueprint, PostgreSQL models and tests |
+| `databricks/` | Databricks table setup, connection checks and optional reports |
+| `web/` | Optional Next.js dashboard; not compatible with phone-only auth yet |
+| `backend/render.yaml` | File to select when creating the Render Blueprint |
+| `backend/RENDER_DEPLOYMENT.md` | Detailed Render operations and recovery guide |
+| `databricks/README.md` | Detailed Databricks setup and reporting guide |
 
-## 🛠️ Build and Run Locally
+Generated databases, `.env` files, `local.properties`, Gradle output and Spark
+output are intentionally ignored by Git.
 
-To build and deploy the app directly to your connected device:
+## Prerequisites
 
-1. Clone this repository to your computer.
-2. Connect your Android device via USB and enable USB Debugging.
-3. Open a terminal in the project root directory and run:
-   ```bash
-   ./gradlew installDebug
+- Android Studio or JDK 17 with an Android SDK
+- Python 3.11+
+- A GitHub, GitLab or Bitbucket fork of this repository
+- A Render account
+- A Databricks workspace with Unity Catalog and a SQL Warehouse
+
+## 1. Prepare Databricks
+
+Create or choose:
+
+1. A Unity Catalog catalog, for example `workspace` or `main`.
+2. A running Serverless or Pro SQL Warehouse.
+3. A Databricks personal access token or service-principal credential. A PAT is
+   the simplest option for this repository; Databricks recommends OAuth for a
+   longer-lived production service.
+
+The token identity needs:
+
+- `CAN USE` on the SQL Warehouse.
+- `USE CATALOG` and permission to create/use the target schema.
+- Permission to create, select and modify tables in that schema.
+
+Create a local configuration file (never commit it):
+
+```powershell
+Copy-Item databricks/.env.example databricks/.env
+```
+
+Fill in `databricks/.env`:
+
+```dotenv
+DATABRICKS_SYNC_ENABLED=false
+DATABRICKS_HOST=https://your-workspace.cloud.databricks.com
+DATABRICKS_TOKEN=your-token
+DATABRICKS_WAREHOUSE_ID=your-warehouse-id
+DATABRICKS_CATALOG=your-catalog
+DATABRICKS_SCHEMA=expense_tracker_dw
+DATABRICKS_SYNC_INTERVAL_SECONDS=15
+```
+
+`DATABRICKS_HOST` is only the HTTPS workspace origin. Find the warehouse ID in
+**SQL Warehouses > your warehouse > Connection details**.
+
+Install the backend dependencies and create the schema and managed Delta
+tables:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r backend/requirements.txt
+python databricks/setup_remote_sync.py --setup
+```
+
+Successful output includes `Databricks warehouse connection verified` and
+`Bronze/Silver tables ready`. This creates:
+
+- `<catalog>.expense_tracker_dw.bronze_expenses`
+- `<catalog>.expense_tracker_dw.silver_expenses`
+
+Do not upload or schedule a separate API-polling notebook for production sync.
+Render pushes confirmed transactions directly and reliably through its outbox.
+
+## 2. Deploy the backend on Render
+
+Push your fork, then in Render choose **New > Blueprint** and select:
+
+```text
+backend/render.yaml
+```
+
+Render creates the web service and PostgreSQL database. Enter these values when
+prompted:
+
+| Render variable | Value |
+| --- | --- |
+| `DATABRICKS_HOST` | Same workspace origin used above |
+| `DATABRICKS_TOKEN` | Databricks token; mark it secret |
+| `DATABRICKS_WAREHOUSE_ID` | SQL Warehouse ID |
+| `DATABRICKS_CATALOG` | Unity Catalog catalog containing the schema |
+| `DEVICE_AUTH_ENABLED` | `false` for the first deployment |
+| `DEVICE_PAIRING_CODE` | A new random code with at least 24 characters |
+
+The Blueprint supplies `DATABASE_URL`, `DATABRICKS_SCHEMA`, retry interval and
+the remaining non-secret settings automatically.
+
+Generate a pairing code locally:
+
+```powershell
+python -c "import secrets; print(secrets.token_urlsafe(32))"
+```
+
+After deployment, verify the public health endpoint:
+
+```text
+https://YOUR-SERVICE.onrender.com/health
+```
+
+It must return `{"status":"ok"}`. Verify the Databricks credentials locally
+before copying the same values to Render:
+
+```powershell
+python backend/scripts/check_databricks.py
+```
+
+## 3. Configure and build the Android app
+
+Copy `local.properties.example` to `local.properties` in the repository root.
+Set the Android SDK path and Render service origin:
+
+```properties
+sdk.dir=C\:\\path\\to\\Android\\Sdk
+BACKEND_BASE_URL=https\://YOUR-SERVICE.onrender.com
+```
+
+The backend URL is not a secret. It can alternatively be entered later through
+the app's Settings dialog. No Databricks token, database password or pairing
+code is compiled into the APK.
+
+Build and install on a USB-debugging-enabled phone:
+
+```powershell
+.\gradlew.bat :app:installDebug
+```
+
+In Android settings, grant the app:
+
+- SMS permission.
+- Notification permission.
+- Notification access, so payment-app notifications can be detected.
+
+## 4. Pair the phone and enable protection
+
+Use this order to avoid locking the phone out:
+
+1. Keep Render `DEVICE_AUTH_ENABLED=false`.
+2. In the app, open **Profile > Phone Security**.
+3. Enter the same `DEVICE_PAIRING_CODE` and tap **Pair this phone**.
+4. Wait for **This phone is paired**.
+5. Change Render `DEVICE_AUTH_ENABLED=true` and redeploy.
+6. Remove or rotate `DEVICE_PAIRING_CODE` after pairing.
+
+The app creates an EC P-256 private key inside Android Keystore. Render stores
+only the public key. Requests are signed with their method, exact URL,
+timestamp, nonce and body hash; stale, modified and replayed calls are rejected.
+
+If the app is uninstalled, follow the recovery procedure in
+[`backend/RENDER_DEPLOYMENT.md`](backend/RENDER_DEPLOYMENT.md).
+
+## 5. Confirm the end-to-end flow
+
+1. Receive a debit SMS or add an expense manually.
+2. If it needs a reason/category, confirm it in the app.
+3. Check that it appears in Render/PostgreSQL.
+4. In Databricks Catalog Explorer, query:
+
+   ```sql
+   SELECT *
+   FROM YOUR_CATALOG.expense_tracker_dw.silver_expenses
+   ORDER BY transaction_timestamp DESC;
    ```
-4. The application will compile and install on your phone automatically.
+
+Only confirmed transactions are sent to Databricks. Pending SMS drafts remain
+in the app/backend until confirmed. Failed Databricks writes stay in the
+PostgreSQL outbox and retry automatically.
+
+## Optional: Databricks email reports
+
+Workflow status emails and spending-report emails are different:
+
+- For workflow success/failure notifications, use
+  `databricks/configure_job_email.py` with your job ID and email.
+- For a report containing spending data, create an AI/BI dashboard from
+  `databricks/weekly_expense_report.sql`, schedule it, and subscribe an email.
+
+See [`databricks/README.md`](databricks/README.md) for exact steps.
+
+## Local development and tests
+
+Run the backend locally:
+
+```powershell
+$env:PYTHONPATH="backend"
+python -m uvicorn app.main:app --app-dir backend --reload
+```
+
+Run focused tests:
+
+```powershell
+$env:PYTHONPATH="backend"
+python -m pytest backend/tests/test_device_auth.py -q
+python backend/tests/test_databricks_delivery.py
+.\gradlew.bat :app:testDebugUnitTest
+```
+
+Google Sheets sync remains optional and can be configured in the Android
+Settings dialog. The Render/PostgreSQL/Databricks path is the supported hosted
+deployment.
+
+## Official platform references
+
+- [Render Blueprint YAML reference](https://render.com/docs/blueprint-spec)
+- [Render free-tier limits](https://render.com/docs/free)
+- [Databricks authentication](https://docs.databricks.com/aws/en/dev-tools/auth)
+- [Databricks SQL Warehouses](https://docs.databricks.com/aws/en/compute/sql-warehouse)
+- [Databricks dashboard schedules and subscriptions](https://docs.databricks.com/aws/en/dashboards/share/schedule-subscribe)

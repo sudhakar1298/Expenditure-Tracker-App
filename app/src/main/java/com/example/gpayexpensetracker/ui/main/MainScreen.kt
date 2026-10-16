@@ -355,7 +355,7 @@ fun VaultGlassHomeScreen(
                                 .background(BotanicalSageContainer.copy(alpha = 0.3f)),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text("SU", color = primaryText, fontWeight = FontWeight.Bold)
+                            Text("ET", color = primaryText, fontWeight = FontWeight.Bold)
                         }
                         Box(
                             modifier = Modifier
@@ -368,7 +368,7 @@ fun VaultGlassHomeScreen(
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
                         Text("Welcome back 👋", color = mutedText, fontSize = 12.sp)
-                        Text("Sudhakar", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                        Text("Expense Tracker", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                     }
                 }
 
@@ -1283,12 +1283,12 @@ fun VaultGlassProfileScreen(viewModel: MainScreenViewModel) {
                                 .background(primaryAccent.copy(alpha = 0.25f)),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text("SU", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 24.sp)
+                            Text("ET", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 24.sp)
                         }
                     }
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text("Sudhakar", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                    Text("sudhakar@example.com", color = mutedText, fontSize = 12.sp)
+                    Text("Expense Tracker", color = primaryText, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                    Text("Private device profile", color = mutedText, fontSize = 12.sp)
                     Spacer(modifier = Modifier.height(8.dp))
                     Box(
                         modifier = Modifier
@@ -1714,7 +1714,7 @@ fun VaultGlassSettingsDialog(
                     value = backendApiUrl,
                     onValueChange = { backendApiUrl = it },
                     label = { Text("Backend API URL") },
-                    placeholder = { Text(BackendSyncUtility.DEFAULT_BACKEND_BASE_URL) },
+                    placeholder = { Text("https://your-service.onrender.com") },
                     colors = OutlinedTextFieldDefaults.colors(focusedTextColor = primaryText, unfocusedTextColor = primaryText, focusedBorderColor = primaryAccent),
                     modifier = Modifier.fillMaxWidth()
                 )

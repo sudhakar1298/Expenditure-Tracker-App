@@ -1,0 +1,4 @@
+# Copy this file to local.properties. The copied file is ignored by Git.
+# Escape backslashes and the colon in Windows paths/protocols as shown.
+sdk.dir=C\:\\Users\\your-name\\AppData\\Local\\Android\\Sdk
+BACKEND_BASE_URL=https\://YOUR-SERVICE.onrender.com

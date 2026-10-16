@@ -30,7 +30,9 @@ temporary Databricks or network failure leaves the entry queued for retry.
 2. Set **Blueprint Path** to `backend/render.yaml`. Render supports Blueprint
    files outside the repository root.
 3. During creation, enter the values requested for `DATABRICKS_HOST`,
-   `DATABRICKS_TOKEN`, `DATABRICKS_WAREHOUSE_ID`, and `DATABRICKS_CATALOG`.
+   `DATABRICKS_TOKEN`, `DATABRICKS_WAREHOUSE_ID`, `DATABRICKS_CATALOG`,
+   `DEVICE_PAIRING_CODE`, and `DEVICE_AUTH_ENABLED`. Use `false` for
+   `DEVICE_AUTH_ENABLED` on the first deployment.
 4. Deploy the Blueprint. It creates the FastAPI web service and a PostgreSQL
    database in Singapore.
 
@@ -64,10 +66,22 @@ does not possess the phone key and therefore cannot call those protected
 endpoints while device-only enforcement is enabled.
 
 If the app is uninstalled, Android's key is lost. To pair the replacement app,
-temporarily set `DEVICE_AUTH_ENABLED=false`, open a Render Shell, and run:
+temporarily set `DEVICE_AUTH_ENABLED=false`. On a paid service, run this from a
+Render Shell:
 
 ```text
 python scripts/revoke_paired_device.py --confirm
+```
+
+Free Render web services do not include Shell access. For a free service, copy
+the PostgreSQL **External Database URL** from Render and run from the cloned
+repository instead:
+
+```powershell
+$env:DATABASE_URL="PASTE_EXTERNAL_DATABASE_URL"
+$env:USE_SQLITE_FALLBACK="false"
+$env:PYTHONPATH="backend"
+python backend/scripts/revoke_paired_device.py --confirm
 ```
 
 Then repeat the pairing steps with a new pairing code. Rotate or remove
@@ -86,19 +100,18 @@ after a restart or redeploy.
 Open these URLs, replacing the hostname with the URL shown by Render:
 
 ```text
-https://gpay-expense-api.onrender.com/health
-https://gpay-expense-api.onrender.com/docs
-https://gpay-expense-api.onrender.com/api/v1/databricks/status
+https://YOUR-SERVICE.onrender.com/health
+https://YOUR-SERVICE.onrender.com/docs
 ```
 
-The health response must be `{"status":"ok"}`. The Databricks status should
-show `enabled: true`. Immediately after a phone upload, `pending` can briefly be
-greater than zero; it should return to zero after delivery.
+The health response must be `{"status":"ok"}`. Once phone-only authentication
+is enabled, protected URLs such as Databricks status intentionally return 401
+to an ordinary browser.
 
-To test a Databricks connection from a Render Shell, run:
+Test the same Databricks values locally before entering them in Render:
 
-```text
-python scripts/check_databricks.py
+```powershell
+python backend/scripts/check_databricks.py
 ```
 
 ## Point the Android app at Render
@@ -107,7 +120,7 @@ In the app's Settings screen, set **Backend API URL** to the Render service
 origin, for example:
 
 ```text
-https://gpay-expense-api.onrender.com
+https://YOUR-SERVICE.onrender.com
 ```
 
 The app will append `/api/v1/expenses/`. Keep `https://` and do not add a token

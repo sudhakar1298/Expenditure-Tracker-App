@@ -2,6 +2,7 @@ package com.example.gpayexpensetracker.data
 
 import android.content.Context
 import android.util.Log
+import com.example.gpayexpensetracker.BuildConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,7 +23,7 @@ import java.util.TimeZone
 
 object BackendSyncUtility {
     private const val TAG = "BackendSync"
-    const val DEFAULT_BACKEND_BASE_URL = "https://expenditure-tracker-app.onrender.com"
+    val DEFAULT_BACKEND_BASE_URL: String = BuildConfig.BACKEND_BASE_URL.trimEnd('/')
     val status = MutableStateFlow("Sync not checked")
     private val uploadLock = Mutex()
 
@@ -46,11 +47,15 @@ object BackendSyncUtility {
         }
         // Never fall back from the HTTPS service to an unsigned LAN endpoint.
         // A developer can still explicitly configure a local URL in Settings.
-        list.add("$DEFAULT_BACKEND_BASE_URL/api/v1/expenses/")
+        if (DEFAULT_BACKEND_BASE_URL.isNotBlank()) {
+            list.add("$DEFAULT_BACKEND_BASE_URL/api/v1/expenses/")
+        }
         return list.distinct()
     }
 
-    fun primaryExpenseApiUrl(context: Context): String = getCandidateUrls(context).first()
+    fun primaryExpenseApiUrl(context: Context): String =
+        getCandidateUrls(context).firstOrNull()
+            ?: error("Set the Backend API URL in app Settings first.")
 
     suspend fun sync(context: Context, transaction: TransactionEntity): Boolean = withContext(Dispatchers.IO) {
         val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).apply {
@@ -182,6 +187,10 @@ object BackendSyncUtility {
     private fun post(context: Context, payload: String): Boolean {
         status.value = "Uploading saved expenses…"
         val candidateUrls = getCandidateUrls(context)
+        if (candidateUrls.isEmpty()) {
+            status.value = "Set the Backend API URL in Settings. Upload pending."
+            return false
+        }
 
         for (backendUrlStr in candidateUrls) {
             var conn: HttpURLConnection? = null
@@ -237,6 +246,10 @@ object BackendSyncUtility {
 
     fun fetchRemoteExpensesFromBackend(context: Context, repository: DataRepository) {
         val candidateUrls = getCandidateUrls(context)
+        if (candidateUrls.isEmpty()) {
+            status.value = "Set the Backend API URL in Settings"
+            return
+        }
 
         CoroutineScope(Dispatchers.IO).launch {
             retryPending(context)
