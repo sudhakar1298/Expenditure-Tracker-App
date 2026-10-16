@@ -288,7 +288,7 @@ fun VaultGlassTopBar(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    "SU",
+                    "ET",
                     color = primaryText,
                     fontWeight = FontWeight.Bold,
                     fontSize = 12.sp

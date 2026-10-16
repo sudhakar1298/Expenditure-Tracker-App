@@ -22,10 +22,9 @@ them together with the backend writer.
 
 ## App preview
 
-<img src="stitch_glassmorphism_expense_tracker/vaultglass_add_expense_botanical_olive/screen.png" alt="Expense Tracker Android app add-expense screen using sample data" width="320">
+<img src="docs/images/app-categories.png" alt="Expense Tracker Android app category management screen" width="320">
 
-_UI preview with sample data. It does not contain the repository owner's real
-transactions._
+_Captured from the Android app. This screen contains no private transaction data._
 
 ## Repository map
 
