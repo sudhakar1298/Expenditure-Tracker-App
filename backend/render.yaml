@@ -38,7 +38,7 @@ services:
       - key: DATABRICKS_SYNC_INTERVAL_SECONDS
         value: "15"
       - key: DEVICE_AUTH_ENABLED
-        value: "false"
+        sync: false
       - key: DEVICE_PAIRING_CODE
         sync: false
       - key: DEVICE_SIGNATURE_MAX_AGE_SECONDS
