@@ -34,6 +34,45 @@ temporary Databricks or network failure leaves the entry queued for retry.
 4. Deploy the Blueprint. It creates the FastAPI web service and a PostgreSQL
    database in Singapore.
 
+## Pair and lock the API to this phone
+
+Use this order so the phone is paired before enforcement starts:
+
+1. Generate a long one-time code locally:
+
+   ```powershell
+   python -c "import secrets; print(secrets.token_urlsafe(32))"
+   ```
+
+2. In the Render service's **Environment** page, set
+   `DEVICE_PAIRING_CODE` to that generated value. Leave
+   `DEVICE_AUTH_ENABLED=false`, then deploy.
+3. Install/open the Android app, go to **Profile > Phone security**, enter the
+   same code, and tap **Pair this phone**.
+4. After the app says **This phone is paired**, change
+   `DEVICE_AUTH_ENABLED=true` in Render and deploy once more.
+
+The Android private key is generated inside Android Keystore and is never sent
+to Render. Render stores only its public key. Each protected request signs the
+HTTP method, exact path/query, timestamp, random nonce, and body hash. Old,
+modified, unsigned, or replayed requests are rejected.
+
+Once enforcement is enabled, expense, analytics, reconciliation, and
+Databricks-status endpoints require the paired phone's signature. `/health`
+remains public for Render's readiness check. The existing browser dashboard
+does not possess the phone key and therefore cannot call those protected
+endpoints while device-only enforcement is enabled.
+
+If the app is uninstalled, Android's key is lost. To pair the replacement app,
+temporarily set `DEVICE_AUTH_ENABLED=false`, open a Render Shell, and run:
+
+```text
+python scripts/revoke_paired_device.py --confirm
+```
+
+Then repeat the pairing steps with a new pairing code. Rotate or remove
+`DEVICE_PAIRING_CODE` after pairing; an already-paired phone does not need it.
+
 The service is pinned to one instance because that instance owns the retry
 worker. Keep it at one instance unless the worker is later moved to a separate
 Render background service.
@@ -85,6 +124,5 @@ Upgrade the database before that deadline if the expense history must remain
 available. Databricks rows that were already delivered are separate, but the
 PostgreSQL database is still the API's operational record and retry queue.
 
-The current API has no user authentication. Treat this deployment as private
-testing and add phone authentication before sharing the URL or using it for
-sensitive financial data.
+After the pairing sequence above is complete, the API accepts protected calls
+only when they carry a fresh signature from the paired Android Keystore key.

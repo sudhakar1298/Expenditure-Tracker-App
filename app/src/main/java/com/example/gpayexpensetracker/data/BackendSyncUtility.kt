@@ -44,13 +44,13 @@ object BackendSyncUtility {
             })
             return list
         }
-        // The hosted backend is the default. LAN addresses remain available as
-        // development fallbacks when the user has not configured another URL.
+        // Never fall back from the HTTPS service to an unsigned LAN endpoint.
+        // A developer can still explicitly configure a local URL in Settings.
         list.add("$DEFAULT_BACKEND_BASE_URL/api/v1/expenses/")
-        list.add("http://192.168.1.37:8000/api/v1/expenses/")
-        list.add("http://10.0.2.2:8000/api/v1/expenses/")
         return list.distinct()
     }
+
+    fun primaryExpenseApiUrl(context: Context): String = getCandidateUrls(context).first()
 
     suspend fun sync(context: Context, transaction: TransactionEntity): Boolean = withContext(Dispatchers.IO) {
         val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).apply {
@@ -97,6 +97,9 @@ object BackendSyncUtility {
                     connectTimeout = 5000
                     readTimeout = 5000
                 }
+                DeviceAuthManager.signIfPaired(
+                    context, connection, URL("${backendUrl}by-transaction/$encodedId"), "DELETE"
+                )
                 val responseCode = connection.responseCode
                 if (responseCode == HttpURLConnection.HTTP_NO_CONTENT || responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
                     status.value = "Activity deleted"
@@ -123,6 +126,9 @@ object BackendSyncUtility {
                     connectTimeout = 5000
                     readTimeout = 5000
                 }
+                DeviceAuthManager.signIfPaired(
+                    context, connection, URL("${backendUrl}pending"), "DELETE"
+                )
                 if (connection.responseCode == HttpURLConnection.HTTP_NO_CONTENT) {
                     backendCleared = true
                     break
@@ -180,14 +186,17 @@ object BackendSyncUtility {
         for (backendUrlStr in candidateUrls) {
             var conn: HttpURLConnection? = null
             try {
-                conn = (URL(backendUrlStr).openConnection() as HttpURLConnection).apply {
+                val url = URL(backendUrlStr)
+                val body = payload.toByteArray(Charsets.UTF_8)
+                conn = (url.openConnection() as HttpURLConnection).apply {
                     requestMethod = "POST"
                     doOutput = true
                     setRequestProperty("Content-Type", "application/json; charset=utf-8")
                     connectTimeout = 5000
                     readTimeout = 5000
                 }
-                conn.outputStream.use { it.write(payload.toByteArray(Charsets.UTF_8)) }
+                DeviceAuthManager.signIfPaired(context, conn, url, "POST", body)
+                conn.outputStream.use { it.write(body) }
                 val responseCode = conn.responseCode
                 Log.d(TAG, "Backend POST response code: $responseCode via $backendUrlStr")
                 if (responseCode in 200..299) return true
@@ -205,14 +214,16 @@ object BackendSyncUtility {
     /**
      * Pulls remote expenses from FastAPI backend and syncs them down to local Room DB.
      */
-    private fun fetchAll(url: String): JSONArray {
+    private fun fetchAll(context: Context, url: String): JSONArray {
         val result = JSONArray()
         var skip = 0
         while (true) {
-            val connection = URL("$url?skip=$skip&limit=100").openConnection() as HttpURLConnection
+            val pageUrl = URL("$url?skip=$skip&limit=100")
+            val connection = pageUrl.openConnection() as HttpURLConnection
             try {
                 connection.connectTimeout = 5000
                 connection.readTimeout = 5000
+                DeviceAuthManager.signIfPaired(context, connection, pageUrl, "GET")
                 check(connection.responseCode == 200) { "Expense fetch HTTP ${connection.responseCode}" }
                 val page = JSONArray(connection.inputStream.bufferedReader().use { it.readText() })
                 for (i in 0 until page.length()) result.put(page.getJSONObject(i))
@@ -236,10 +247,11 @@ object BackendSyncUtility {
                     conn.requestMethod = "GET"
                     conn.connectTimeout = 3000
                     conn.readTimeout = 3000
+                    DeviceAuthManager.signIfPaired(context, conn, url, "GET")
 
                     if (conn.responseCode == HttpURLConnection.HTTP_OK) {
                         conn.disconnect()
-                        val jsonArray = fetchAll(backendUrlStr)
+                        val jsonArray = fetchAll(context, backendUrlStr)
                         if (context.getSharedPreferences("BackendOutbox", Context.MODE_PRIVATE).all.isEmpty()) {
                             status.value = "Backend connected"
                         }

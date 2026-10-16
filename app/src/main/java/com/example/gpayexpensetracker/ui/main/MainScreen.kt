@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -1178,6 +1179,8 @@ fun VaultGlassInsightsScreen(viewModel: MainScreenViewModel) {
 fun VaultGlassProfileScreen(viewModel: MainScreenViewModel) {
     val transactions by viewModel.allTransactions.collectAsStateWithLifecycle()
     val categories by viewModel.categories.collectAsStateWithLifecycle()
+    val isDevicePaired by viewModel.isDevicePaired.collectAsStateWithLifecycle()
+    val pairingStatus by viewModel.devicePairingStatus.collectAsStateWithLifecycle()
     val isDark = isSystemInDarkTheme()
     val primaryText = if (isDark) BotanicalDarkTextPrimary else BotanicalLightTextPrimary
     val mutedText = if (isDark) BotanicalDarkTextMuted else BotanicalLightTextMuted
@@ -1185,6 +1188,8 @@ fun VaultGlassProfileScreen(viewModel: MainScreenViewModel) {
     var showAddCategory by remember { mutableStateOf(false) }
     var editingCategory by remember { mutableStateOf<String?>(null) }
     var deletingCategory by remember { mutableStateOf<String?>(null) }
+    var pairingCode by remember { mutableStateOf("") }
+    var isPairing by remember { mutableStateOf(false) }
 
     LazyColumn(
         modifier = Modifier
@@ -1193,6 +1198,72 @@ fun VaultGlassProfileScreen(viewModel: MainScreenViewModel) {
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(top = 8.dp, bottom = 100.dp)
     ) {
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .glassPanel(cornerRadius = 20.dp, isDark = isDark)
+                    .padding(18.dp)
+            ) {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text("PHONE SECURITY", color = primaryAccent, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                    Text(
+                        if (isDevicePaired) "This phone is paired" else "Pair this phone",
+                        color = primaryText,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+                    Text(
+                        if (isDevicePaired)
+                            "Requests to your Render backend are signed by a key that stays in Android Keystore."
+                        else
+                            "Enter the one-time code from Render before enabling device-only access.",
+                        color = mutedText,
+                        fontSize = 11.sp
+                    )
+
+                    if (!isDevicePaired) {
+                        OutlinedTextField(
+                            value = pairingCode,
+                            onValueChange = { pairingCode = it },
+                            label = { Text("Pairing code") },
+                            singleLine = true,
+                            enabled = !isPairing,
+                            visualTransformation = PasswordVisualTransformation(),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Button(
+                            onClick = {
+                                isPairing = true
+                                viewModel.pairThisDevice(pairingCode) { success ->
+                                    isPairing = false
+                                    if (success) pairingCode = ""
+                                }
+                            },
+                            enabled = !isPairing && pairingCode.trim().length >= 24
+                        ) {
+                            if (isPairing) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(18.dp),
+                                    strokeWidth = 2.dp
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                            }
+                            Text(if (isPairing) "Pairing..." else "Pair this phone")
+                        }
+                    }
+
+                    pairingStatus?.let {
+                        Text(
+                            it,
+                            color = if (isDevicePaired) primaryAccent else MaterialTheme.colorScheme.error,
+                            fontSize = 11.sp
+                        )
+                    }
+                }
+            }
+        }
+
         item {
             Box(
                 modifier = Modifier

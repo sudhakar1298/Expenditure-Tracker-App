@@ -1,10 +1,11 @@
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import func, text
 
 from app.core.config import settings
 from app.core.database import engine, Base
-from app.models import user, expense
+from app.models import user, expense, device_credential
+from app.core.device_auth import require_paired_device
 from app.api.v1.router import api_router
 from contextlib import asynccontextmanager
 from app.core.database import SessionLocal
@@ -45,7 +46,7 @@ app.include_router(api_router, prefix=settings.API_V1_STR)
 
 
 @app.get("/api/v1/databricks/status")
-def databricks_status():
+def databricks_status(_device_id: str | None = Depends(require_paired_device)):
     with SessionLocal() as db:
         errors = dict(db.query(
             DatabricksOutbox.last_error,

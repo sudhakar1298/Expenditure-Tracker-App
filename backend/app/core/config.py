@@ -23,6 +23,14 @@ class Settings(BaseSettings):
     USE_SQLITE_FALLBACK: bool = os.getenv("USE_SQLITE_FALLBACK", "true").lower() == "true"
     SQLITE_URL: str = f"sqlite:///{_SQLITE_FILE}"
 
+    # Device-bound request signing. Deploy with authentication disabled, pair
+    # the phone once, then enable enforcement in Render.
+    DEVICE_AUTH_ENABLED: bool = os.getenv("DEVICE_AUTH_ENABLED", "false").lower() == "true"
+    DEVICE_PAIRING_CODE: str = os.getenv("DEVICE_PAIRING_CODE", "")
+    DEVICE_SIGNATURE_MAX_AGE_SECONDS: int = int(
+        os.getenv("DEVICE_SIGNATURE_MAX_AGE_SECONDS", "300")
+    )
+
     class Config:
         case_sensitive = True
 

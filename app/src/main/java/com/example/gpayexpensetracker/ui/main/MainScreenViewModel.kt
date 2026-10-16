@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.gpayexpensetracker.data.BackendSyncUtility
 import com.example.gpayexpensetracker.data.CategoryStore
 import com.example.gpayexpensetracker.data.DataRepository
+import com.example.gpayexpensetracker.data.DeviceAuthManager
 import com.example.gpayexpensetracker.data.ExpenseCategories
 import com.example.gpayexpensetracker.data.SheetsSyncUtility
 import com.example.gpayexpensetracker.data.TransactionEntity
@@ -49,6 +50,12 @@ class MainScreenViewModel(
     val backendApiUrl: StateFlow<String> = _backendApiUrl.asStateFlow()
     val syncStatus: StateFlow<String> = BackendSyncUtility.status.asStateFlow()
 
+    private val _isDevicePaired = MutableStateFlow(DeviceAuthManager.isPaired(appContext))
+    val isDevicePaired: StateFlow<Boolean> = _isDevicePaired.asStateFlow()
+
+    private val _devicePairingStatus = MutableStateFlow<String?>(null)
+    val devicePairingStatus: StateFlow<String?> = _devicePairingStatus.asStateFlow()
+
     private val _isNotificationServiceEnabled = MutableStateFlow(false)
     val isNotificationServiceEnabled: StateFlow<Boolean> = _isNotificationServiceEnabled.asStateFlow()
 
@@ -66,6 +73,23 @@ class MainScreenViewModel(
 
     fun refreshFromBackend() {
         BackendSyncUtility.fetchRemoteExpensesFromBackend(appContext, repository)
+    }
+
+    fun pairThisDevice(pairingCode: String, onFinished: (Boolean) -> Unit) {
+        _devicePairingStatus.value = "Pairing this phone..."
+        viewModelScope.launch {
+            val result = DeviceAuthManager.pair(appContext, pairingCode)
+            result.onSuccess {
+                _isDevicePaired.value = true
+                _devicePairingStatus.value = "This phone is paired securely."
+                refreshFromBackend()
+                BackendSyncUtility.retryPending(appContext)
+                onFinished(true)
+            }.onFailure { error ->
+                _devicePairingStatus.value = error.message ?: "Could not pair this phone."
+                onFinished(false)
+            }
+        }
     }
 
     fun checkNotificationPermission() {
