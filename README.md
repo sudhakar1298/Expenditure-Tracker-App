@@ -20,6 +20,13 @@ The Render backend is the only supported Databricks writer. The older Spark
 API-polling examples remain in `databricks/jobs` for reference; do not schedule
 them together with the backend writer.
 
+## App preview
+
+<img src="stitch_glassmorphism_expense_tracker/vaultglass_add_expense_botanical_olive/screen.png" alt="Expense Tracker Android app add-expense screen using sample data" width="320">
+
+_UI preview with sample data. It does not contain the repository owner's real
+transactions._
+
 ## Repository map
 
 | Path | Purpose |
@@ -141,7 +148,38 @@ before copying the same values to Render:
 python backend/scripts/check_databricks.py
 ```
 
-## 3. Configure and build the Android app
+## 3. Install the Android app without Android Studio
+
+The easiest installation uses the APK automatically built by GitHub Actions.
+No Android Studio, Java setup or USB cable is required.
+
+1. Open this repository on GitHub and select the **Actions** tab.
+2. Open **Build installable APK** and select the newest successful green run.
+   If there is no run yet, select **Run workflow**.
+3. Under **Artifacts**, download `expense-tracker-apk`.
+4. Extract the downloaded ZIP to get `ExpenseTracker.apk`.
+5. If downloaded on a computer, send the APK to the Android phone. It can also
+   be downloaded directly from GitHub using the phone browser.
+6. Tap `ExpenseTracker.apk`. If Android asks, allow **Install unknown apps** for
+   the browser or Files app, complete installation, and then disable that
+   permission again.
+7. Open the app's Settings dialog and enter the Render service origin:
+
+   ```text
+   https://YOUR-SERVICE.onrender.com
+   ```
+
+The GitHub APK intentionally contains no owner's backend URL, Databricks token,
+database password or pairing code. Each installer connects it to their own
+Render service in Settings.
+
+GitHub keeps workflow artifacts for 30 days. A maintainer can run the workflow
+again at any time to produce a fresh download.
+
+### Optional developer build
+
+Developers who want to modify the source can build locally. Android Studio is
+optional; JDK 17 plus the Android SDK command-line tools are sufficient.
 
 Copy `local.properties.example` to `local.properties` in the repository root.
 Set the Android SDK path and Render service origin:
